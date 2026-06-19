@@ -1,0 +1,1813 @@
+﻿ @{
+    ViewData["Title"] = "POS Sales";
+    Layout = "_Layout";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+    }
+
+    body {
+        /* background: #b73de3; */
+        background: #7547A3;
+        font-family: Arial, sans-serif;
+        padding: 5px;
+    }
+
+   /*  .pos-container {
+        display: flex;
+        gap: 5px;
+        width: 100%;
+    } */
+
+    .left-panel {
+        width: 30%;
+    }
+
+    .right-panel {
+        width: 70%;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        overflow: hidden;
+    }
+
+    .card-header {
+        padding: 3px 15px;
+        font-weight: bold;
+        color: whitesmoke;
+        background-color:rebeccapurple;
+        border-bottom: 1px solid #32a852;
+    }
+
+    .card-body {
+        padding: 5px;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .info-box {
+        border: 1px solid #ddd;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+     
+/* 
+    .product-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 5px;
+    } */
+
+    button {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .table-wrapper {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+    .summary {
+        margin-top: 20px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .grand-total {
+        font-size: 24px;
+        font-weight: bold;
+    }
+     .btn-new{
+    width:100%;
+    padding:8px;
+    background-color:white;
+    color:darkblue;
+    border:1px solid #ccc;
+    cursor:pointer;
+}
+
+.btn-new:hover{
+    background-color:darkblue;
+    color:white;
+}
+
+
+/* Customer Image Size CSS Desing */
+ 
+/* Container for the avatar */
+    .cust-avatar, .cust-avatar-fallback {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover; /* Ensures image isn't distorted */
+        border: 1px solid rebeccapurple;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    font-size: 24px;
+    color: #666;
+}
+
+.customer-card-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 3px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    position: relative;
+    background: #f9f9f9;
+}
+
+    .cust-details {
+        flex-grow: 1;
+    }
+
+    .cust-name-row {
+        font-size: 13px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .cust-code {
+        font-size: 10px;
+        color: #777;
+    }
+
+    .cust-totals {
+        font-size: 12px;
+        text-align: right;
+        margin-top:10px;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 3px;
+        right: 10px;
+        cursor: pointer;
+        color: red;
+    }
+    /* Customer Image Size CSS Desing End */
+
+    
+     
+
+    /* CARD */
+
+.product-card {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+/* HEADER */
+
+.product-card-header {
+    background: rebeccapurple;
+    color: white;
+    padding: 5px 15px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* BODY */
+
+.product-card-body {
+    padding: 5px;
+}
+
+/* SEARCH AREA */
+
+.search-header {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 3px;
+}
+
+.search-header input {
+    flex: 1;
+    height: 34px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 12px;
+}
+
+.btn-new-product {
+    width: 80px;
+    border: none;
+    border-radius: 5px;
+    background: #28a745;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn-new-product:hover {
+    background: #218838;
+}
+
+/* FIXED PRODUCT AREA */
+
+.product-scroll-container {
+    height: 215px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-top: 1px solid #f2f2f2;
+}
+
+/* SCROLLBAR */
+
+.product-scroll-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.product-scroll-container::-webkit-scrollbar-thumb {
+    background: #d3cfde;
+    border-radius: 5px;
+}
+
+/* PRODUCT ITEM */
+
+.product-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1px 5px;
+    border-bottom: 1px solid #f3f3f3;
+    transition: .2s;
+}
+
+.product-item:hover {
+    background: #faf7ff;
+}
+
+/* LEFT SIDE */
+
+.product-left {
+    display: flex;
+    align-items: center;
+    width: 95%;
+}
+
+/* IMAGE */
+
+.product-image,
+.product-image-placeholder {
+    width: 42px;
+    height: 42px;
+    border-radius: 6px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.product-image {
+    object-fit: cover;
+}
+
+.product-image-placeholder {
+    background: #ececec;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #888;
+}
+
+/* DETAILS */
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.product-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-subtext {
+    font-size: 10px;
+    color: #777;
+}
+
+/* RIGHT SIDE */
+
+.product-right {
+    text-align: right;
+    margin-right: 10px;
+    min-width: 90px;
+    font-size: 11px;
+}
+
+/* ADD BUTTON */
+
+.btn-add-cart {
+/*     width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 50%;
+    background: #28a745;
+    color: white;
+    cursor: pointer;
+    flex-shrink: 0;
+        top: 50%;
+        margin-right: 5px; */
+        width: 30px;
+        height: 30px;
+        border: none;
+        border-radius: 50%;
+        background: #28a745;
+        color: white;
+        cursor: pointer;
+        flex-shrink: 0;
+        margin-right: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+
+.btn-add-cart:hover {
+    background: #1f8a37;
+}
+
+/* EMPTY STATE */
+
+.empty-state {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+      
+
+
+    /* POS Cart Wrapper Grid Container */
+    .pos-cart-card {
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 450px; /* Fixed height for POS view execution */
+        border: 1px solid #e2e8f0;
+    }
+
+    /* Frozen Header */
+    .pos-cart-header {
+        display: flex;
+        background: rebeccapurple;
+        background: rebeccapurple;
+        color: #ffffff;
+        font-weight: 600;
+        padding: 5px 4px;
+        font-size: 14px;
+    }
+
+    .header-cell {
+        padding: 0 4px;
+    }
+
+    /* Column Width Percentages for Grid Alignment */
+    .col-sl {
+        width: 8%;
+        text-align: center;
+        font-size:14px;
+    }
+
+    .col-product {
+        width: 37%;
+    }
+
+    .col-price {
+        width: 14%;
+    }
+
+    .col-qty {
+        width: 13%;
+    }
+
+    .col-discount {
+        width: 11%;
+    }
+
+    .col-total {
+        width: 11%;
+        text-align: right;
+        padding-right: 8px;
+        font-size: 14px;
+    }
+
+    .col-delete {
+        width: 6%;
+        text-align: center;
+    }
+
+    /* Scrollable Body Content Section */
+    .pos-cart-body {
+        flex: 1;
+        overflow-y: auto;
+        background: #f8fafc;
+    }
+
+    /* Product Row Styles */
+    .cart-item-row {
+        display: flex;
+        align-items: center;
+        padding: 10px 8px;
+        border-bottom: 1px solid #e2e8f0;
+        background: #fff;
+        transition: background 0.2s;
+    }
+
+        .cart-item-row:hover {
+            background: #f1f5f9;
+        }
+
+        /* Embedded Product-Left Structure Design matching your template */
+        .cart-item-row .product-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-item-row .product-image,
+        .cart-item-row .product-image-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+
+        .cart-item-row .product-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-item-row .product-name {
+            font-weight: 600;
+            font-size: 10px;
+            color: #1e293b;
+        }
+
+        .cart-item-row .product-subtext {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+    /* Input Fields inside Grid */
+    .cart-grid-input {
+        width: 100%;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 5px 8px;
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+        color: #334155;
+    }
+
+        .cart-grid-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+        }
+
+    /* Action Elements */
+    .btn-cart-delete {
+        background: none;
+        border: none;
+        color: #ef4444;
+        cursor: pointer;
+        font-size: 16px;
+        transition: transform 0.1s;
+    }
+
+        .btn-cart-delete:hover {
+            transform: scale(1.15);
+        }
+
+    .sl-number {
+        font-weight: 600;
+        color: #475569;
+        text-align: center;
+    }
+
+    .row-total-val {
+        font-weight: 700;
+        color: #1e293b;
+        text-align: right;
+        padding-right: 8px;
+    }
+
+    /* Frozen Footer with Layout matching Mockup 2 */
+    .pos-cart-footer {
+        background: #ffffff;
+        border-top: 2px solid #cbd5e1;
+        padding: 8px;
+    }
+
+    .footer-summary-wrapper {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .summary-box {
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        border: 1px solid #e2e8f0;
+        padding: 5px;
+        border-radius: 6px;
+        background: #fafafa;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        color: #475569;
+    }
+
+        .summary-item .value {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+    .summary-input {
+        width: 90px;
+        text-align: right;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 2px 6px;
+    }
+
+    .grand-total-highlight {
+        border-top: 1px dashed #cbd5e1;
+        padding-top: 8px;
+        margin-top: 4px;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+        .grand-total-highlight .label {
+            color: #1d4ed8;
+        }
+
+        .grand-total-highlight .value {
+            color: #1d4ed8;
+            font-size: 18px;
+        }
+
+/*     .cart-empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #94a3b8;
+    }
+
+        .cart-empty-state i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+ */
+
+
+
+
+
+
+
+
+
+        /* Container Alignment */
+.cart-empty-state-modern {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 260px;
+    padding: 40px 20px;
+    text-align: center;
+    background: radial-gradient(circle at center, #ffffff 0%, #f8fafc 100%);
+    animation: fadeInContainer 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Smooth fade-in for the whole container view */
+@@keyframes fadeInContainer {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Core Animation Wrapper */
+.animation-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Floating Icon Box */
+.cart-icon-box {
+    position: relative;
+    width: 76px;
+    height: 76px;
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+    color: #4f46e5; /* Premium Indigo Accent */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.2);
+    z-index: 2;
+    animation: floatingCart 3s ease-in-out infinite;
+}
+
+/* Radar Pulse Rings */
+.radar-pulse {
+    position: absolute;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: rgba(79, 70, 229, 0.15);
+    z-index: 1;
+    animation: radarExpand 3s cubic-bezier(0.25, 0, 0, 1) infinite;
+}
+
+/* Typography Enhancements */
+.empty-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.01em;
+}
+
+.empty-subtitle {
+    font-size: 13px;
+    color: #64748b;
+    max-width: 300px;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+/* Dynamic Direction Indicator */
+.direction-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f5f9;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+.direction-indicator i {
+    animation: pointLeft 1.5s ease-in-out infinite;
+}
+
+/* Keyframe Definitions */
+    @@keyframes floatingCart {
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-8px);
+        }
+    }
+
+    @@keyframes radarExpand {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(1.8);
+            opacity: 0;
+        }
+    }
+
+    @@keyframes pointLeft {
+        0%, 100% {
+            transform: translateX(0);
+        }
+
+        50% {
+            transform: translateX(-4px);
+        }
+    }
+
+
+
+
+
+
+
+    /*--------------------- Modern Toast Notification Container Start ---------------- */
+    #toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Toast Body */
+    .pos-toast {
+        background: #ffffff;
+        border-left: 4px solid #ef4444; /* Dark red warning edge */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        padding: 12px 16px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 300px;
+        max-width: 450px;
+        animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        transition: all 0.3s ease;
+    }
+
+    /* Warning Message Text Details */
+    .toast-content {
+        flex: 1;
+    }
+
+    .toast-title {
+        font-weight: 700;
+        font-size: 14px;
+        color: #1e293b;
+        margin-bottom: 2px;
+    }
+
+    .toast-message {
+        font-size: 13px;
+        color: red;
+        line-height: 1.4;
+    }
+
+    /* Toast Icon Wrapper */
+    .toast-icon {
+        font-size: 18px;
+        color: #ef4444;
+    }
+
+    /* Slide in animation track */
+    @@keyframes toastSlideIn {
+        from {
+            transform: translateX(120%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    /* Fade out style applied via JavaScript */
+    .toast-fade-out {
+        transform: translateX(120%);
+        opacity: 0;
+        pointer-events: none;
+    } 
+    /*--------------------- Modern Toast Notification Container End ---------------- */
+
+
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+@* <div class="pos-container"> *@
+<div class="container-fluid">
+    <div class="row g-2">
+        <!-- Left Panel -->
+        @* <div class="left-panel"> *@
+        <div class="col-12 col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-user"></i>
+                    Customer
+                </div>
+                <div class="card-body">
+
+                    <div style="display:flex; width:100%; gap:10px; align-items: center;">
+                        <div style="width:80%;">
+                            <input type="text" id="btnSearchCustomer" placeholder=" 🔍 Search by Name or Code or Phone"
+                                   style="width:100%; height: 30px; padding: 4px 8px; font-size:12px; box-sizing: border-box;">
+                        </div>
+                        <div style="width:20%;">
+                            <input type="button" id="btnAddCustomer" value="+ New" class="btn-new"
+                                   style="width:100%; height: 30px; padding: 0; font-size:12px; box-sizing: border-box; line-height: 28px;">
+                        </div>
+                    </div>
+                    <div class="info-box">
+                    </div>
+                </div>
+            </div>
+             
+            <div class="product-card">
+                <div class="product-card-header">
+                    <i class="fa-solid fa-cube"></i> Products
+                </div>
+                <div class="product-card-body">
+                    <div class="search-header">
+                        <div style="width:80%;">
+                            <input type="text" id="btnSearchProduct" placeholder=" 🔍 Search by Name, Code, Model or Serial"
+                                   style="width:100%; height: 30px; padding: 4px 8px; font-size:12px; box-sizing: border-box;">
+                        </div>
+                        <div style="width:20%;">
+                            <input type="button" id="btnAddProduct" value="+ New" class="btn-new"
+                                   style="width:100%; height: 30px; padding: 0; font-size:12px; box-sizing: border-box; line-height: 28px;">
+                        </div>
+                    </div>
+
+                    <div class="product-scroll-container">
+                        <div class="productInfo-box">
+                            <!-- Dynamic Product List -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+             
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-user-tie"></i>
+                    Sales Person
+                </div>
+                <div class="card-body">
+
+                    <div style="display:flex; width:100%; gap:10px; align-items: center;">
+                        <div style="width:80%;">
+                            <input type="text" id="btnSearchCustomer" placeholder=" 🔍 Search by Name or Code or Model or Serial"
+                                   style="width:100%; height: 30px; padding: 4px 8px; font-size:12px; box-sizing: border-box;">
+                        </div>
+                        <div style="width:20%;">
+                            <input type="button" id="btnAddCustomer" value="+ New" class="btn-new"
+                                   style="width:100%; height: 30px; padding: 0; font-size:12px; box-sizing: border-box; line-height: 28px;">
+                        </div>
+                    </div>
+                    <div class="info-box">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Panel -->
+        <div class="col-12 col-lg-8">
+
+            <div class="pos-cart-card">
+                <div class="pos-cart-header">
+                    <div class="header-cell col-sl">#SL</div>
+                    <div class="header-cell col-product">Item/Product</div>
+                    <div class="header-cell col-price">Price</div>
+                    <div class="header-cell col-qty">Quantity</div>
+                    <div class="header-cell col-discount">Discount</div>
+                    <div class="header-cell col-total">Total</div>
+                    <div class="header-cell col-delete">Delete</div>
+                </div>
+
+                <div class="pos-cart-body" id="cartItemsContainer">
+                    @* <div class="cart-empty-state">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <p>Cart is empty. Add products to begin.</p>
+                    </div> *@
+                </div>
+
+                <div class="pos-cart-footer">
+                    <div class="footer-summary-wrapper">
+                        <div class="summary-box">
+                            <div class="summary-item">
+                                <span class="label">Sub Total</span>
+                                <span class="value" id="lblSubTotal">0.00</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Discount</span>
+                                <input type="number" class="summary-input" id="inputGlobalDiscount" value="0" min="0">
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Tax (%)</span>
+                                <input type="number" class="summary-input" id="inputGlobalTax" value="0" min="0">
+                            </div>
+                            <div class="summary-item grand-total-highlight">
+                                <span class="label">Grand Total</span>
+                                <span class="value" id="lblGrandTotal">0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+
+<script>
+
+//------------ Product Information Script Start------------//
+$(function () {
+    LoadProducts();
+    let typingTimer;    //Timer set cause database traffic handle. 
+
+    $("#btnSearchProduct").on("input", function () {
+        clearTimeout(typingTimer);
+        let keyword = $(this).val();
+        typingTimer = setTimeout(function () {
+                LoadProducts(keyword);
+        }, 500);
+    });
+
+    function LoadProducts(searchText = "") {
+        $.ajax({
+            url: "/POS/GetProductList",
+            type: "GET",
+            data: { paramObj: searchText },
+            success: function (data) {
+                    console.log(data);
+                let html = "";
+                if (!data || data.length === 0) {
+                    $(".productInfo-box").html(`
+                        <div class="empty-state">
+                            <i class="fa-solid fa-box-open"></i>
+                            <div>No Product Found</div>
+                        </div>`);
+                    return;
+                }
+
+                data.forEach(function (p) {
+                    const imageHtml = p.picture
+                        ? `<img src="${p.picture}" class="product-image" alt="${p.name}">`
+                        : `<div class="product-image-placeholder"> <i class="fa-solid fa-box"></i></div>`;
+                    html += `<div class="product-item">
+                            <div class="product-left">
+                                ${imageHtml}
+                                <div class="product-details">
+                                    <span class="product-name">
+                                        ${p.name || ''}
+                                    </span>
+                                    <span class="product-subtext"> 
+                                        Code: ${p.code || 'N/A'} |
+                                        ${p.serialNo ? `#SL: ${p.serialNo}` : `Model: ${p.model || 'N/A'}`}                                              
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="product-right">
+                                <div>
+                                    Price:
+                                    <strong>
+                                        ${(p.price || 0).toLocaleString()}
+                                    </strong>
+                                </div>
+                                <div>
+                                    Stock:
+                                    <strong style="color:#dc3545">
+                                        ${(p.quantity || 0).toLocaleString()}
+                                    </strong>
+                                </div>
+                            </div>
+                            <button id="addProductInGrid" class="btn-add-cart"
+                                    data-id="${p.productId}"
+                                    data-name="${p.name}">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                            </button>
+                        </div>`;
+                });
+                $(".productInfo-box").html(html);
+            },
+            error: function (err) {
+                console.log(err);
+                $(".productInfo-box").html(`
+                    <div class="empty-state">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <div>Failed To Load Products</div>
+                    </div>
+                    `);
+            }
+        });
+    }
+
+    $(document).on("click", ".btn-add-cart", function () {
+
+        const productId = $(this).data("id");
+        const productName = $(this).data("name");
+
+        console.log("Selected Product ID:", productId);
+        console.log("Selected Product:", productName); 
+
+        $(this).blur();
+    });
+
+});
+//------------ Product Information Script End ------------//
+
+//------------- Customer Information Script Start ---------//
+$(document).ready(function(){
+
+    LoadCustomer();
+})
+
+function LoadCustomer(searchText = "Mr. Cash Sale") { 
+$.ajax({
+    url: "/Customer/GetCustomerByCodeNameAndPhone",
+    type: "GET",
+    data: { term: searchText }, 
+    success: function (data) {
+        console.log('Customer Loading');
+        console.log(data); 
+        if (!data || data.length === 0) {
+            $(".info-box").html(`
+                <div class="empty-state">
+                    <i class="fa-solid fa-user-slash"></i>
+                    <div>No Customer Found</div>
+                </div>
+            `);
+            return;
+        } 
+        RenderCustomer(data[0]);
+    },
+
+    error: function (err) {
+        console.log(err); 
+        $(".info-box").html(`
+            <div class="empty-state">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <div>Failed To Load Customer</div>
+            </div>
+        `);
+    }
+});
+}
+     
+function RenderCustomer(c) { 
+    const imageHtml = c.picture
+        ? `<img src="${c.picture}" alt="${c.name}" class="cust-avatar">`
+        : `<div class="cust-avatar-fallback"><i class="fa-solid fa-user"></i></div>`; 
+        const html = `
+            <div class="customer-card-content">
+                ${imageHtml}
+                <div class="cust-details">
+                    <div class="cust-name-row">
+                        <strong>${c.name}</strong>
+                    </div>
+                    <div style="font-size: 12px; margin-right: 5px;">
+                        <i class="fa-solid fa-phone"></i> ${c.phone || 'N/A'}
+                    </div>
+                    <div class="cust-code">Code: ${c.code}</div>
+                </div> 
+                <div class="cust-totals">
+                    <div>Total Sales: <strong>${(c.totalSales || 0).toLocaleString()}</strong></div>
+                    <div>Total Due: <strong style="color:red;">${(c.dueAmount || 0).toLocaleString()}</strong></div>
+                </div> 
+                <span class="close-btn" onclick="$(this).parent().remove()">✕</span>
+            </div>`;
+        $(".info-box").html(html);
+    };
+     
+$("#btnSearchCustomer").autocomplete({
+            source: function (request, response) {
+                $.get("/Customer/GetCustomerByCodeNameAndPhone",
+                    { term: request.term },
+                    function (data) {
+                            console.log(data);
+                        response($.map(data, function (item) {
+                            return { 
+                                label: "👤 "+ item.name + " 🖁" + item.phone ,
+                                value: "👤 "+ item.name +" 🖁"+ item.phone,
+                            // Pass all data fields to ui.item
+                                id: item.customerId,
+                                name: item.name,
+                                phone: item.phone,
+                                code: item.code,
+                                totalSales: item.totalSales,
+                                dueAmount: item.dueAmount,
+                                picture: item.picture  
+                            };
+                        }));
+                    });
+            }, 
+            minLength: 2,
+            select: function (event, ui) {
+            const c = ui.item;
+                RenderCustomer(c); 
+            return false;  
+        }
+        }); 
+
+//------------- Customer Information Script End ---------//
+
+
+ 
+
+
+
+
+
+
+
+
+    // =========================================================================
+    // 1. ACTIVE ORDER CART ENGINE (DASHBOARD GRID & CALCULATION LOGIC)
+    // =========================================================================
+    $(document).ready(function () {
+        // Array variable holding local memory state for the active customer cart session
+        let productCartList = [];
+        renderCartGrid();
+
+        // A. Intercept the product item listing button dispatch event
+        $(document).on("click", ".btn-add-cart", function (e) {
+            e.preventDefault();
+
+            const btn = $(this);
+
+            // Extract metrics explicitly from data attributes to decouple business logic from UI design
+            const productId   = btn.data("id");
+            const productName = btn.data("name");
+            const productCode = btn.data("code");
+            const serialNo    = btn.data("serial") ? String(btn.data("serial")).trim() : "";
+            const model       = btn.data("model") || "N/A";
+            const imageSrc    = btn.data("image") || "";
+            const productPrice = parseFloat(btn.data("price")) || 0;
+
+            // Isolate serialized items vs standard bulk commodities
+            const isSerialized = (serialNo !== "" && serialNo !== "N/A");
+            const lookupSerial = isSerialized ? serialNo : "N/A";
+
+            // Compound unique constraint evaluation: matching both ID and Serial Number
+            let existingItem = productCartList.find(item => item.id === productId && item.serialNo === lookupSerial);
+
+            if (existingItem) {
+                if (isSerialized) { 
+                    ShowWarningToast(
+                            "Duplicate Serial Number", 
+                            `Serial <strong>${serialNo}</strong> for <strong> ${productName}</strong> is already active in your cart layout.`
+                    );
+                    return; 
+                } else {
+                    // Standard non-serialized products can scale quantity infinitely
+                    existingItem.quantity += 1;
+                }
+            } 
+            else {
+                // Setup fresh operational business entity payload maps
+                productCartList.push({
+                    id: productId,
+                    name: productName,
+                    code: productCode,
+                    serialNo: lookupSerial,
+                    model: model,
+                    image: imageSrc,
+                    price: productPrice,
+                    quantity: 1,
+                    discount: 0
+                });
+            }
+
+            renderCartGrid();
+        });
+
+
+
+
+     function ShowWarningToast(title, message) {
+        // 1. Ensure the global container box exists in the DOM body
+        if ($("#toast-container").length === 0) {
+            $("body").append('<div id="toast-container"></div>');
+        }
+
+        // 2. Build the structured modern card layout
+        const toastHtml = `
+            <div class="pos-toast">
+                <div class="toast-icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+            </div>
+        `;
+
+        const $toast = $(toastHtml);
+        $("#toast-container").append($toast);
+
+        // 3. Automatically fade out and clean up the DOM element after 3.5 seconds
+        setTimeout(function() {
+            $toast.addClass("toast-fade-out");
+            setTimeout(() => $toast.remove(), 300); // Remove element completely after animation finishes
+        }, 3500);
+    }
+
+        // B. Render & Update Layout View Core Implementation
+        function renderCartGrid() {
+            const container = $("#cartItemsContainer");
+            container.empty();
+
+            if (productCartList.length === 0) {
+                container.html(`
+                    <div class="cart-empty-state-modern">
+                        <div class="animation-wrapper">
+                            <div class="radar-pulse"></div>
+                            <div class="cart-icon-box">
+                                <i class="fa-solid fa-basket-shopping"></i>
+                            </div>
+                        </div>
+                        <h3 class="empty-title">Cart is Empty</h3>
+                        <p class="empty-subtitle">Select products from the left pane to build an order</p>
+                        <div class="direction-indicator">
+                            <i class="fa-solid fa-arrow-left"></i> Ready to scan or add items
+                        </div>
+                    </div>
+                `);
+                calculateTotals();
+                return;
+            }
+
+            productCartList.forEach((item, index) => {
+                const rowTotal = (item.price * item.quantity) - item.discount;
+                const slNo = String(index + 1).padStart(2, '0');
+
+                // Generate clean image markup conditionally
+                const imageHtml = item.image
+                    ? `<img src="${item.image}" class="product-image" alt="${item.name}">`
+                    : `<div class="product-image-placeholder"><i class="fa-solid fa-box"></i></div>`;
+
+                // Display #SL or Model context subtext gracefully
+                const dynamicSubtext = item.serialNo !== "N/A" ? `#SL: ${item.serialNo}` : `Model: ${item.model}`;
+
+                // Check if serialized to disable quantity editing directly in the grid
+                const qtyReadOnlyAttr = item.serialNo !== "N/A" ? 'readonly style="background:#f1f5f9; cursor:not-allowed;"' : '';
+
+                const itemHtml = `
+                    <div class="cart-item-row" data-id="${item.id}" data-serial="${item.serialNo}">
+                        <div class="col-sl sl-number">${slNo}</div>
+                        <div class="col-product">
+                            <div class="product-left">
+                                ${imageHtml}
+                                <div class="product-details">
+                                    <span class="product-name">${item.name}</span>
+                                    <span class="product-subtext">Code: ${item.code} | ${dynamicSubtext}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-price">
+                            <input type="number" class="cart-grid-input input-row-price" value="${item.price}" min="0" step="any">
+                        </div>
+                        <div class="col-qty">
+                            <input type="number" class="cart-grid-input input-row-qty" value="${item.quantity}" min="1" ${qtyReadOnlyAttr}>
+                        </div>
+                        <div class="col-discount">
+                            <input type="number" class="cart-grid-input input-row-discount" value="${item.discount}" min="0" step="any">
+                        </div>
+                        <div class="col-total row-total-val">${rowTotal.toFixed(2)}</div>
+                        <div class="col-delete">
+                            <button type="button" class="btn-cart-delete"><i class="fa-solid fa-minus-circle"></i></button>
+                        </div>
+                    </div>`;
+                container.append(itemHtml);
+            });
+
+            calculateTotals();
+        }
+
+        // C. Dynamic input adjustments mapping to memory calculations state
+        $(document).on("input", ".input-row-price, .input-row-qty, .input-row-discount", function () {
+            const row = $(this).closest(".cart-item-row");
+            const id = row.data("id");
+            const serial = row.data("serial");
+
+            const targetItem = productCartList.find(item => item.id === id && item.serialNo === serial);
+
+            if (targetItem) {
+                const isSerialized = (targetItem.serialNo !== "" && targetItem.serialNo !== "N/A");
+                let typedQty = parseInt(row.find(".input-row-qty").val()) || 1;
+
+                // Security fallback safeguard for manual keyboard inputs
+                if (isSerialized && typedQty > 1) {
+                    alert("Serialized products are strictly locked to a maximum quantity of 1.");
+                    typedQty = 1;
+                    row.find(".input-row-qty").val(1);
+                }
+
+                targetItem.price = parseFloat(row.find(".input-row-price").val()) || 0;
+                targetItem.quantity = typedQty;
+                targetItem.discount = parseFloat(row.find(".input-row-discount").val()) || 0;
+
+                // Instantly render updated calculations visually inline
+                const updatedRowTotal = (targetItem.price * targetItem.quantity) - targetItem.discount;
+                row.find(".row-total-val").text(updatedRowTotal.toFixed(2));
+
+                calculateTotals();
+            }
+        });
+
+        // D. Handle Item Deletions from active UI Grid View rows
+        $(document).on("click", ".btn-cart-delete", function () {
+            const row = $(this).closest(".cart-item-row");
+            const id = row.data("id");
+            const serial = row.data("serial");
+
+            // Use strict inverse evaluation to wipe matching data model nodes completely out
+            productCartList = productCartList.filter(item => !(item.id === id && item.serialNo === serial));
+            renderCartGrid();
+        });
+
+        // E. Global Calculation Engine for Checkout totals
+        $(document).on("input", "#inputGlobalDiscount, #inputGlobalTax", function () {
+            calculateTotals();
+        });
+
+
+            function calculateTotals() {
+        // 🚨 FIX 1: If the cart is empty, force all inputs to 0 BEFORE calculating anything
+        if (productCartList.length === 0) {
+            $("#inputGlobalTax").val(0);
+            $("#inputGlobalDiscount").val(0);
+
+            $("#lblSubTotal").text("0.00");
+            $("#lblGrandTotal").text("0.00"); // FIX 2: Changed from .val(0) to .text("0.00")
+            return; // Exit early since nothing else needs calculation
+        }
+
+        let subTotal = 0;
+        productCartList.forEach(item => {
+            subTotal += (item.price * item.quantity) - item.discount;
+        });
+
+        const globalDiscount = parseFloat($("#inputGlobalDiscount").val()) || 0;
+        const taxPercentage = parseFloat($("#inputGlobalTax").val()) || 0;
+
+        // Apply logic safely
+        const intermediateTotal = subTotal - globalDiscount;
+        const taxCalculatedAmount = intermediateTotal * (taxPercentage / 100);
+        const grandTotal = intermediateTotal + taxCalculatedAmount;
+
+        // Render localized system presentation parameters safely
+        $("#lblSubTotal").text(subTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        $("#lblGrandTotal").text(grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    }
+        // function calculateTotals() {
+        //     let subTotal = 0;
+        //     productCartList.forEach(item => {
+        //         subTotal += (item.price * item.quantity) - item.discount;
+        //     });
+
+        //     const globalDiscount = parseFloat($("#inputGlobalDiscount").val()) || 0;
+        //     const taxPercentage = parseFloat($("#inputGlobalTax").val()) || 0;
+
+        //     const intermediateTotal = subTotal - globalDiscount;
+        //     const taxCalculatedAmount = intermediateTotal * (taxPercentage / 100);
+        //     const grandTotal = intermediateTotal + taxCalculatedAmount;
+
+            
+        //     // Render localized system presentation parameters safely
+        //     $("#lblSubTotal").text(subTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        //     $("#lblGrandTotal").text(grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        //              // alert(productCartList.length);
+        //     if(productCartList.length <=0){
+        //         $("#inputGlobalTax").val(0);
+        //         $("#inputGlobalDiscount").val(0);
+        //         $("#lblGrandTotal").val(0);
+        //     }
+        //     // alert($("#lblGrandTotal").val());
+        
+        // }
+    });
+
+
+    // =========================================================================
+    // 2. PRODUCT CATALOG ASYNC AJAX DATA RETRIEVAL (LEFT PANEL PRESENTATION)
+    // =========================================================================
+    $(function () {
+        LoadProducts();
+        let typingTimer;
+
+        $("#btnSearchProduct").on("input", function () {
+            clearTimeout(typingTimer);
+            let keyword = $(this).val();
+            typingTimer = setTimeout(function () {
+                LoadProducts(keyword);
+            }, 500);
+        });
+
+        function LoadProducts(searchText = "") {
+            $.ajax({
+                url: "/POS/GetProductList",
+                type: "GET",
+                data: { paramObj: searchText },
+                success: function (data) {
+                    let html = "";
+                    if (!data || data.length === 0) {
+                        $(".productInfo-box").html(`
+                            <div class="empty-state">
+                                <i class="fa-solid fa-box-open"></i>
+                                <div>No Product Found</div>
+                            </div>`);
+                        return;
+                    }
+
+                    data.forEach(function (p) {
+                        const imageHtml = p.picture
+                            ? `<img src="${p.picture}" class="product-image" alt="${p.name}">`
+                            : `<div class="product-image-placeholder"><i class="fa-solid fa-box"></i></div>`;
+
+                        const subtextContext = p.serialNo ? `#SL: ${p.serialNo}` : `Model: ${p.model || 'N/A'}`;
+
+                        // Embed metrics natively into dataset elements to protect logic against future styling updates
+                        html += `
+                            <div class="product-item">
+                                <div class="product-left">
+                                    ${imageHtml}
+                                    <div class="product-details">
+                                        <span class="product-name">${p.name || ''}</span>
+                                        <span class="product-subtext">Code: ${p.code || 'N/A'} | ${subtextContext}</span>
+                                    </div>
+                                </div>
+                                <div class="product-right">
+                                    <div>Price: <strong>${(p.price || 0).toLocaleString()}</strong></div>
+                                    <div>Stock: <strong style="color:#dc3545">${(p.quantity || 0).toLocaleString()}</strong></div>
+                                </div>
+
+                                <button type="button" class="btn-add-cart"
+                                        data-id="${p.productId}"
+                                        data-name="${escapeHtml(p.name)}"
+                                        data-code="${p.code || ''}"
+                                        data-serial="${p.serialNo || ''}"
+                                        data-model="${p.model || ''}"
+                                        data-image="${p.picture || ''}"
+                                        data-price="${p.price || 0}">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                </button>
+                            </div>`;
+                    });
+                    $(".productInfo-box").html(html);
+                },
+                error: function (err) {
+                    console.error("Critical POS System Failure:", err);
+                    $(".productInfo-box").html(`
+                        <div class="empty-state">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <div>Failed To Load Products</div>
+                        </div>`);
+                }
+            });
+        }
+
+        // Helper utility to safely escape special layout string entities inside HTML fields
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    });
+
+
+
+     
+    // ============================================
+    // PRODUCT SEARCH & PRODUCT CATALOG AJAX LOADER
+    // ============================================
+    // $(function () {
+    //     LoadProducts();
+    //     let typingTimer;
+
+    //     $("#btnSearchProduct").on("input", function () {
+    //         clearTimeout(typingTimer);
+    //         let keyword = $(this).val();
+    //         typingTimer = setTimeout(function () {
+    //             LoadProducts(keyword);
+    //         }, 500);
+    //     });
+
+    //     function LoadProducts(searchText = "") {
+    //         $.ajax({
+    //             url: "/POS/GetProductList",
+    //             type: "GET",
+    //             data: { paramObj: searchText },
+    //             success: function (data) {
+    //                 let html = "";
+    //                 if (!data || data.length === 0) {
+    //                     $(".productInfo-box").html(`
+    //                         <div class="empty-state">
+    //                             <i class="fa-solid fa-box-open"></i>
+    //                             <div>No Product Found</div>
+    //                         </div>`);
+    //                     return;
+    //                 }
+
+    //                 data.forEach(function (p) {
+    //                     const imageHtml = p.picture
+    //                         ? `<img src="${p.picture}" class="product-image" alt="${p.name}">`
+    //                         : `<div class="product-image-placeholder"><i class="fa-solid fa-box"></i></div>`;
+
+    //                     const subtextContext = p.serialNo ? `#SL: ${p.serialNo}` : `Model: ${p.model || 'N/A'}`;
+
+    //                     // REFACTOR CRITICAL POINT: Embed raw item entity models directly
+    //                     // within HTML5 custom data metrics for clean programmatic consumption.
+    //                     html += `
+    //                         <div class="product-item">
+    //                             <div class="product-left">
+    //                                 ${imageHtml}
+    //                                 <div class="product-details">
+    //                                     <span class="product-name">${p.name || ''}</span>
+    //                                     <span class="product-subtext">Code: ${p.code || 'N/A'} | ${subtextContext}</span>
+    //                                 </div>
+    //                             </div>
+    //                             <div class="product-right">
+    //                                 <div>Price: <strong>${(p.price || 0).toLocaleString()}</strong></div>
+    //                                 <div>Stock: <strong style="color:#dc3545">${(p.quantity || 0).toLocaleString()}</strong></div>
+    //                             </div>
+
+    //                             <button type="button" class="btn-add-cart"
+    //                                     data-id="${p.productId}"
+    //                                     data-name="${escapeHtml(p.name)}"
+    //                                     data-code="${p.code || ''}"
+    //                                     data-serial="${p.serialNo || ''}"
+    //                                     data-model="${p.model || ''}"
+    //                                     data-image="${p.picture || ''}"
+    //                                     data-price="${p.price || 0}">
+    //                                 <i class="fa-solid fa-cart-plus"></i>
+    //                             </button>
+    //                         </div>`;
+    //                 });
+    //                 $(".productInfo-box").html(html);
+    //             },
+    //             error: function (err) {
+    //                 console.error(err);
+    //                 $(".productInfo-box").html(`
+    //                     <div class="empty-state">
+    //                         <i class="fa-solid fa-triangle-exclamation"></i>
+    //                         <div>Failed To Load Products</div>
+    //                     </div>`);
+    //             }
+    //         });
+    //     }
+
+    //     // Helper utility to escape special string characters in attributes safely
+    //     function escapeHtml(str) {
+    //         if (!str) return '';
+    //         return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    //     }
+    // });
+
+ 
+
+
+
+    //     $(document).ready(function () {
+    //     // Array variable holding local memory state for the active customer cart session
+    //     let productCartList = [];
+    //      renderCartGrid();
+
+    //     // 1. Intercept the product item listing button dispatch event
+    //     $(document).on("click", "#addProductInGrid", function (e) {
+    //         e.preventDefault();
+
+    //         // Extract parameters attached directly via dynamic loop assignments
+    //         const btn = $(this);
+    //         const productId = btn.data("id");
+
+    //         // Find the wrapper layout context to read other UI attributes on demand
+    //         const itemContainer = btn.closest(".product-item");
+    //         const productName = itemContainer.find(".product-name").text().trim();
+    //         const subtextHtml = itemContainer.find(".product-subtext").html();
+    //         const imageHtml = itemContainer.find(".product-left").html().split('<div class="product-details">')[0]; // Grabs exact img tag or fallback
+
+    //         // Clear punctuation logic safely out of string representations for absolute numeric conversions
+    //         const rawPrice = itemContainer.find(".product-right strong").first().text().replace(/[^0-9.-]+/g, "");
+    //         const productPrice = parseFloat(rawPrice) || 0;
+
+    //         // Check if item already exists inside current session list state array
+    //             let existingItem = productCartList.find(item => item.id === productId);
+    //             console.log(existingItem);
+    //         if (existingItem) {
+    //             existingItem.quantity += 1;
+    //         } else {
+    //             // Setup fresh operational business entity item record payload maps
+    //                 productCartList.push({
+    //                 id: productId,
+    //                 name: productName,
+    //                 subtext: subtextHtml,
+    //                 image: imageHtml,
+    //                 price: productPrice,
+    //                 quantity: 1,
+    //                 discount: 0
+    //             });
+    //             console.log('productCartList');
+    //             console.log(productCartList);
+    //         }
+
+    //         renderCartGrid();
+    //     });
+
+    //     // 2. Render & Update Layout View Core Implementation
+    //     function renderCartGrid() {
+    //         const container = $("#cartItemsContainer");
+    //         container.empty();
+
+    //             if (productCartList.length === 0) {
+    //             // container.html(`
+    //             //     <div class="cart-empty-state">
+    //             //         <i class="fa-solid fa-cart-shopping"></i>
+    //             //         <p>Cart is empty. Add products to begin.</p>
+    //             //     </div>`);
+
+    //                 container.html(`
+    //                                 <div class="cart-empty-state-modern">
+    //                                     <div class="animation-wrapper">
+    //                                         <div class="radar-pulse"></div>
+    //                                         <div class="cart-icon-box">
+    //                                             <i class="fa-solid fa-basket-shopping"></i>
+    //                                         </div>
+    //                                     </div>
+    //                                     <h3 class="empty-title">Cart is Empty</h3>
+    //                                     <p class="empty-subtitle">Select products from the left pane to build an order</p>
+    //                                     <div class="direction-indicator">
+    //                                         <i class="fa-solid fa-arrow-left"></i> Ready to scan or add items
+    //                                     </div>
+    //                                 </div>
+    //                             `); 
+    //             calculateTotals();
+    //             return;
+    //         }
+
+    //             productCartList.forEach((item, index) => {
+    //             const rowTotal = (item.price * item.quantity) - item.discount;
+    //             const slNo = String(index + 1).padStart(2, '0');
+
+    //             const itemHtml = `
+    //                 <div class="cart-item-row" data-id="${item.id}">
+    //                     <div class="col-sl sl-number">${slNo}</div>
+    //                     <div class="col-product">
+    //                         <div class="product-left">
+    //                             ${item.image}
+    //                             <div class="product-details">
+    //                                  <span class="product-name">
+    //                                                 ${item.name}
+    //                                         </span>
+    //                                         <span class="product-subtext">
+    //                                                 ${item.subtext}
+    //                                         </span> 
+ 
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                     <div class="col-price">
+    //                         <input type="number" class="cart-grid-input input-row-price" value="${item.price}" min="0" step="any">
+    //                     </div>
+    //                     <div class="col-qty">
+    //                         <input type="number" class="cart-grid-input input-row-qty" value="${item.quantity}" min="1">
+    //                     </div>
+    //                     <div class="col-discount">
+    //                         <input type="number" class="cart-grid-input input-row-discount" value="${item.discount}" min="0" step="any">
+    //                     </div>
+    //                     <div class="col-total row-total-val">${rowTotal.toFixed(2)}</div>
+    //                     <div class="col-delete">
+    //                         <button type="button" class="btn-cart-delete"><i class="fa-solid fa-minus-circle"></i></button>
+    //                     </div>
+    //                 </div>`;
+    //             container.append(itemHtml);
+    //         });
+
+    //         calculateTotals();
+    //     }
+
+    //     // 3. Dynamic input adjustments mapping to memory calculations state
+    //     $(document).on("input", ".input-row-price, .input-row-qty, .input-row-discount", function () {
+    //         const row = $(this).closest(".cart-item-row");
+    //         const id = row.data("id");
+    //             const targetItem = productCartList.find(item => item.id === id);
+
+    //         if (targetItem) {
+    //             targetItem.price = parseFloat(row.find(".input-row-price").val()) || 0;
+    //             targetItem.quantity = parseInt(row.find(".input-row-qty").val()) || 1;
+    //             targetItem.discount = parseFloat(row.find(".input-row-discount").val()) || 0;
+
+    //             // Fast recalculate single inline calculation visual block
+    //             const updatedRowTotal = (targetItem.price * targetItem.quantity) - targetItem.discount;
+    //             row.find(".row-total-val").text(updatedRowTotal.toFixed(2));
+
+    //             calculateTotals();
+    //         }
+    //     });
+
+    //     // 4. Handle Item Deletions from active UI Grid View rows
+    //     $(document).on("click", ".btn-cart-delete", function () {
+    //         const row = $(this).closest(".cart-item-row");
+    //         const id = row.data("id");
+
+    //         // Splice entry out from underlying dynamic array instance tracking
+    //             productCartList = productCartList.filter(item => item.id !== id);
+    //         renderCartGrid();
+    //     });
+
+    //     // 5. Global Calculation Engine for Checkout totals
+    //     $(document).on("input", "#inputGlobalDiscount, #inputGlobalTax", function () {
+    //         calculateTotals();
+    //     });
+
+    //     function calculateTotals() {
+    //         let subTotal = 0;
+
+    //         // Sum individual row configurations
+    //             productCartList.forEach(item => {
+    //             subTotal += (item.price * item.quantity) - item.discount;
+    //         });
+
+    //         const globalDiscount = parseFloat($("#inputGlobalDiscount").val()) || 0;
+    //         const taxPercentage = parseFloat($("#inputGlobalTax").val()) || 0;
+
+    //         // Apply calculations down logically
+    //         const intermediateTotal = subTotal - globalDiscount;
+    //         const taxCalculatedAmount = intermediateTotal * (taxPercentage / 100);
+    //         const grandTotal = intermediateTotal + taxCalculatedAmount;
+
+    //         // Render localized system strings safely
+    //         $("#lblSubTotal").text(subTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    //         $("#lblGrandTotal").text(grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    //     }
+    // });
+     
+</script>
+
+
