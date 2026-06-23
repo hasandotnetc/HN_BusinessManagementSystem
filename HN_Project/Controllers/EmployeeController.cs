@@ -24,8 +24,8 @@ namespace HN_Project.Controllers
             //var list = data.Select(x => CustomerMapper.CustomerVMMapper(x)).ToList();
 
             var _list = getEmployeeList.Select(x => EmployeeMapper.EmployeeVMMapper(x)).ToList();
-            if (_list.Count == 0)
-                return NotFound("No data found !!");
+            //if (_list.Count == 0)
+            //    return NotFound("No data found !!");
             return Ok(_list);
         }
     }
