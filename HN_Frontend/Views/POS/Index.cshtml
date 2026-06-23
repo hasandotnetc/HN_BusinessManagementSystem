@@ -61,7 +61,7 @@
         border-radius: 5px;
     }
 
-    .info-box {
+    .info-box, .salesPerson-info-box {
         border: 1px solid #ddd;
         padding: 5px;
         border-radius: 5px;
@@ -259,6 +259,7 @@
     overflow-x: hidden;
     border-top: 1px solid #f2f2f2;
 }
+ 
 
 /* SCROLLBAR */
 
@@ -350,17 +351,7 @@
 
 /* ADD BUTTON */
 
-.btn-add-cart {
-/*     width: 35px;
-    height: 35px;
-    border: none;
-    border-radius: 50%;
-    background: #28a745;
-    color: white;
-    cursor: pointer;
-    flex-shrink: 0;
-        top: 50%;
-        margin-right: 5px; */
+.btn-add-cart { 
         width: 30px;
         height: 30px;
         border: none;
@@ -424,7 +415,8 @@
         padding: 0 4px;
     }
 
-    /* Column Width Percentages for Grid Alignment */
+
+    /* Column Width Percentages for Grid Alignment */ 
     .col-sl {
         width: 8%;
         text-align: center;
@@ -568,10 +560,78 @@
         padding: 8px;
     }
 
-    .footer-summary-wrapper {
+  /*   .footer-summary-wrapper {
         display: flex;
         justify-content: flex-end;
+    } */
+
+    .footer-summary-wrapper {
+    display: flex;
+    justify-content: space-between; /* Pushes payment to left and totals to right */
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+}
+
+    /* New Left Side Payment Box matching the exact aesthetic of your right side box */
+    .payment-box {
+        width: 320px; /* Gives a bit more room for text and bold inputs */
+        display: flex;
+        flex-direction: column;
+        gap: 8px; /* Slightly relaxed padding for transactional entries */
+        border: 1px solid #e2e8f0;
+        padding: 8px 12px;
+        border-radius: 6px;
+        background: #fafafa; /* Identical background color to your right box */
     }
+
+    /* Adjust labels for clarity on the checkout processing side */
+    .payment-label {
+        font-weight: 700;
+        font-size: 15px;
+        color: #1e293b;
+    }
+
+    /* Tailoring large numbers to look bold and structured like your design snapshot */
+    .payment-input {
+        width: 120px !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        text-align: right !important;
+        padding: 4px 8px !important;
+    }
+
+    /* Visual cue to indicate that change amount cannot be modified manually */
+    #lblChangeAmount[readonly] {
+        background-color: #f1f5f9;
+        color: #0f172a;
+        border-color: #cbd5e1;
+        cursor: not-allowed;
+    }
+
+
+/*     #lblDueAmount[readonly] {
+        background-color: #FEE9DA;
+        color: #0f172a;
+        border-color: #cbd5e1;
+        cursor: not-allowed;
+    } */
+
+    /* আপনার আগের ডিফল্ট স্টাইল */
+    #lblDueAmount[readonly] {
+        background-color: #FEE9DA; /* হালকা কমল রঙের ডিফল্ট ব্যাকগ্রাউন্ড */
+        color: #0f172a;
+        border-color: #cbd5e1;
+        cursor: not-allowed;
+        transition: background-color 0.3s ease, color 0.3s ease; /* স্মুথ কালার চেঞ্জের জন্য */
+    }
+
+        /* নতুন ক্লাস: যখন ডিউ ০ (জিরো) হয়ে যাবে */
+        #lblDueAmount[readonly].due-clear-green {
+            background-color: #d1fae5 !important; /* হালকা সফট গ্রিন (Soft Green) */
+            color: #065f46 !important; /* গাঢ় সবুজ টেক্সট */
+            border-color: #a7f3d0 !important;
+        }
 
     .summary-box {
         width: 300px;
@@ -849,6 +909,339 @@
 
 
 
+
+    /* -------------------- Pos Footer Payment and Operatoinal Option Start ---------------- */
+    /* -------------------- Pos Footer Payment and Operatoinal Option Start ---------------- */
+
+    /* Container Layout positioning underneath the main grid component */
+    .pos-actions-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 6px; /* দুই কার্ডের মাঝের গ্যাপ কিছুটা কমানো হলো */
+        margin-top: 5px;
+        width: 100%;
+    }
+
+    .action-card {
+        background: #ffffff;
+        border-radius: 6px; /* কোণাগুলো একটু শার্প করা হলো */
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .method-card {
+        width: 62%;
+    }
+
+    .operational-card {
+        width: 38%;
+    }
+
+    .action-card-header {
+        background: rebeccapurple;
+        color: #ffffff;
+        font-weight: 600;
+        padding: 6px 14px; /* হেডার প্যাডিং কমিয়ে ছোট করা হলো */
+        font-size: 14px; /* টেক্সট সাইজ ১ পিক্সেল কমানো হলো */
+        letter-spacing: 0.5px;
+    }
+
+    .action-card-body {
+        padding: 8px; /* ভেতরের মূল বডির প্যাডিং কমানো হলো যাতে বাটনগুলো গায়ে গায়ে লাগে */
+        flex: 1;
+        background: #f8fafc;
+    }
+
+    /* Custom Grid Matrix Allocation for Payment Channels */
+    .payment-methods-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px; /* পেমেন্ট বাটনগুলোর মাঝের গ্যাপ ৮ থেকে ৪ করা হলো (গায়ে গায়ে লাগবে) */
+    }
+
+        .payment-methods-grid label:nth-child(7) {
+            grid-column: span 3; /* Extends Split Payment cleanly across full layout wide */
+        }
+
+    /* Custom Checkbox Design Mocking Radio Input Triggers */
+    .method-option input[type="radio"] {
+        display: none;
+    }
+    
+    .method-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px; /* আইকন ও লেখার দূরত্ব কমানো হলো */
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        color: #334155;
+        padding: 6px 5px;  
+        border-radius: 4px;
+        font-size: 14px; /* ফন্ট সাইজ সামান্য ছোট করা হলো */
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.15s ease-in-out;
+        user-select: none;
+    }
+
+        .method-btn i {
+            font-size: 14px;
+            color: #64748b; 
+        }
+    /* আইকন সাইজ ব্যালেন্স করা হলো */
+    .method-option:hover .method-btn {
+        background: #F6FBD2;
+        border-color: #94a3b8;
+    }
+
+    /* Selected Button Highlights */
+    .method-option input[type="radio"]:checked + .method-btn {
+        background: #eff6ff;
+        border-color: #3b82f6;
+        color: #1d4ed8;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+    }
+
+        .method-option input[type="radio"]:checked + .method-btn i {
+            color: #2563eb;
+        }
+
+    /* Custom Brand Specific Layout Wrappers */
+    .mfs-text {
+        font-family: 'Segoe UI', Roboto, sans-serif;
+        font-weight: 800;
+    }
+
+    .btn-split-theme {
+        background: #fffbeb;
+        border-color: #fde68a;
+        color: #b45309;
+    }
+
+    /* Operational Buttons Matrix Layout */
+    .process-buttons-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4px; /* অপারেশন বাটনগুলোর গ্যাপ ১০ থেকে কমিয়ে ৪ করা হলো */
+    }
+
+    .btn-op-save-report {
+        grid-column: span 2;
+    }
+
+    .btn-op {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border: none;
+        padding: 7px 10px; /* ১২ পিক্সেল থেকে কমিয়ে ৭ পিক্সেল করা হলো (বাটন ছোট ও নিখুঁত হবে) */
+        border-radius: 4px;
+        font-size: 14px; /* লেখার ফন্ট ১৪ থেকে ১২ করা হলো */
+        font-weight: 700;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .btn-op-save-report {
+        background: #10b981;
+    }
+
+        .btn-op-save-report:hover {
+            background: #059669;
+        }
+
+    .btn-op-save {
+        background: #3b82f6;
+    }
+
+        .btn-op-save:hover {
+            background: #2563eb;
+        }
+
+    .btn-op-clear {
+        background: #f97316;
+    }
+
+        .btn-op-clear:hover {
+            background: #ea580c;
+        }
+
+    /* --- DIALOG OVERLAY ANIMATED WINDOWS --- */
+    .pos-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(4px);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+        .pos-modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+    .pos-modal-box {
+        background: #ffffff;
+        border-radius: 12px;
+        width: 400px;
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        display: none;
+        transform: scale(0.85);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .pos-modal-overlay.active .pos-modal-box.active {
+        display: block;
+        transform: scale(1);
+    }
+
+    .pos-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 20px;
+        border-bottom: 1px solid #e2e8f0;
+        background: #f8fafc;
+        border-radius: 12px 12px 0 0;
+    }
+
+        .pos-modal-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+
+    .btn-modal-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #94a3b8;
+        cursor: pointer;
+    }
+
+        .btn-modal-close:hover {
+            color: #64748b;
+        }
+
+    .pos-modal-body {
+        padding: 20px;
+    }
+
+    .form-group-pos {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+
+        .form-group-pos label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .form-group-pos input {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            color: #1e293b;
+        }
+
+            .form-group-pos input:focus {
+                outline: none;
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+            }
+
+    .pos-modal-footer {
+        padding: 12px 20px 20px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .btn-modal-submit {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        font-size: 13px;
+        font-weight: 700;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+
+        .btn-modal-submit:hover {
+            background: #2563eb;
+        }
+
+    /* ------------------------------------- End Payment and Operational Process------------------ */
+/* ------------------------------------- End Payment and Operational Process------------------ */
+
+    /* --- MFS Brand Specific Custom Styling --- */
+
+    /* ১. বিকাশ (bKash) স্টাইল */
+    .btn-bkash .mfs-text {
+        color: #D12053; /* অফিশিয়াল বিকাশ পিঙ্ক */
+    }
+
+    .method-option input[type="radio"]:checked + .btn-bkash {
+        background: #FFF0F5; /* সিলেক্ট হলে হালকা পিঙ্ক ব্যাকগ্রাউন্ড */
+        border-color: #D12053;
+    }
+
+    /* ২. নগদ (Nagad) স্টাইল */
+    .btn-nagad .mfs-text {
+        color: #F64A20; /* অফিশিয়াল নগদ রেড-অরেঞ্জ */
+    }
+
+    .method-option input[type="radio"]:checked + .btn-nagad {
+        background: #FFF5F2; /* সিলেক্ট হলে হালকা অরেঞ্জ ব্যাকগ্রাউন্ড */
+        border-color: #F64A20;
+    }
+
+    /* ৩. রকেট (Rocket) স্টাইল */
+    .btn-rocket .mfs-text {
+        color: #8C2D84; /* অফিশিয়াল রকেট পার্পল */
+    }
+
+    .method-option input[type="radio"]:checked + .btn-rocket {
+        background: #FAF0FA; /* সিলেক্ট হলে হালকা পার্পল ব্যাকগ্রাউন্ড */
+        border-color: #8C2D84;
+    }
+
+    /* ফন্ট স্টাইল একটু বোল্ড করা যাতে লোগোর মতো ফিল আসে */
+    .mfs-text {
+        font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+    }
+
+
+
+
+
+
+
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -917,15 +1310,15 @@
 
                     <div style="display:flex; width:100%; gap:10px; align-items: center;">
                         <div style="width:80%;">
-                            <input type="text" id="btnSearchCustomer" placeholder=" 🔍 Search by Name or Code or Model or Serial"
+                            <input type="text" id="btnSearchSalesPerson" placeholder=" 🔍 Search by Name or Code or Phone"
                                    style="width:100%; height: 30px; padding: 4px 8px; font-size:12px; box-sizing: border-box;">
                         </div>
                         <div style="width:20%;">
-                            <input type="button" id="btnAddCustomer" value="+ New" class="btn-new"
+                            <input type="button" id="btnAddSalesPerson" value="+ New" class="btn-new"
                                    style="width:100%; height: 30px; padding: 0; font-size:12px; box-sizing: border-box; line-height: 28px;">
                         </div>
                     </div>
-                    <div class="info-box">
+                    <div class="salesPerson-info-box">
                     </div>
                 </div>
             </div>
@@ -933,6 +1326,8 @@
         </div>
 
         <!-- Right Panel -->
+       
+
         <div class="col-12 col-lg-8">
 
             <div class="pos-cart-card">
@@ -947,14 +1342,25 @@
                 </div>
 
                 <div class="pos-cart-body" id="cartItemsContainer">
-                    @* <div class="cart-empty-state">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <p>Cart is empty. Add products to begin.</p>
-                    </div> *@
                 </div>
 
                 <div class="pos-cart-footer">
                     <div class="footer-summary-wrapper">
+                        <div class="payment-box">
+                            <div class="summary-item">
+                                <span class="label payment-label">Receive Amount</span>
+                                <input type="text" class="summary-input payment-input" id="inputPaidAmount" min="0" step="any">
+                            </div>
+                            <div class="summary-item">
+                                <span class="label payment-label">Due Amount</span>
+                                <input class="summary-input payment-input" id="lblDueAmount" value="0.00" readonly>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label payment-label">Change Amount</span>
+                                <input class="summary-input payment-input" id="lblChangeAmount" value="0.00" readonly>
+                            </div>
+                        </div>
+
                         <div class="summary-box">
                             <div class="summary-item">
                                 <span class="label">Sub Total</span>
@@ -976,10 +1382,249 @@
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="pos-actions-row">
+
+                <div class="action-card method-card">
+                    <div class="action-card-header">
+                        <i class="fa-solid fa-wallet"></i>
+                        Payment Method
+                    </div>
+                    <div class="action-card-body payment-methods-grid">
+                        <label class="method-option active">
+                            <input type="radio" name="paymentMethod" value="Cash" checked>
+                            <div class="method-btn">
+                                <i class="fa-solid fa-money-bill-wave"></i>
+                                <span>Cash</span>
+                            </div>
+                        </label>
+                        <label class="method-option">
+                            <input type="radio" name="paymentMethod" value="Card">
+                            <div class="method-btn">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>Card</span>
+                            </div>
+                        </label>
+                        <label class="method-option">
+                            <input type="radio" name="paymentMethod" value="Cheque">
+                            <div class="method-btn">
+                                <i class="fa-solid fa-money-check-dollar"></i>
+                                <span>Cheque</span>
+                            </div>
+                        </label>
+                        <label class="method-option">
+                            <input type="radio" name="paymentMethod" value="BKash">
+                            <div class="method-btn M-icon btn-bkash">
+                                <span class="mfs-text">bKash</span>
+                            </div>
+                        </label>
+                        <label class="method-option">
+                            <input type="radio" name="paymentMethod" value="Nagad">
+                            <div class="method-btn M-icon btn-nagad">
+                                <span class="mfs-text">Nagad</span>
+                            </div>
+                        </label>
+                        <label class="method-option">
+                            <input type="radio" name="paymentMethod" value="Roket">
+                            <div class="method-btn M-icon btn-rocket">
+                                <span class="mfs-text">Rocket</span>
+                            </div>
+                        </label>
+                        <label class="method-option">
+                            <input type="radio" name="paymentMethod" value="Split">
+                            <div class="method-btn btn-split-theme">
+                                <i class="fa-solid fa-diagram-split"></i>
+                                <span>Split Amount</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="action-card operational-card">
+                    <div class="action-card-header">
+                        <i class="fa-solid fa-sliders"></i>
+                        Operational Process
+                    </div>
+                    <div class="action-card-body process-buttons-grid">
+                        <button type="button" class="btn-op btn-op-save-report" id="btnSaveReport">
+                            <i class="fa-solid fa-print"></i> Save & Report
+                        </button>
+                        <button type="button" class="btn-op btn-op-save" id="btnSaveInvoice">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Save
+                        </button>
+                        <button type="button" class="btn-op btn-op-clear" id="btnClearCart">
+                            <i class="fa-solid fa-trash-can"></i> Clear
+                        </button>
+                    </div>
+                </div>
+
+            </div> <input type="hidden" id="hdnPaymentType" value="Cash">
+            <input type="hidden" id="hdnMobileNo" value="">
+            <input type="hidden" id="hdnCardNo" value="">
+            <input type="hidden" id="hdnBankName" value="">
+            <input type="hidden" id="hdnChequeNo" value="">
 
 
 
+
+            <div class="pos-modal-overlay" id="posSplitModalOverlay">
+                <div class="pos-modal-box" id="modalSplitPayment" style="width: 550px; max-width: 95%;">
+                    <div class="pos-modal-header">
+                        <h3><i class="fa-solid fa-diagram-split"></i> Split Multi-Mode Payment</h3>
+                        <button type="button" class="btn-modal-close" id="btnSplitModalClose">&times;</button>
+                    </div>
+
+                    <div class="pos-modal-body" style="max-height: 420px; overflow-y: auto; padding: 15px;">
+
+                        <div style="display: flex; justify-content: space-between; background: #f1f5f9; padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #cbd5e1;">
+                            <div>
+                                <span style="font-size: 12px; color: #64748b; font-weight: 600;">Payable Total:</span>
+                                <strong style="font-size: 14px; color: #1e293b; margin-left: 5px;" id="lblSplitPayableTotal">0.00</strong>
+                            </div>
+                            <div>
+                                <span style="font-size: 12px; color: #64748b; font-weight: 600;">Due / Remaining:</span>
+                                <strong style="font-size: 14px; color: #ef4444; margin-left: 5px;" id="lblSplitRemainingDue">0.00</strong>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+
+                            <div style="border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px; background: #fff;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 30%; font-size: 13px; font-weight: 700; color: #1e293b;"><i class="fa-solid fa-money-bill-wave" style="color:#16a34a;"></i> Cash</div>
+                                    <div style="width: 70%;">
+                                        <input type="number" id="txtSplitAmountCash" class="split-amount-input" placeholder="0.00" style="width:100%; padding: 6px 10px; font-size:13px; font-weight:700; border:1px solid #cbd5e1; border-radius:4px;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px; background: #fff;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                    <div style="width: 30%; font-size: 13px; font-weight: 800; color: #D12053;">bKash</div>
+                                    <div style="width: 70%;">
+                                        <input type="number" id="txtSplitAmountBKash" class="split-amount-input" placeholder="Amount (0.00)" style="width:100%; padding: 6px 10px; font-size:13px; font-weight:700; border:1px solid #cbd5e1; border-radius:4px;">
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 6px;">
+                                    <input type="text" id="txtSplitRefBKash" placeholder="bKash Wallet / Mobile No" style="width:100%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px;">
+                                </div>
+                            </div>
+
+                            <div style="border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px; background: #fff;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                    <div style="width: 30%; font-size: 13px; font-weight: 800; color: #F64A20;">Nagad</div>
+                                    <div style="width: 70%;">
+                                        <input type="number" id="txtSplitAmountNagad" class="split-amount-input" placeholder="Amount (0.00)" style="width:100%; padding: 6px 10px; font-size:13px; font-weight:700; border:1px solid #cbd5e1; border-radius:4px;">
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 6px;">
+                                    <input type="text" id="txtSplitRefNagad" placeholder="Nagad Wallet / Mobile No" style="width:100%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px;">
+                                </div>
+                            </div>
+
+                            <div style="border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px; background: #fff;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                    <div style="width: 30%; font-size: 13px; font-weight: 800; color: #8C2D84;">Rocket</div>
+                                    <div style="width: 70%;">
+                                        <input type="number" id="txtSplitAmountRocket" class="split-amount-input" placeholder="Amount (0.00)" style="width:100%; padding: 6px 10px; font-size:13px; font-weight:700; border:1px solid #cbd5e1; border-radius:4px;">
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 6px;">
+                                    <input type="text" id="txtSplitRefRocket" placeholder="Rocket Wallet / Mobile No" style="width:100%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px;">
+                                </div>
+                            </div>
+
+                            <div style="border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px; background: #fff;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                    <div style="width: 30%; font-size: 13px; font-weight: 700; color: #2563eb;"><i class="fa-solid fa-credit-card"></i> Card</div>
+                                    <div style="width: 70%;">
+                                        <input type="number" id="txtSplitAmountCard" class="split-amount-input" placeholder="Amount (0.00)" style="width:100%; padding: 6px 10px; font-size:13px; font-weight:700; border:1px solid #cbd5e1; border-radius:4px;">
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 6px;">
+                                    <input type="text" id="txtSplitRefCardNo" placeholder="Card Last 4 Digits" style="width:50%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px;">
+                                    <input type="text" id="txtSplitRefCardBank" placeholder="Bank Name" style="width:50%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px;">
+                                </div>
+                            </div>
+
+                            <div style="border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px; background: #fff;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                    <div style="width: 30%; font-size: 13px; font-weight: 700; color: #475569;"><i class="fa-solid fa-money-check-dollar"></i> Cheque</div>
+                                    <div style="width: 70%;">
+                                        <input type="number" id="txtSplitAmountCheque" class="split-amount-input" placeholder="Amount (0.00)" style="width:100%; padding: 6px 10px; font-size:13px; font-weight:700; border:1px solid #cbd5e1; border-radius:4px;">
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 6px;">
+                                    <input type="text" id="txtSplitRefChequeNo" placeholder="Cheque Number" style="width:50%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px;">
+                                    <input type="text" id="txtSplitRefChequeBank" placeholder="Bank Name" style="width:50%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px;">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="pos-modal-footer" style="padding: 10px 15px; border-top: 1px solid #e2e8f0; background: #f8fafc; border-radius: 0 0 12px 12px;">
+                        <button type="button" class="btn-modal-submit" id="btnSubmitSplitPayment" style="background: #10b981; width: 100%; padding: 10px; font-size: 14px;">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Confirm Split Payment & Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="hdnSplitAmtCash" value="0">
+            <input type="hidden" id="hdnSplitAmtBKash" value="0">
+            <input type="hidden" id="hdnSplitRefBKash" value="">
+            <input type="hidden" id="hdnSplitAmtNagad" value="0">
+            <input type="hidden" id="hdnSplitRefNagad" value="">
+            <input type="hidden" id="hdnSplitAmtRocket" value="0">
+            <input type="hidden" id="hdnSplitRefRocket" value="">
+            <input type="hidden" id="hdnSplitAmtCard" value="0">
+            <input type="hidden" id="hdnSplitRefCardNo" value="">
+            <input type="hidden" id="hdnSplitRefCardBank" value="">
+            <input type="hidden" id="hdnSplitAmtCheque" value="0">
+            <input type="hidden" id="hdnSplitRefChequeNo" value="">
+            <input type="hidden" id="hdnSplitRefChequeBank" value="">
+             
+            <div class="pos-modal-overlay" id="posModalOverlay">
+
+                <div class="pos-modal-box" id="modalMFS">
+                    <div class="pos-modal-header">
+                        <h3 id="mfsModalTitle">Mobile Banking</h3>
+                        <button type="button" class="btn-modal-close">&times;</button>
+                    </div>
+                    <div class="pos-modal-body">
+                        <div class="form-group-pos">
+                            <label for="txtModalMobileNo">Mobile Number</label>
+                            <input type="text" id="txtModalMobileNo" autocomplete="off" placeholder="01XXXXXXXXX">
+                        </div>
+                    </div>
+                    <div class="pos-modal-footer">
+                        <button type="button" class="btn-modal-submit" id="btnSubmitMFS">Confirm Data</button>
+                    </div>
+                </div>
+
+                <div class="pos-modal-box" id="modalBanking">
+                    <div class="pos-modal-header">
+                        <h3 id="bankingModalTitle">Bank Details</h3>
+                        <button type="button" class="btn-modal-close">&times;</button>
+                    </div>
+                    <div class="pos-modal-body">
+                        <div class="form-group-pos" id="wrapperRefNo">
+                            <label id="lblRefNo" for="txtModalRefNo">Reference Number</label>
+                            <input type="text" id="txtModalRefNo" autocomplete="off">
+                        </div>
+                        <div class="form-group-pos">
+                            <label for="txtModalBankName">Bank Name</label>
+                            <input type="text" id="txtModalBankName" autocomplete="off" placeholder="e.g., Dutch-Bangla Bank">
+                        </div>
+                    </div>
+                    <div class="pos-modal-footer">
+                        <button type="button" class="btn-modal-submit" id="btnSubmitBanking">Confirm Data</button>
+                    </div>
+                </div>
+            </div>
+        
+        </div> 
+         
     </div>
 </div>
 
@@ -1005,7 +1650,7 @@ $(function () {
             type: "GET",
             data: { paramObj: searchText },
             success: function (data) {
-                    console.log(data);
+                    // console.log(data);
                 let html = "";
                 if (!data || data.length === 0) {
                     $(".productInfo-box").html(`
@@ -1073,8 +1718,8 @@ $(function () {
         const productId = $(this).data("id");
         const productName = $(this).data("name");
 
-        console.log("Selected Product ID:", productId);
-        console.log("Selected Product:", productName); 
+        // console.log("Selected Product ID:", productId);
+        // console.log("Selected Product:", productName); 
 
         $(this).blur();
     });
@@ -1084,7 +1729,7 @@ $(function () {
 
 //------------- Customer Information Script Start ---------//
 $(document).ready(function(){
-
+    LoadSalesPerson();
     LoadCustomer();
 })
 
@@ -1094,8 +1739,8 @@ $.ajax({
     type: "GET",
     data: { term: searchText }, 
     success: function (data) {
-        console.log('Customer Loading');
-        console.log(data); 
+        // console.log('Customer Loading');
+        // console.log(data); 
         if (!data || data.length === 0) {
             $(".info-box").html(`
                 <div class="empty-state">
@@ -1180,6 +1825,101 @@ $("#btnSearchCustomer").autocomplete({
 
  
 
+
+
+
+
+
+
+
+
+    $("#btnSearchSalesPerson").autocomplete({
+                source: function (request, response) {
+                        $.get("/Employee/GetEmployeeByCodeNameAndPhone",
+                        { term: request.term },
+                        function (data) {
+                                console.log('data employee'); 
+                                console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: "👤 "+ item.name + " 🖁" + item.phone ,
+                                    value: "👤 "+ item.name +" 🖁"+ item.phone,
+                                // Pass all data fields to ui.item
+                                    id: item.employeeId,
+                                    name: item.name,
+                                    phone: item.phone,
+                                    code: item.code,
+                                    // totalSales: item.totalSales,
+                                    // dueAmount: item.dueAmount,
+                                    picture: item.picture
+                                };
+                            }));
+                        });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                const p = ui.item;
+                console.log(p);
+                     RenderSalesPerson(p);
+                return false;
+            }
+            });
+
+    function RenderSalesPerson(p) {
+        const imageHtml = p.picture
+            ? `<img src="${p.picture}" alt="${p.name}" class="cust-avatar">`
+            : `<div class="cust-avatar-fallback"><i class="fa-solid fa-user"></i></div>`;
+            const html = `
+                <div class="customer-card-content">
+                    ${imageHtml}
+                    <div class="cust-details">
+                        <div class="cust-name-row">
+                            <strong>${p.name}</strong>
+                        </div>
+                        <div style="font-size: 12px; margin-right: 5px;">
+                            <i class="fa-solid fa-phone"></i> ${p.phone || 'N/A'}
+                        </div>
+                        <div class="cust-code">Code: ${p.code}</div>
+                    </div> 
+                </div>`;
+                $(".salesPerson-info-box").html(html);
+        };
+
+
+
+
+
+        function LoadSalesPerson(searchText = "ADMIN") {
+    $.ajax({
+            url: "/Employee/GetEmployeeByCodeNameAndPhone",
+        type: "GET",
+        data: { term: searchText },
+        success: function (data) {
+            // console.log('Employee Loading');
+            // console.log(data);
+            if (!data || data.length === 0) {
+                $(".salesPerson-info-box").html(`
+                    <div class="empty-state">
+                        <i class="fa-solid fa-user-slash"></i>
+                        <div>No Employee Found</div>
+                    </div>
+                `);
+                return;
+            }
+                RenderSalesPerson(data[0]);
+        },
+
+        error: function (err) {
+            console.log(err);
+            $(".salesPerson-info-box").html(`
+                <div class="empty-state">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>Failed To Load Sales Person</div>
+                </div>
+            `);
+        }
+    });
+    }
 
 
 
@@ -1300,7 +2040,8 @@ $("#btnSearchCustomer").autocomplete({
                         </div>
                     </div>
                 `);
-                calculateTotals();
+
+                calculateTotals(); 
                 return;
             }
 
@@ -1349,7 +2090,13 @@ $("#btnSearchCustomer").autocomplete({
             });
 
             calculateTotals();
+                   // container.scrollTop(container[0].scrollHeight);
+                        container.animate({
+                            scrollTop: container[0].scrollHeight
+                        }, 300);
         }
+
+
 
         // C. Dynamic input adjustments mapping to memory calculations state
         $(document).on("input", ".input-row-price, .input-row-qty, .input-row-discount", function () {
@@ -1406,7 +2153,8 @@ $("#btnSearchCustomer").autocomplete({
             $("#inputGlobalDiscount").val(0);
 
             $("#lblSubTotal").text("0.00");
-            $("#lblGrandTotal").text("0.00"); // FIX 2: Changed from .val(0) to .text("0.00")
+            $("#lblGrandTotal").text("0.00");  
+            $("#lblDueAmount").text("0.00");  
             return; // Exit early since nothing else needs calculation
         }
 
@@ -1422,37 +2170,17 @@ $("#btnSearchCustomer").autocomplete({
         const intermediateTotal = subTotal - globalDiscount;
         const taxCalculatedAmount = intermediateTotal * (taxPercentage / 100);
         const grandTotal = intermediateTotal + taxCalculatedAmount;
-
+        // console.log('grand Total');
+        // console.log(grandTotal);
         // Render localized system presentation parameters safely
         $("#lblSubTotal").text(subTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
         $("#lblGrandTotal").text(grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
+        $("#lblDueAmount").val(grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
+            calculateChangeAmount();
     }
-        // function calculateTotals() {
-        //     let subTotal = 0;
-        //     productCartList.forEach(item => {
-        //         subTotal += (item.price * item.quantity) - item.discount;
-        //     });
-
-        //     const globalDiscount = parseFloat($("#inputGlobalDiscount").val()) || 0;
-        //     const taxPercentage = parseFloat($("#inputGlobalTax").val()) || 0;
-
-        //     const intermediateTotal = subTotal - globalDiscount;
-        //     const taxCalculatedAmount = intermediateTotal * (taxPercentage / 100);
-        //     const grandTotal = intermediateTotal + taxCalculatedAmount;
-
-            
-        //     // Render localized system presentation parameters safely
-        //     $("#lblSubTotal").text(subTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-        //     $("#lblGrandTotal").text(grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-        //              // alert(productCartList.length);
-        //     if(productCartList.length <=0){
-        //         $("#inputGlobalTax").val(0);
-        //         $("#inputGlobalDiscount").val(0);
-        //         $("#lblGrandTotal").val(0);
-        //     }
-        //     // alert($("#lblGrandTotal").val());
-        
-        // }
+    
     });
 
 
@@ -1541,273 +2269,196 @@ $("#btnSearchCustomer").autocomplete({
         }
     });
 
+          // ১. হিসাব করার মূল ফাংশন (যাতে যেকোনো জায়গা থেকে কল করা যায়)
+    function calculateChangeAmount() {
+        // গ্র্যান্ড টোটাল থেকে কমা সরিয়ে পিওর নাম্বার নেওয়া
+        let grandTotalTxt = $("#lblGrandTotal").text().trim();
+        let grandTotal = parseFloat(grandTotalTxt.replace(/,/g, '')) || 0;
+
+             let totalDueAmountTxt = $("#lblDueAmount").val().trim();
+            let totalDueAmount = grandTotal; //  parseFloat(totalDueAmountTxt.replace(/,/g, '')) || 0;
 
 
-     
-    // ============================================
-    // PRODUCT SEARCH & PRODUCT CATALOG AJAX LOADER
-    // ============================================
-    // $(function () {
-    //     LoadProducts();
-    //     let typingTimer;
+        // পেইড অ্যামাউন্ট থেকে কমা সরিয়ে পিওর নাম্বার নেওয়া
+        let rawPaid = $("#inputPaidAmount").val().replace(/,/g, '');
+        let paidAmount = parseFloat(rawPaid) || 0;
 
-    //     $("#btnSearchProduct").on("input", function () {
-    //         clearTimeout(typingTimer);
-    //         let keyword = $(this).val();
-    //         typingTimer = setTimeout(function () {
-    //             LoadProducts(keyword);
-    //         }, 500);
-    //     });
-
-    //     function LoadProducts(searchText = "") {
-    //         $.ajax({
-    //             url: "/POS/GetProductList",
-    //             type: "GET",
-    //             data: { paramObj: searchText },
-    //             success: function (data) {
-    //                 let html = "";
-    //                 if (!data || data.length === 0) {
-    //                     $(".productInfo-box").html(`
-    //                         <div class="empty-state">
-    //                             <i class="fa-solid fa-box-open"></i>
-    //                             <div>No Product Found</div>
-    //                         </div>`);
-    //                     return;
-    //                 }
-
-    //                 data.forEach(function (p) {
-    //                     const imageHtml = p.picture
-    //                         ? `<img src="${p.picture}" class="product-image" alt="${p.name}">`
-    //                         : `<div class="product-image-placeholder"><i class="fa-solid fa-box"></i></div>`;
-
-    //                     const subtextContext = p.serialNo ? `#SL: ${p.serialNo}` : `Model: ${p.model || 'N/A'}`;
-
-    //                     // REFACTOR CRITICAL POINT: Embed raw item entity models directly
-    //                     // within HTML5 custom data metrics for clean programmatic consumption.
-    //                     html += `
-    //                         <div class="product-item">
-    //                             <div class="product-left">
-    //                                 ${imageHtml}
-    //                                 <div class="product-details">
-    //                                     <span class="product-name">${p.name || ''}</span>
-    //                                     <span class="product-subtext">Code: ${p.code || 'N/A'} | ${subtextContext}</span>
-    //                                 </div>
-    //                             </div>
-    //                             <div class="product-right">
-    //                                 <div>Price: <strong>${(p.price || 0).toLocaleString()}</strong></div>
-    //                                 <div>Stock: <strong style="color:#dc3545">${(p.quantity || 0).toLocaleString()}</strong></div>
-    //                             </div>
-
-    //                             <button type="button" class="btn-add-cart"
-    //                                     data-id="${p.productId}"
-    //                                     data-name="${escapeHtml(p.name)}"
-    //                                     data-code="${p.code || ''}"
-    //                                     data-serial="${p.serialNo || ''}"
-    //                                     data-model="${p.model || ''}"
-    //                                     data-image="${p.picture || ''}"
-    //                                     data-price="${p.price || 0}">
-    //                                 <i class="fa-solid fa-cart-plus"></i>
-    //                             </button>
-    //                         </div>`;
-    //                 });
-    //                 $(".productInfo-box").html(html);
-    //             },
-    //             error: function (err) {
-    //                 console.error(err);
-    //                 $(".productInfo-box").html(`
-    //                     <div class="empty-state">
-    //                         <i class="fa-solid fa-triangle-exclamation"></i>
-    //                         <div>Failed To Load Products</div>
-    //                     </div>`);
-    //             }
-    //         });
-    //     }
-
-    //     // Helper utility to escape special string characters in attributes safely
-    //     function escapeHtml(str) {
-    //         if (!str) return '';
-    //         return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-    //     }
-    // });
-
+        let changeDue = paidAmount - grandTotal;
+        let availableDueAmount = totalDueAmount - paidAmount;
  
 
+        // if(parseFloat(availableDueAmount)<=0)
+        // {
+        //   $("#lblDueAmount").val(0);
+        // }
+       
+
+            // ডিলিউ অ্যামাউন্ট এবং কালার চেঞ্জ কন্ডিশন
+        if (availableDueAmount <= 0) {
+            // যখন কোনো ডিউ বা বাকি থাকবে না
+            $("#lblDueAmount").val("0.00");
+            $("#lblDueAmount").addClass("due-clear-green"); // সবুজ রঙের ক্লাস যোগ হবে
+        } else {
+            // যখন ডিউ বা বাকি থাকবে
+                        $("#lblDueAmount").val(availableDueAmount);
+            // $("#lblDueAmount").val(availableDueAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+            $("#lblDueAmount").removeClass("due-clear-green"); // সবুজ রঙের ক্লাস চলে যাবে (আগের রঙে ফেরত যাবে)
+        }
 
 
-    //     $(document).ready(function () {
-    //     // Array variable holding local memory state for the active customer cart session
-    //     let productCartList = [];
-    //      renderCartGrid();
+         
+        // ফরম্যাট করে Change Amount ফিল্ডে বসানো
+        let formattedChange = changeDue > 0
+            ? changeDue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            : "0.00";
 
-    //     // 1. Intercept the product item listing button dispatch event
-    //     $(document).on("click", "#addProductInGrid", function (e) {
-    //         e.preventDefault();
+        $("#lblChangeAmount").val(formattedChange);
+    }
 
-    //         // Extract parameters attached directly via dynamic loop assignments
-    //         const btn = $(this);
-    //         const productId = btn.data("id");
+    // ২. ক্যাশিয়ার যখন Paid Amount ইনপুট ফিল্ডে টাইপ করবেন
+    $(document).on("input", "#inputPaidAmount", function () {
+        calculateChangeAmount(); // লাইভ হিসাব ট্রিগার হবে
+    });
 
-    //         // Find the wrapper layout context to read other UI attributes on demand
-    //         const itemContainer = btn.closest(".product-item");
-    //         const productName = itemContainer.find(".product-name").text().trim();
-    //         const subtextHtml = itemContainer.find(".product-subtext").html();
-    //         const imageHtml = itemContainer.find(".product-left").html().split('<div class="product-details">')[0]; // Grabs exact img tag or fallback
 
-    //         // Clear punctuation logic safely out of string representations for absolute numeric conversions
-    //         const rawPrice = itemContainer.find(".product-right strong").first().text().replace(/[^0-9.-]+/g, "");
-    //         const productPrice = parseFloat(rawPrice) || 0;
+        $(document).ready(function () {
 
-    //         // Check if item already exists inside current session list state array
-    //             let existingItem = productCartList.find(item => item.id === productId);
-    //             console.log(existingItem);
-    //         if (existingItem) {
-    //             existingItem.quantity += 1;
-    //         } else {
-    //             // Setup fresh operational business entity item record payload maps
-    //                 productCartList.push({
-    //                 id: productId,
-    //                 name: productName,
-    //                 subtext: subtextHtml,
-    //                 image: imageHtml,
-    //                 price: productPrice,
-    //                 quantity: 1,
-    //                 discount: 0
-    //             });
-    //             console.log('productCartList');
-    //             console.log(productCartList);
-    //         }
+        // Helper Utility: Clear hidden element strings to maintain a pristine database payload
+        function resetHiddenPayloadFields() {
+            $("#hdnMobileNo").val("");
+            $("#hdnCardNo").val("");
+            $("#hdnBankName").val("");
+            $("#hdnChequeNo").val("");
+        }
 
-    //         renderCartGrid();
-    //     });
+        // Trigger Invoice Save automatically
+        function triggerInvoiceSave() {
+            // আপনার সেভ বাটনের ক্লিকের কাজ বা সাবমিট ফাংশনটিকে সরাসরি কল করবে
+            $("#btnSaveInvoice").trigger("click");
+        }
 
-    //     // 2. Render & Update Layout View Core Implementation
-    //     function renderCartGrid() {
-    //         const container = $("#cartItemsContainer");
-    //         container.empty();
+        // Capture payment configuration adjustments
+        $(document).on("change", 'input[name="paymentMethod"]', function () {
+            let selectedMethod = $(this).val();
+            $("#hdnPaymentType").val(selectedMethod);
 
-    //             if (productCartList.length === 0) {
-    //             // container.html(`
-    //             //     <div class="cart-empty-state">
-    //             //         <i class="fa-solid fa-cart-shopping"></i>
-    //             //         <p>Cart is empty. Add products to begin.</p>
-    //             //     </div>`);
+            // Wipe previous contextual transaction identities clean automatically
+            resetHiddenPayloadFields();
 
-    //                 container.html(`
-    //                                 <div class="cart-empty-state-modern">
-    //                                     <div class="animation-wrapper">
-    //                                         <div class="radar-pulse"></div>
-    //                                         <div class="cart-icon-box">
-    //                                             <i class="fa-solid fa-basket-shopping"></i>
-    //                                         </div>
-    //                                     </div>
-    //                                     <h3 class="empty-title">Cart is Empty</h3>
-    //                                     <p class="empty-subtitle">Select products from the left pane to build an order</p>
-    //                                     <div class="direction-indicator">
-    //                                         <i class="fa-solid fa-arrow-left"></i> Ready to scan or add items
-    //                                     </div>
-    //                                 </div>
-    //                             `); 
-    //             calculateTotals();
-    //             return;
-    //         }
+            // Evaluate target modal popup triggers
+            if (selectedMethod === "BKash" || selectedMethod === "Nagad" || selectedMethod === "Roket") {
+                // Update MFS UI Context Labels dynamically
+                $("#mfsModalTitle").text(selectedMethod + " Authentication");
+                $("#txtModalMobileNo").val("").attr("placeholder", "Enter " + selectedMethod + " Mobile No");
 
-    //             productCartList.forEach((item, index) => {
-    //             const rowTotal = (item.price * item.quantity) - item.discount;
-    //             const slNo = String(index + 1).padStart(2, '0');
+                // Bring overlay window alive with smooth animation layout transition
+                $("#posModalOverlay").addClass("active");
+                $("#modalMFS").addClass("active");
 
-    //             const itemHtml = `
-    //                 <div class="cart-item-row" data-id="${item.id}">
-    //                     <div class="col-sl sl-number">${slNo}</div>
-    //                     <div class="col-product">
-    //                         <div class="product-left">
-    //                             ${item.image}
-    //                             <div class="product-details">
-    //                                  <span class="product-name">
-    //                                                 ${item.name}
-    //                                         </span>
-    //                                         <span class="product-subtext">
-    //                                                 ${item.subtext}
-    //                                         </span> 
- 
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                     <div class="col-price">
-    //                         <input type="number" class="cart-grid-input input-row-price" value="${item.price}" min="0" step="any">
-    //                     </div>
-    //                     <div class="col-qty">
-    //                         <input type="number" class="cart-grid-input input-row-qty" value="${item.quantity}" min="1">
-    //                     </div>
-    //                     <div class="col-discount">
-    //                         <input type="number" class="cart-grid-input input-row-discount" value="${item.discount}" min="0" step="any">
-    //                     </div>
-    //                     <div class="col-total row-total-val">${rowTotal.toFixed(2)}</div>
-    //                     <div class="col-delete">
-    //                         <button type="button" class="btn-cart-delete"><i class="fa-solid fa-minus-circle"></i></button>
-    //                     </div>
-    //                 </div>`;
-    //             container.append(itemHtml);
-    //         });
+                // Redirect autofocus straight into the payload input string instantly
+                setTimeout(() => $("#txtModalMobileNo").focus(), 150);
 
-    //         calculateTotals();
-    //     }
+            } else if (selectedMethod === "Card" || selectedMethod === "Cheque") {
+                // Adjust banking form contextual properties dynamically
+                $("#txtModalRefNo").val("");
+                $("#txtModalBankName").val("");
+                $("#bankingModalTitle").text(selectedMethod + " Remittance Details");
+                $("#lblRefNo").text(selectedMethod === "Card" ? "Card Number (Last 4 digits)" : "Cheque Number");
 
-    //     // 3. Dynamic input adjustments mapping to memory calculations state
-    //     $(document).on("input", ".input-row-price, .input-row-qty, .input-row-discount", function () {
-    //         const row = $(this).closest(".cart-item-row");
-    //         const id = row.data("id");
-    //             const targetItem = productCartList.find(item => item.id === id);
+                $("#posModalOverlay").addClass("active");
+                $("#modalBanking").addClass("active");
 
-    //         if (targetItem) {
-    //             targetItem.price = parseFloat(row.find(".input-row-price").val()) || 0;
-    //             targetItem.quantity = parseInt(row.find(".input-row-qty").val()) || 1;
-    //             targetItem.discount = parseFloat(row.find(".input-row-discount").val()) || 0;
+                setTimeout(() => $("#txtModalRefNo").focus(), 150);
+            }
+        });
 
-    //             // Fast recalculate single inline calculation visual block
-    //             const updatedRowTotal = (targetItem.price * targetItem.quantity) - targetItem.discount;
-    //             row.find(".row-total-val").text(updatedRowTotal.toFixed(2));
+        // Handle Submission validation payload maps
+        $("#btnSubmitMFS").on("click", function () {
+            let mobileNumber = $("#txtModalMobileNo").val().trim();
+            if(mobileNumber !== "") {
+                $("#hdnMobileNo").val(mobileNumber);
+                closeActivePOSModals();
+                triggerInvoiceSave(); // ডেটা কনফার্ম হওয়ার সাথে সাথে ইনভয়েস সেভ হবে
+            } else {
+                closeActivePOSModals();
+            }
+        });
 
-    //             calculateTotals();
-    //         }
-    //     });
+        // MFS মোডাল ইনপুটে Enter কি (Key) হ্যান্ডলার
+        $("#txtModalMobileNo").on("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault(); // ফর্মের ডিফল্ট সাবমিট বন্ধ করবে
+                $("#btnSubmitMFS").trigger("click"); // সাবমিট বাটনের কাজ সম্পাদন করবে
+            }
+        });
 
-    //     // 4. Handle Item Deletions from active UI Grid View rows
-    //     $(document).on("click", ".btn-cart-delete", function () {
-    //         const row = $(this).closest(".cart-item-row");
-    //         const id = row.data("id");
+        $("#btnSubmitBanking").on("click", function () {
+            let refNo = $("#txtModalRefNo").val().trim();
+            let bankName = $("#txtModalBankName").val().trim();
+            let currentMethod = $("#hdnPaymentType").val();
 
-    //         // Splice entry out from underlying dynamic array instance tracking
-    //             productCartList = productCartList.filter(item => item.id !== id);
-    //         renderCartGrid();
-    //     });
+            if (currentMethod === "Card") {
+                $("#hdnCardNo").val(refNo);
+            } else if (currentMethod === "Cheque") {
+                $("#hdnChequeNo").val(refNo);
+            }
+            $("#hdnBankName").val(bankName);
 
-    //     // 5. Global Calculation Engine for Checkout totals
-    //     $(document).on("input", "#inputGlobalDiscount, #inputGlobalTax", function () {
-    //         calculateTotals();
-    //     });
+            closeActivePOSModals();
+            triggerInvoiceSave(); // ডেটা কনফার্ম হওয়ার সাথে সাথে ইনভয়েস সেভ হবে
+        });
 
-    //     function calculateTotals() {
-    //         let subTotal = 0;
+        // Banking মোডাল ইনপুট সমূহে Enter কি (Key) ফ্লো কন্ট্রোল
+        $("#txtModalRefNo").on("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                $("#txtModalBankName").focus(); // প্রথম ঘরে Enter দিলে ব্যাংক নামের ঘরে ফোকাস যাবে
+            }
+        });
 
-    //         // Sum individual row configurations
-    //             productCartList.forEach(item => {
-    //             subTotal += (item.price * item.quantity) - item.discount;
-    //         });
+        $("#txtModalBankName").on("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                $("#btnSubmitBanking").trigger("click"); // ব্যাংক নাম লিখে Enter দিলে সেভ হবে
+            }
+        });
 
-    //         const globalDiscount = parseFloat($("#inputGlobalDiscount").val()) || 0;
-    //         const taxPercentage = parseFloat($("#inputGlobalTax").val()) || 0;
+        // Close Modals Safely (via Close button or Escape Key triggers)
+        $(".btn-modal-close").on("click", function () {
+            // Automatically default back to Cash to prevent orphan data entries
+            fallbackToCashPayment();
+        });
 
-    //         // Apply calculations down logically
-    //         const intermediateTotal = subTotal - globalDiscount;
-    //         const taxCalculatedAmount = intermediateTotal * (taxPercentage / 100);
-    //         const grandTotal = intermediateTotal + taxCalculatedAmount;
+        // Auto-Close Window Handler when clicking on gray canvas zones
+        $("#posModalOverlay").on("click", function (e) {
+            if ($(e.target).hasClass("pos-modal-overlay")) {
+                fallbackToCashPayment();
+            }
+        });
 
-    //         // Render localized system strings safely
-    //         $("#lblSubTotal").text(subTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-    //         $("#lblGrandTotal").text(grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-    //     }
-    // });
-     
+        // Intercept keyboard event listeners globally across system execution
+        $(document).on("keydown", function (e) {
+            if (e.key === "Escape" && $("#posModalOverlay").hasClass("active")) {
+                fallbackToCashPayment();
+            }
+        });
+
+        function closeActivePOSModals() {
+            $("#posModalOverlay").removeClass("active");
+            $(".pos-modal-box").removeClass("active");
+        }
+
+        function fallbackToCashPayment() {
+            closeActivePOSModals();
+            // Reset state back to clean 'Cash' parameters automatically
+            let cashRadio = $('input[name="paymentMethod"][value="Cash"]');
+            cashRadio.prop("checked", true);
+            resetHiddenPayloadFields();
+            $("#hdnPaymentType").val("Cash");
+        }
+    });
+
+    
 </script>
 
 

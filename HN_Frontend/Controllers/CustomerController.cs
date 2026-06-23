@@ -23,7 +23,7 @@ namespace HN_Frontend.Controllers
         //[HttpGet("GetCustomerByCodeNameAndPhone")]
         public async Task<IActionResult> GetCustomerByCodeNameAndPhone(string term = "Mr. Cash Sale")
         {
-            var url = $"https://localhost:7008/api/Customer/{term}";
+            var url = $"https://localhost:7008/api/Customer/{term}"; 
 
             var data = await _client.GetFromJsonAsync<List<CustomerVM>>(url);
 
