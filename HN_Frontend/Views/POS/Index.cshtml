@@ -1238,6 +1238,78 @@
 
 
 
+    /* Premium Tinted POS Receipt Ribbon Container */
+.pos-success-ribbon {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #fdf4ff; /* Soft lavender/magenta tint matching your theme header */
+    border: 1px solid #e9d5ff;
+    border-left: 4px solid #701a75; /* Solid purple anchor bar accent */
+    border-radius: 6px;
+    padding: 10px 16px;
+    box-shadow: 0 2px 8px rgba(112, 26, 117, 0.08);
+    animation: premiumPopIn 0.3s ease-out forwards;
+    min-width: 290px;
+    margin: 0 auto;
+}
+
+@@keyframes premiumPopIn {
+    from { transform: translateY(5px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Status Icon Box - Switched from white circle to clean, minimalist mint accent */
+.status-badge-circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #10b981; /* Pure vibrant green for successful operational state */
+    font-weight: 700;
+    font-size: 20px; /* Highlights the status icon beautifully */
+}
+
+.status-badge-circle span {
+    font-size: 10px;
+    font-family: 'Segoe UI', sans-serif;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #059669; /* Soft dark green text color for the 'Received' label string */
+    margin-top: 2px;
+}
+
+/* Master Data Grid - Solves the decoration/alignment distortion */
+.success-meta-details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    row-gap: 4px;
+    column-gap: 8px;
+    align-items: center;
+}
+
+/* Plain Text Row Labels */
+.meta-label {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Value Columns perfectly highlighted and aligned */
+.meta-value {
+    font-family: 'Consolas', 'Courier New', monospace; /* Monospace font looks incredible for receipt IDs */
+    font-size: 12px;
+    color: #701a75; /* Deep rich purple text matching system theme */
+    font-weight: 700;
+    background: rgba(112, 26, 117, 0.05); /* Very subtle purple code background tag */
+    padding: 1px 6px;
+    border-radius: 4px;
+    text-align: left;
+}
 
 
 
@@ -1247,7 +1319,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @* <div class="pos-container"> *@
 <div class="container-fluid">
     <div class="row g-2">
@@ -1360,6 +1432,13 @@
                                 <input class="summary-input payment-input" id="lblChangeAmount" value="0.00" readonly>
                             </div>
                         </div>
+
+
+                        <!-- MIDDLE BLANK SPACE: Target Container for Success Badge -->
+                        <div id="posSuccessReceiptSpace" style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                            <!-- Premium Badge will render here automatically upon success -->
+                        </div>
+
 
                         <div class="summary-box">
                             <div class="summary-item">
@@ -1925,14 +2004,14 @@ $("#btnSearchCustomer").autocomplete({
 
 
 
-
+           let productCartList = [];
 
     // =========================================================================
     // 1. ACTIVE ORDER CART ENGINE (DASHBOARD GRID & CALCULATION LOGIC)
     // =========================================================================
     $(document).ready(function () {
         // Array variable holding local memory state for the active customer cart session
-        let productCartList = [];
+     
         renderCartGrid();
 
         // A. Intercept the product item listing button dispatch event
@@ -2331,11 +2410,11 @@ $("#btnSearchCustomer").autocomplete({
             $("#hdnChequeNo").val("");
         }
 
-        // Trigger Invoice Save automatically
-        function triggerInvoiceSave() {
-            // আপনার সেভ বাটনের ক্লিকের কাজ বা সাবমিট ফাংশনটিকে সরাসরি কল করবে
-            $("#btnSaveInvoice").trigger("click");
-        }
+        // // Trigger Invoice Save automatically
+        // function triggerInvoiceSave() {
+        //     // আপনার সেভ বাটনের ক্লিকের কাজ বা সাবমিট ফাংশনটিকে সরাসরি কল করবে
+        //     $("#btnSaveInvoice").trigger("click");
+        // }
 
         // Capture payment configuration adjustments
         $(document).on("change", 'input[name="paymentMethod"]', function () {
@@ -2378,8 +2457,9 @@ $("#btnSearchCustomer").autocomplete({
             if(mobileNumber !== "") {
                 $("#hdnMobileNo").val(mobileNumber);
                 closeActivePOSModals();
-                triggerInvoiceSave(); // ডেটা কনফার্ম হওয়ার সাথে সাথে ইনভয়েস সেভ হবে
-            } else {
+                //triggerInvoiceSave(); // ডেটা কনফার্ম হওয়ার সাথে সাথে ইনভয়েস সেভ হবে
+            } 
+            else {
                 closeActivePOSModals();
             }
         });
@@ -2405,7 +2485,7 @@ $("#btnSearchCustomer").autocomplete({
             $("#hdnBankName").val(bankName);
 
             closeActivePOSModals();
-            triggerInvoiceSave(); // ডেটা কনফার্ম হওয়ার সাথে সাথে ইনভয়েস সেভ হবে
+           // triggerInvoiceSave(); // ডেটা কনফার্ম হওয়ার সাথে সাথে ইনভয়েস সেভ হবে
         });
 
         // Banking মোডাল ইনপুট সমূহে Enter কি (Key) ফ্লো কন্ট্রোল
@@ -2458,7 +2538,416 @@ $("#btnSearchCustomer").autocomplete({
         }
     });
 
+
+
+
+        $(document).ready(function () {
+
+        // ১. রানটাইমে HTML মোডালকে ডাইনামিক মোডে রূপান্তর করা (HTML ফাইলে হাত না দিয়ে)
+        function transformModalToFullyDynamic() {
+            // মোডাল বডিকে টার্গেট করা
+            let $modalBody = $("#modalSplitPayment .pos-modal-body");
+            if ($modalBody.length && !$("#dynamicSplitRowsContainer").length) {
+
+                // প্রথম অংশ (Payable Total & Due Summary) ব্যাকআপ রাখা
+                let $summaryBox = $modalBody.children().first();
+
+                // নতুন অ্যাকশন বাটন গ্রিড (এখান থেকে ইউজার যেকোনো মেথড যতবার খুশি যোগ করতে পারবে)
+                let actionButtonsHTML = `
+                    <div class="dynamic-add-buttons-row" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px dashed #cbd5e1;">
+                        <button type="button" class="btn-add-split-row" data-type="Cash" style="padding: 6px 12px; font-size: 12px; font-weight: bold; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; color: #16a34a;"><i class="fa-solid fa-money-bill-wave"></i> + Cash</button>
+                        <button type="button" class="btn-add-split-row" data-type="bKash" style="padding: 6px 12px; font-size: 12px; font-weight: bold; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; color: #D12053;">+ bKash</button>
+                        <button type="button" class="btn-add-split-row" data-type="Nagad" style="padding: 6px 12px; font-size: 12px; font-weight: bold; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; color: #F64A20;">+ Nagad</button>
+                        <button type="button" class="btn-add-split-row" data-type="Rocket" style="padding: 6px 12px; font-size: 12px; font-weight: bold; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; color: #8C2D84;">+ Rocket</button>
+                        <button type="button" class="btn-add-split-row" data-type="Card" style="padding: 6px 12px; font-size: 12px; font-weight: bold; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; color: #2563eb;"><i class="fa-solid fa-credit-card"></i> + Card</button>
+                        <button type="button" class="btn-add-split-row" data-type="Cheque" style="padding: 6px 12px; font-size: 12px; font-weight: bold; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; color: #475569;"><i class="fa-solid fa-money-check-dollar"></i> + Cheque</button>
+                    </div>
+                    <div id="dynamicSplitRowsContainer" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                `;
+
+                // মোডাল বডির ভেতরের সব ফিক্সড ইনপুট বক্স ডিলিট করে নতুন স্ট্রাকচার দেওয়া
+                $modalBody.empty().append($summaryBox).append(actionButtonsHTML);
+            }
+        }
+
+        // ২. ডাইনামিক রো জেনারেটর ফাংশন (যা যতবার খুশি কল হতে পারবে)
+        function createSplitRowHTML(type) {
+            let color = "#334155";
+            let extraFieldsHTML = "";
+
+            if (type === "Cash") color = "#16a34a";
+            if (type === "bKash") color = "#D12053";
+            if (type === "Nagad") color = "#F64A20";
+            if (type === "Rocket") color = "#8C2D84";
+            if (type === "Card") color = "#2563eb";
+
+            // MFS (bKash/Nagad/Rocket) এর জন্য রেফারেন্স ফিল্ড
+            if (type === "bKash" || type === "Nagad" || type === "Rocket") {
+                extraFieldsHTML = `<input type="text" class="split-ref-primary" placeholder="${type} Mobile / Wallet No" style="width:100%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px; margin-top:5px;">`;
+            }
+            // Card এর জন্য ২টি ফিল্ড (No এবং Bank Name)
+            else if (type === "Card") {
+                extraFieldsHTML = `
+                    <div style="display: flex; gap: 6px; margin-top:5px;">
+                        <input type="text" class="split-ref-primary" placeholder="Card Last 4 Digits" style="width:50%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px;">
+                        <input type="text" class="split-ref-secondary" placeholder="Bank Name" style="width:50%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px;">
+                    </div>`;
+            }
+            // Cheque এর জন্য ২টি ফিল্ড
+            else if (type === "Cheque") {
+                extraFieldsHTML = `
+                    <div style="display: flex; gap: 6px; margin-top:5px;">
+                        <input type="text" class="split-ref-primary" placeholder="Cheque Number" style="width:50%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px;">
+                        <input type="text" class="split-ref-secondary" placeholder="Bank Name" style="width:50%; padding: 5px 8px; font-size:11px; border:1px solid #e2e8f0; border-radius:4px;">
+                    </div>`;
+            }
+
+            return `
+            <div class="split-payment-row" data-method-type="${type}" style="border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; background: #fff; position:relative;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 25%; font-size: 13px; font-weight: 800; color: ${color};">
+                        ${type === 'Cash' ? '<i class="fa-solid fa-money-bill-wave"></i> ' : ''}${type}
+                    </div>
+                    <div style="width:65%;">
+                        <input type="number" class="split-amount-input" placeholder="Amount (0.00)" step="any" min="0" style="width:100%; padding: 6px 10px; font-size:13px; font-weight:700; border:1px solid #cbd5e1; border-radius:4px;">
+                    </div>
+                    <div style="width:10%; text-align:right;">
+                        <button type="button" class="btn-remove-split-row" style="background:none; border:none; color:#ef4444; font-size:16px; cursor:pointer;"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                </div>
+                ${extraFieldsHTML}
+            </div>`;
+        }
+
+        // ৩. লাইভ ক্যালকুলেশন রিমেইনিং ব্যালেন্স ট্র্যাকিং (সবগুলো ডাইনামিক ইনপুট লুপ করে হিসাব করবে)
+        function calculateSplitAmounts() {
+            let grandTotal = parseFloat($("#lblGrandTotal").text().replace(/,/g, '')) || 0;
+            $("#lblSplitPayableTotal").text(grandTotal.toFixed(2));
+
+            let totalEntered = 0;
+            $(".split-amount-input").each(function () {
+                totalEntered += parseFloat($(this).val()) || 0;
+            });
+
+            let remaining = grandTotal - totalEntered;
+            $("#lblSplitRemainingDue").text(remaining.toFixed(2));
+            $("#lblSplitRemainingDue").css("color", remaining <= 0 ? "#16a34a" : "#ef4444");
+        }
+
+        // ৪. স্প্লিট মেথড সিলেক্ট করলে মোডাল ওপেন হবে
+        $(document).on("change", 'input[name="paymentMethod"]', function () {
+            if ($(this).val() === "Split") {
+                $("#hdnPaymentType").val("Split");
+                $("#hdnSplitPaymentJsonPayload").val("");
+
+                // প্রথমে জাভাস্ক্রিপ্ট দিয়ে HTML স্ট্রাকচার পরিবর্তন করে নেওয়া হচ্ছে
+                transformModalToFullyDynamic();
+
+                // কন্টেইনার ক্লিয়ার করে ডিফল্ট একটা Cash রো দেওয়া
+                $("#dynamicSplitRowsContainer").empty();
+                $("#posSplitModalOverlay").addClass("active");
+                $("#modalSplitPayment").addClass("active");
+
+                let defaultRow = createSplitRowHTML("Cash");
+                $("#dynamicSplitRowsContainer").append(defaultRow);
+
+                calculateSplitAmounts();
+                setTimeout(() => $("#dynamicSplitRowsContainer .split-amount-input").first().focus(), 150);
+            }
+        });
+
+        // ৫. প্লাস বাটন সমূহে ক্লিক ইভেন্ট (ইউজার যতবার ক্লিক করবে, আনলিমিটেড একই মেথড অ্যাড হবে)
+        $(document).on("click", ".btn-add-split-row", function () {
+            let methodType = $(this).data("type");
+            let rowHTML = createSplitRowHTML(methodType);
+            $("#dynamicSplitRowsContainer").append(rowHTML);
+
+            // নতুন ফিল্ডে ফোকাস করা
+            $("#dynamicSplitRowsContainer .split-payment-row").last().find(".split-amount-input").focus();
+            calculateSplitAmounts();
+        });
+
+        // ৬. ডাইনামিক রো ডিলিট করার মেকানিজম
+        $(document).on("click", ".btn-remove-split-row", function () {
+            $(this).closest(".split-payment-row").remove();
+            calculateSplitAmounts();
+        });
+
+        // লাইভ ক্যালকুলেশন লিসেনার
+        $(document).on("input", ".split-amount-input", function () {
+            calculateSplitAmounts();
+        });
+
+        // ৭. কনফার্ম এবং সেভ সাবমিশন (সব ডাইনামিক মেথড ডেটা অ্যারে অবজেক্ট হিসেবে নিয়ে JSON তৈরি করবে)
+        $("#btnSubmitSplitPayment").on("click", function () {
+            let splitDataRecords = [];
+
+            // ডাইনামিক সব রো লুপ করে ডেটা ক্যাচ করা (৫টি কার্ড বা ৩টি বিকাশ থাকলে সবগুলো আলাদা রেকর্ড হিসেবে আসবে)
+            $(".split-payment-row").each(function () {
+                let row = $(this);
+                let amt = parseFloat(row.find(".split-amount-input").val()) || 0;
+
+                if (amt > 0) {
+                    splitDataRecords.push({
+                        method: row.data("method-type"),
+                        amount: amt,
+                        ref1: row.find(".split-ref-primary").val() || "",
+                        ref2: row.find(".split-ref-secondary").val() || ""
+                    });
+                }
+            });
+
+            if (splitDataRecords.length === 0) {
+                alert("Please enter at least one payment amount.");
+                return;
+            }
+
+            // কন্ট্রোলারে পাস করার জন্য JSON পে-লোড জেনারেট করা
+            $("#hdnSplitPaymentJsonPayload").val(JSON.stringify(splitDataRecords));
+
+            // মোডাল হাইড করা
+            $("#posSplitModalOverlay").removeClass("active");
+            $("#modalSplitPayment").removeClass("active");
+
+            // মেইন ইনভয়েস অটো সেভ ট্রিগার
+            // $("#btnSaveInvoice").trigger("click");
+        });
+
+        // ৮. ইনপুট বক্সে Enter চাপলে অটো সেভ ট্রিগার হবে
+        $("#modalSplitPayment").on("keydown", "input", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                $("#btnSubmitSplitPayment").trigger("click");
+            }
+        });
+
+        // ৯. মোডাল ক্লোজ বা ক্যানসেল প্রসেস
+        $("#btnSplitModalClose, #posSplitModalOverlay").on("click", function (e) {
+            if (e.target === this || this.id === "btnSplitModalClose") {
+                $("#posSplitModalOverlay").removeClass("active");
+                $("#modalSplitPayment").removeClass("active");
+
+                $('input[name="paymentMethod"][value="Cash"]').prop("checked", true);
+                $("#hdnPaymentType").val("Cash");
+                $("#hdnSplitPaymentJsonPayload").val("");
+            }
+        });
+    });
     
+
+
+
+
+
+    /////////////////////Save FN
+
+        $(document).ready(function () {
+
+        // --- POS Invoice Save Event Handler ---
+        $("#btnSaveInvoice").on("click", function (e) {
+            e.preventDefault();
+
+            //inputPaidAmount
+                  if (typeof $("#inputPaidAmount").val() === 'undefined' || $("#inputPaidAmount").val() === "" || Number($("#inputPaidAmount").val()) < 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'No Receive Amount set',
+                        confirmButtonColor: '#3085d6'
+                    }).then(() => {
+                        // Warning-er OK click korar por cursor auto focused hobe ebong text selected thakbe
+                        $("#inputPaidAmount").focus();
+                    });
+                    return;
+                }
+
+            // 1. Validate Product Cart
+                if (typeof productCartList === 'undefined' || productCartList.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Empty Cart!',
+                        text: 'Your checkout cart is completely empty. Please select products first.',
+                        confirmButtonColor: '#3085d6'
+                    });
+                    return;
+                }
+               
+            // 2. Extract Customer Information
+            // Since customerId is not saved in a dedicated input, we retrieve it from the UI selection
+            // Tip: Ensure your autocompleter or initial load binds a reference attribute
+            let customerId = $(".info-box .customer-card-content").parent().data("customer-id") || 0;
+            // As a safe fallback, if no custom attribute is added yet, try to read or manage it globally
+            // For standard setup, let's assume we read from a placeholder or default fallback
+            let customerName = $(".info-box strong").first().text().trim();
+                  
+
+            if (!customerName) {
+                Swal.fire({
+                            icon: 'warning',
+                            title: 'Empty Customer!',
+                            text: 'Select a Customer first !',
+                            confirmButtonColor: '#3085d6'
+                        });
+                        return;
+            }
+
+            // 3. Extract Sales Person Information
+            let salesPersonName = $(".salesPerson-info-box strong").first().text().trim();
+
+            // 4. Gather Payment Options & Totals
+            let paymentMethod = $("#hdnPaymentType").val() || "Cash";
+            let subTotal = parseFloat($("#lblSubTotal").text().replace(/,/g, '')) || 0;
+            let discount = parseFloat($("#inputGlobalDiscount").val()) || 0;
+            let tax = parseFloat($("#inputGlobalTax").val()) || 0;
+            let grandTotal = parseFloat($("#lblGrandTotal").text().replace(/,/g, '')) || 0;
+            let paidAmount = parseFloat($("#inputPaidAmount").val()) || 0;
+            let dueAmount = parseFloat($("#lblDueAmount").val()) || 0;
+            let changeAmount = parseFloat($("#lblChangeAmount").val()) || 0;
+
+            // 5. Handle Split / Multi-Mode Payment Payload Data
+            let splitPaymentsArray = [];
+            if (paymentMethod === "Split") {
+                let jsonPayloadRaw = $("#hdnSplitPaymentJsonPayload").val();
+                if (jsonPayloadRaw) {
+                    splitPaymentsArray = JSON.parse(jsonPayloadRaw);
+                }
+            }
+
+            // 6. Build Consolidated Master Payload JSON Structure
+            let masterSalePayload = {
+                Customer: {
+                    Name: customerName,
+                    // Pass extra metadata if mapped to DOM attributes
+                    Phone: $(".info-box .fa-phone").parent().text().trim()
+                },
+                SalesPerson: {
+                    Name: salesPersonName
+                },
+                PaymentOption: {
+                    Method: paymentMethod,
+                    ReceiveAmount: paidAmount,
+                    DueAmount: dueAmount,
+                    ChangeAmount: changeAmount,
+                    // Regular single payment details from hidden controls
+                    MobileNo: $("#hdnMobileNo").val() || "",
+                    CardNo: $("#hdnCardNo").val() || "",
+                    ChequeNo: $("#hdnChequeNo").val() || "",
+                    BankName: $("#hdnBankName").val() || ""
+                },
+                Summary: {
+                    SubTotal: subTotal,
+                    Discount: discount,
+                    TaxPercent: tax,
+                    GrandTotal: grandTotal
+                },
+                // Product List details mapping directly from memory array
+                ProductRowsAllInfo: productCartList.map(item => ({
+                    ProductId: item.id,
+                    ProductName: item.name,
+                    ProductCode: item.code,
+                    SerialNo: item.serialNo,
+                    Model: item.model,
+                    UnitPrice: item.price,
+                    Quantity: item.quantity,
+                    RowDiscount: item.discount,
+                    TotalPrice: (item.price * item.quantity) - item.discount
+                })),
+                // Holds due-split records if multi-mode split mechanism is verified
+                SplitAmounts: splitPaymentsArray
+            };
+
+                console.log("masterSalePayload");
+                console.log(masterSalePayload);
+
+            // 7. Fire Async AJAX Dispatch Routine to Backend Controller Method
+            $.ajax({
+                url: "/POS/SaveInvoice", // Adjust the endpoint mapping to your actual backend controller routing
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(masterSalePayload),
+                beforeSend: function () {
+                    // Disable button element to stop double-submission requests
+                    $("#btnSaveInvoice").prop("disabled", true).html('<i class="fa-solid fa-spinner fa-spin"></i> Processing...');
+                },
+                 success: function (response) {
+                if (response.success) {
+                    let invoiceNo = response.invoiceNo || "INV-0001";
+                    let salesOrderNo = response.salesOrderNo || "SO-0001";
+                    let orderStatus = response.status || "Received";
+
+                    let badgeHtml = `
+                        <div class="pos-success-ribbon">
+                            <div class="status-badge-circle">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>${orderStatus}</span>
+                            </div>
+                            <div class="success-meta-details">
+                                <span class="meta-label">Invoice No:</span>
+                                <span class="meta-value">${invoiceNo}</span>
+                    
+                                <span class="meta-label">Order No:</span>
+                                <span class="meta-value">${salesOrderNo}</span>
+                            </div>
+                        </div>
+                    `;
+
+                    // Safely push into the mid-section empty layout column
+                    $("#posSuccessReceiptSpace").html(badgeHtml);
+
+                       
+
+                    if (typeof productCartList !== 'undefined') {
+                        productCartList = []; 
+                    }
+                         Swal.fire({
+                            icon: 'success', // 'successfull' er poriborte shudhu 'success' hobe
+                            title: 'Saved Successfully',
+                              html: `Invoice No: <strong>${invoiceNo}</strong><br/>Order No: <strong>${salesOrderNo}</strong>`,
+                            confirmButtonColor: '#3085d6'
+                        });
+                        return;
+                    // $("#btnClearCart").trigger("click");
+
+                } else {
+                    alert("Transaction Refused: " + response.message);
+                }
+            },
+                // success: function (response) {
+                //     if (response.success) {
+                //         alert("Invoice compiled successfully! Invoice ID: " + (response.invoiceId || "N/A"));
+                //         // Clear memory data node structures and wipe UI components back to default pristine settings
+                //         $("#btnClearCart").trigger("click");
+                //     } else {
+                //         alert("Transaction Refused: " + response.message);
+                //     }
+                // },
+                error: function (xhr, status, error) {
+                    console.error("Critical error during backend save operations: ", xhr.responseText);
+                    alert("An unexpected system fault occurred while attempting to post payload details.");
+                },
+                complete: function () {
+                    // Re-enable interactive save functionality safely
+                    // $("#btnSaveInvoice").prop("disabled", true).html('<i class="fa-solid fa-cloud-arrow-up"></i> Save');
+                    $("#btnSaveInvoice").prop("disabled", true).css({"background-color": "#6c757d", "border-color": "#6c757d"}).html('<i class="fa-solid fa-cloud-arrow-up"></i> Saved');
+                        // $("#btnSaveInvoice").prop("disabled", true).removeClass("btn-primary").addClass("btn-secondary").html('<i class="fa-solid fa-cloud-arrow-up"></i> Saved');
+                }
+            });
+        });
+
+
+            //
+
+
+    });
+
+
+
+    
+        $("#btnClearCart").on("click", function () {
+            window.location.reload();
+           // window.location.href = '@Url.Action("Index", "POS")';
+        });
+
+
 </script>
 
 
