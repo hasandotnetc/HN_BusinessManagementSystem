@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HN_Project.Models;
+namespace HN_Backend.Models;
 
 public partial class Product
 {
@@ -31,7 +31,7 @@ public partial class Product
 
     public string? Picture { get; set; }
 
-    public DateTime? CreateOn { get; set; }
+    public DateTime CreateOn { get; set; }
 
     public long EntryBy { get; set; }
 
