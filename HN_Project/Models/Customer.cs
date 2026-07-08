@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HN_Project.Models;
+namespace HN_Backend.Models;
 
 public partial class Customer
 {
@@ -27,16 +27,13 @@ public partial class Customer
 
     public string? Picture { get; set; }
 
-    public DateTime? CreateOn { get; set; }
+    public DateTime CreateOn { get; set; }
 
     public long EntryBy { get; set; }
+
+    public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
 
     public virtual LoginUser EntryByNavigation { get; set; } = null!;
 
     public virtual ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();
-
-    //internal object CustomerVMMapper()
-    //{
-    //    throw new NotImplementedException();
-    //}
 }

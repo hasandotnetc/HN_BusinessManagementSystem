@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HN_Project.Models;
+namespace HN_Backend.Models;
 
 public partial class Location
 {
@@ -11,7 +11,9 @@ public partial class Location
 
     public string Name { get; set; } = null!;
 
-    public DateTime? CreateOn { get; set; }
+    public DateTime CreateOn { get; set; }
+
+    public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
 
     public virtual ICollection<CurrentStock> CurrentStocks { get; set; } = new List<CurrentStock>();
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HN_Project.Models;
+namespace HN_Backend.Models;
 
 public partial class SalesOrder
 {
@@ -35,7 +35,9 @@ public partial class SalesOrder
 
     public long EntryBy { get; set; }
 
-    public DateTime? CreateOn { get; set; }
+    public DateTime CreateOn { get; set; }
+
+    public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
 
     public virtual Customer Customer { get; set; } = null!;
 

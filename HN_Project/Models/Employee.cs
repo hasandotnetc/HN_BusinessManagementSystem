@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HN_Project.Models;
+namespace HN_Backend.Models;
 
 public partial class Employee
 {
@@ -19,9 +19,11 @@ public partial class Employee
 
     public string? Picture { get; set; }
 
-    public DateTime? CreateOn { get; set; }
+    public DateTime CreateOn { get; set; }
 
     public long EntryBy { get; set; }
+
+    public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
 
     public virtual LoginUser EntryByNavigation { get; set; } = null!;
 
