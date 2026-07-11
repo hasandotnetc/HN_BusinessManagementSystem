@@ -1,6 +1,6 @@
-﻿using HN_Project.Data;
-using HN_Project.Interface;
-using HN_Project.Models;
+﻿using HN_Backend.Models;
+using HN_Project.Data;
+using HN_Project.Interface; 
 using Microsoft.EntityFrameworkCore;
 
 namespace HN_Project.Repository

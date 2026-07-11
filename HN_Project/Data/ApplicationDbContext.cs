@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using HN_Project.Models;
+using HN_Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HN_Project.Data;

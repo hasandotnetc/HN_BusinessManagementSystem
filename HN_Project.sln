@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11217.181 d18.0
+VisualStudioVersion = 18.0.11217.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HN_Backend", "HN_Project\HN_Backend.csproj", "{409A9ED7-FCB4-4A95-A67D-BC03E81317D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HN_Frontend", "HN_Frontend\HN_Frontend.csproj", "{4EAEC15A-E67A-46DD-ABC2-84E102406081}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HN_Shared", "HN_Shared\HN_Shared.csproj", "{139B06B6-A32E-45CF-A682-88E93BC6648F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{4EAEC15A-E67A-46DD-ABC2-84E102406081}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EAEC15A-E67A-46DD-ABC2-84E102406081}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EAEC15A-E67A-46DD-ABC2-84E102406081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{139B06B6-A32E-45CF-A682-88E93BC6648F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{139B06B6-A32E-45CF-A682-88E93BC6648F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{139B06B6-A32E-45CF-A682-88E93BC6648F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{139B06B6-A32E-45CF-A682-88E93BC6648F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
