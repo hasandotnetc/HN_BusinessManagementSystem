@@ -1,5 +1,4 @@
-﻿using HN_Project.Models;
-
+﻿using HN_Backend.Models; 
 namespace HN_Project.Interface
 {
     public interface ICustomerRepository

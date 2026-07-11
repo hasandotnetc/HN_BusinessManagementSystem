@@ -1,5 +1,5 @@
 ﻿using HN_Project.DTOs;
-using HN_Project.Models;
+using HN_Backend.Models;
 
 namespace HN_Project.Mapper
 {

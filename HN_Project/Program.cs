@@ -1,3 +1,5 @@
+using HN_Backend.Interface;
+using HN_Backend.Repository;
 using HN_Project.Data;
 using HN_Project.Interface;
 using HN_Project.Repository;
@@ -33,7 +35,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ProductService>();
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<EmployeeService>();
+builder.Services.AddScoped<EmployeeService>();  
 //-------------------- DI For Controller END ----------------//
 
 var app = builder.Build();
