@@ -1,6 +1,10 @@
 ﻿namespace HN_Backend.Interface
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork: IDisposable
     {
+        Task<int> CommitAsync();
+        Task BeginTransactionAsync();
+        Task CommitTransactionAsync();
+        Task RollbackTransactionAsync();
     }
 }

@@ -8,6 +8,7 @@ namespace HN_Shared.DTOs
 {
     public class PaymentOptionDto
     {
+        public long PaymentModeId { get; set; }
         public string Method { get; set; }
         public decimal ReceiveAmount { get; set; }
         public decimal DueAmount { get; set; }
