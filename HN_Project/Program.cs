@@ -1,6 +1,7 @@
 using HN_Backend.Interface;
+using HN_Backend.Models;
 using HN_Backend.Repository;
-using HN_Project.Data;
+using HN_Backend.Service; 
 using HN_Project.Interface;
 using HN_Project.Repository;
 using HN_Project.Service;
@@ -35,7 +36,21 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ProductService>();
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<EmployeeService>();  
+builder.Services.AddScoped<EmployeeService>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICurrentStock, CurrentStockRepository>();
+builder.Services.AddScoped<ICurrentStockDetail, CurrentStockDetailRepository>();
+builder.Services.AddScoped<ISalesOrder, SalesOrderRepository>();
+builder.Services.AddScoped<ISalesOrderDetail, SalesOrderDetailDetail>();
+builder.Services.AddScoped<ISalesOrderSerial, SalesOrderDetailSerialRepository>();
+builder.Services.AddScoped<ICollectionIn, CollectionRepository>();
+builder.Services.AddScoped<ICollectionDetail, CollectionDetailRepository>();
+builder.Services.AddScoped<ISalesOrderSerial, SalesOrderDetailSerialRepository>();
+
+builder.Services.AddScoped<PointOfSalesService>();
+ 
+
 //-------------------- DI For Controller END ----------------//
 
 var app = builder.Build();

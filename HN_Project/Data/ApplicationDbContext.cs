@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using HN_Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace HN_Project.Data;
+namespace HN_Backend.Models;
 
 public partial class ApplicationDbContext : DbContext
 {
@@ -16,9 +15,15 @@ public partial class ApplicationDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Bank> Banks { get; set; }
+
     public virtual DbSet<Brand> Brands { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
+
+    public virtual DbSet<Collection> Collections { get; set; }
+
+    public virtual DbSet<CollectionDetail> CollectionDetails { get; set; }
 
     public virtual DbSet<CurrentStock> CurrentStocks { get; set; }
 
@@ -45,10 +50,28 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:DefaultConnection");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=localhost\\MSSQLSERVER01;Database=Hasan_DB;Trusted_Connection=True;Encrypt=False;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Bank>(entity =>
+        {
+            entity.ToTable("Bank");
+
+            entity.HasIndex(e => e.BankName, "Bank_BankName");
+
+            entity.Property(e => e.Address)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.BankName)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.Phone)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Brand>(entity =>
         {
             entity.ToTable("Brand");
@@ -56,7 +79,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Code)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Name)
                 .HasMaxLength(200)
                 .IsUnicode(false);
@@ -75,7 +100,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Code)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Name)
                 .HasMaxLength(200)
                 .IsUnicode(false);
@@ -87,12 +114,76 @@ public partial class ApplicationDbContext : DbContext
                 .HasConstraintName("FK_Category_LoginUser");
         });
 
+        modelBuilder.Entity<Collection>(entity =>
+        {
+            entity.ToTable("Collection");
+
+            entity.HasIndex(e => e.CollectionNo, "Collection_CollectionNo");
+
+            entity.Property(e => e.CollectionAgainst)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.CollectionNo)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Remarks)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.CollectedByNavigation).WithMany(p => p.Collections)
+                .HasForeignKey(d => d.CollectedBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Collection_Employee");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.Collections)
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Collection_Customer");
+
+            entity.HasOne(d => d.Location).WithMany(p => p.Collections)
+                .HasForeignKey(d => d.LocationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Collection_Location");
+
+            entity.HasOne(d => d.SalesOrder).WithMany(p => p.Collections)
+                .HasForeignKey(d => d.SalesOrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Collection_SalesOrder");
+        });
+
+        modelBuilder.Entity<CollectionDetail>(entity =>
+        {
+            entity.ToTable("CollectionDetail");
+
+            entity.Property(e => e.Amount).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.CollectionReference)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Bank).WithMany(p => p.CollectionDetails)
+                .HasForeignKey(d => d.BankId)
+                .HasConstraintName("FK_CollectionDetail_Bank");
+
+            entity.HasOne(d => d.Collection).WithMany(p => p.CollectionDetails)
+                .HasForeignKey(d => d.CollectionId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CollectionDetail_Collection");
+        });
+
         modelBuilder.Entity<CurrentStock>(entity =>
         {
             entity.ToTable("CurrentStock");
 
             entity.Property(e => e.Cost).HasColumnType("decimal(18, 3)");
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.StockInType)
                 .HasMaxLength(5)
                 .IsUnicode(false);
@@ -153,7 +244,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Code)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.DueAmount).HasColumnType("decimal(18, 3)");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
@@ -189,7 +282,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Code)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .IsUnicode(false);
@@ -218,7 +313,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Code)
                 .HasMaxLength(5)
                 .IsUnicode(false);
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Name)
                 .HasMaxLength(150)
                 .IsUnicode(false);
@@ -234,7 +331,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Code)
                 .HasMaxLength(5)
                 .IsUnicode(false);
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .IsUnicode(false);
@@ -252,7 +351,9 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.ToTable("PaymentMethod");
 
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Name)
                 .HasMaxLength(250)
                 .IsUnicode(false);
@@ -282,7 +383,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Code)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 3)");
             entity.Property(e => e.Model)
                 .HasMaxLength(30)
@@ -323,7 +426,9 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.SalesOrderNo, "SalesOrder_SalesOrderNo");
 
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.DiscountAmount).HasColumnType("decimal(18, 3)");
             entity.Property(e => e.DueAmount).HasColumnType("decimal(18, 3)");
             entity.Property(e => e.GrandTotal).HasColumnType("decimal(18, 3)");
@@ -369,7 +474,9 @@ public partial class ApplicationDbContext : DbContext
             entity.ToTable("SalesOrderDetail");
 
             entity.Property(e => e.Cost).HasColumnType("decimal(18, 3)");
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 3)");
             entity.Property(e => e.Price).HasColumnType("decimal(18, 3)");
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 3)");
@@ -391,7 +498,9 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.SerialNo, "SalesOrderSerial_SerialNo");
 
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.SerialNo)
                 .HasMaxLength(250)
                 .IsUnicode(false);
@@ -419,7 +528,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Code)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.CreateOn).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .IsUnicode(false);

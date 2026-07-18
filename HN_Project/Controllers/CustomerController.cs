@@ -1,5 +1,4 @@
-﻿using HN_Project.Data;
-using HN_Project.Service;
+﻿using HN_Project.Service;
 using HN_Project.Mapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

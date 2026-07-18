@@ -1,5 +1,5 @@
 ﻿using HN_Backend.Models;
-using HN_Project.Data;
+ 
 using HN_Project.DTOs;
 using HN_Project.Interface; 
 using HN_Project.Repository;
