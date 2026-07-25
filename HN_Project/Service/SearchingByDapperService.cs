@@ -1,6 +1,7 @@
-﻿using HN_Project.DTOs;
+﻿using HN_Backend.Data;
+using HN_Backend.DTOs;
+using HN_Project.DTOs;
 using HN_Project.Interface;
-using HN_Backend.Models;
 
 namespace HN_Project.Service
 {
@@ -14,6 +15,11 @@ namespace HN_Project.Service
         public async Task<List<CurrentStockProductVM>> GetProductByNameCodeSerialModelNoWithCurrentStock(string objParam)
         {
             return await _searchDapp.GetProductByNameCodeSerialModelNoWithCurrentStock(objParam);
+        }
+
+        public async Task<PaginationResponse<ProductPaginationVM>> GetProductByPaginationRequest(PaginationRequest request)
+        {
+            return await _searchDapp.GetProductByPaginationRequest(request);
         }
     }
 }

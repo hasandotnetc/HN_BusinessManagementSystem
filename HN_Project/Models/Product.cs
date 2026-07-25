@@ -35,6 +35,8 @@ public partial class Product
 
     public long EntryBy { get; set; }
 
+    public long GroupId { get; set; }
+
     public virtual Brand Brand { get; set; } = null!;
 
     public virtual Category Category { get; set; } = null!;
@@ -42,6 +44,8 @@ public partial class Product
     public virtual ICollection<CurrentStock> CurrentStocks { get; set; } = new List<CurrentStock>();
 
     public virtual LoginUser EntryByNavigation { get; set; } = null!;
+
+    public virtual ProductGroup Group { get; set; } = null!;
 
     public virtual ICollection<SalesOrderDetail> SalesOrderDetails { get; set; } = new List<SalesOrderDetail>();
 }

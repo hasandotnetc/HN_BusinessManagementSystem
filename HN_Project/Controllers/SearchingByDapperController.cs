@@ -1,4 +1,5 @@
-﻿using HN_Project.Mapper;
+﻿using HN_Backend.DTOs;
+using HN_Project.Mapper;
 using HN_Project.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +19,15 @@ namespace HN_Project.Controllers
         [HttpGet("{paramObj}")]
         public async Task<IActionResult> GetProductByNameCodeSerialModelNoWithCurrentStock(string paramObj)
         {
-            var list = await _dappService.GetProductByNameCodeSerialModelNoWithCurrentStock(paramObj);
+            var list = await _dappService.GetProductByNameCodeSerialModelNoWithCurrentStock(paramObj); 
+            return Ok(list);
+        }
 
-            //var list = data.Select(x => CustomerMapper.CustomerVMMapper(x)).ToList();
-            //data.Select(CustomerMapper.CustomerVMMapper).ToList();
-            //if (list.Count == 0)
-            //    return NotFound("No Data Found");
+        //[HttpGet("GetProductByPaginationRequest/{paramObj}")]
+        [HttpGet("GetProductByPaginationRequest")]
+        public async Task<IActionResult> GetProductByPaginationRequest([FromQuery] PaginationRequest request)
+        {
+            var list = await _dappService.GetProductByPaginationRequest(request);
             return Ok(list);
         }
     }

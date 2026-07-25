@@ -1,5 +1,5 @@
 ﻿using HN_Backend.Interface;
-using HN_Backend.Models; 
+using HN_Backend.Data; 
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 

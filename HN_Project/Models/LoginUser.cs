@@ -35,6 +35,8 @@ public partial class LoginUser
 
     public virtual ICollection<PaymentMethod> PaymentMethods { get; set; } = new List<PaymentMethod>();
 
+    public virtual ICollection<ProductGroup> ProductGroups { get; set; } = new List<ProductGroup>();
+
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
     public virtual ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();
