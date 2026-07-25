@@ -7,6 +7,7 @@
         public long CategoryId { get; set; }
 
         public long BrandId { get; set; }
+        public long GroupId { get; set; }
 
         public string Code { get; set; } = null!;
 
@@ -30,7 +31,7 @@
 
         //public DateTime? CreateOn { get; set; }
 
-        //public long EntryBy { get; set; }
+        public long EntryBy { get; set; }
 
     }
 }

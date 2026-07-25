@@ -38,8 +38,9 @@ namespace HN_Frontend.Controllers
             return Json(data);
         }
 
+
         [HttpPost]
-        public IActionResult SaveInvoice([FromBody] InvoicePOSDto payload)
+        public async Task<IActionResult> SaveInvoice([FromBody] InvoicePOSDto payload)
         {
             if (payload == null || payload.ProductRowsAllInfo.Count == 0)
             {
@@ -48,15 +49,64 @@ namespace HN_Frontend.Controllers
 
             try
             {
-                // 1. Process your business logic (save to Invoice Master / Details tables)
-                // 2. If payload.PaymentOption.Method == "Split", access payload.SplitAmounts list loop elements
+                var url = "https://localhost:7008/api/PointOfSales/create-invoice";
 
-                return Json(new { success = true, invoiceId = 10452 });
+                var response = await _client.PostAsJsonAsync(url, payload);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+
+                    return Json(new
+                    {
+                        success = false,
+                        message = error
+                    });
+                }
+
+                var result = await response.Content.ReadFromJsonAsync<List<SaveInvoiceResponseDto>>();
+
+                return Json(new
+                {
+                    success = true,
+                    data = result
+                });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message });
+                return Json(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
             }
         }
+
+
+
+        //[HttpPost]
+        //public IActionResult SaveInvoice([FromBody] InvoicePOSDto payload)
+        //{
+        //    if (payload == null || payload.ProductRowsAllInfo.Count == 0)
+        //    {
+        //        return Json(new { success = false, message = "Invalid data payload compiled." });
+        //    }
+
+        //    try
+        //    {
+        //        // 1. Process your business logic (save to Invoice Master / Details tables)
+        //        // 2. If payload.PaymentOption.Method == "Split", access payload.SplitAmounts list loop elements
+        //        var url = $"https://localhost:7008/api/SearchingByDapper/{payload}";
+
+        //         //await _client.GetFromJsonAsync<List<SaveInvoiceResponseDto>>(url);
+
+        //        //return Json(data);
+        //        return Json(new { success = true, invoiceId = 10452 });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { success = false, message = ex.Message });
+        //    }
+        //}
     }
 }

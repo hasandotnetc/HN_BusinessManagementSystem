@@ -1,13 +1,13 @@
 ﻿using HN_Backend.Interface;
-using HN_Backend.Models; 
+using HN_Backend.Data; 
 using Microsoft.EntityFrameworkCore;
 
 namespace HN_Backend.Repository
 {
-    public class SalesOrderDetailDetail: ISalesOrderDetail
+    public class SalesOrderDetailRepository: ISalesOrderDetail
     {
         private readonly ApplicationDbContext _context; 
-        public SalesOrderDetailDetail(ApplicationDbContext context)
+        public SalesOrderDetailRepository(ApplicationDbContext context)
         {
             _context = context;
         }

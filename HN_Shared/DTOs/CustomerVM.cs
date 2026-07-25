@@ -3,7 +3,7 @@
     public class CustomerVM
     {
         public long CustomerId { get; set; }
-        public string Code { get; set; } = null!; 
+        //public string Code { get; set; } 
 
         public decimal OpeningBalance { get; set; }
 

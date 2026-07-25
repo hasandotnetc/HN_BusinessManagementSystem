@@ -1,4 +1,5 @@
-﻿using HN_Backend.Models;
+﻿using HN_Backend.Data;
+//using HN_Backend.Data;
  
 using HN_Project.Interface; 
 using Microsoft.EntityFrameworkCore;

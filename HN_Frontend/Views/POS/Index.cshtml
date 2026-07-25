@@ -1340,7 +1340,7 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @* <div class="pos-container"> *@
-<div class="container-fluid">
+<div class="pos-page">
     <div class="row g-2">
         <!-- Left Panel -->
         @* <div class="left-panel"> *@
@@ -2961,8 +2961,6 @@ $("#btnSearchCustomer").autocomplete({
         // Fallback checking to prevent case sensitivity bugs (e.g., "split" vs "Split")
         let paymentMethod = $("#hdnPaymentType").val() || "Cash";
 
-        alert(paymentMethod);
-
         let subTotal = parseFloat($("#lblSubTotal").text().replace(/,/g, '')) || 0;
         let discount = parseFloat($("#inputGlobalDiscount").val()) || 0;
         let tax = parseFloat($("#inputGlobalTax").val()) || 0;
@@ -2995,12 +2993,14 @@ $("#btnSearchCustomer").autocomplete({
                 Name: customerName,
                 customerId: customerId,
                 Phone: $(".info-box .fa-phone").parent().text().trim()
+                // CustomerCode: $(".info-box .fa-phone").parent().text().trim()
             },
             SalesPerson: {
                 Name: salesPersonName,
                 employeeId: employeeId
             },
             PaymentOption: {
+                PaymentModeId:1,
                 Method: paymentMethod,
                 ReceiveAmount: paidAmount,
                 DueAmount: dueAmount,

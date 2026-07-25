@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace HN_Backend.Models;
+namespace HN_Backend.Data;
 
 public partial class ApplicationDbContext : DbContext
 {
@@ -41,6 +41,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<ProductGroup> ProductGroups { get; set; }
+
     public virtual DbSet<SalesOrder> SalesOrders { get; set; }
 
     public virtual DbSet<SalesOrderDetail> SalesOrderDetails { get; set; }
@@ -50,8 +52,7 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost\\MSSQLSERVER01;Database=Hasan_DB;Trusted_Connection=True;Encrypt=False;");
+        => optionsBuilder.UseSqlServer("Name=DefaultConnection");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -416,6 +417,28 @@ public partial class ApplicationDbContext : DbContext
                 .HasForeignKey(d => d.EntryBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Product_LoginUser");
+
+            entity.HasOne(d => d.Group).WithMany(p => p.Products)
+                .HasForeignKey(d => d.GroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Product_ProductGroup");
+        });
+
+        modelBuilder.Entity<ProductGroup>(entity =>
+        {
+            entity.ToTable("ProductGroup");
+
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Name)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.EntryByNavigation).WithMany(p => p.ProductGroups)
+                .HasForeignKey(d => d.EntryBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ProductGroup_LoginUser");
         });
 
         modelBuilder.Entity<SalesOrder>(entity =>

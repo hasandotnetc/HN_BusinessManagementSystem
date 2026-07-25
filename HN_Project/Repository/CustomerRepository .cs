@@ -1,4 +1,4 @@
-﻿using HN_Backend.Models;
+﻿using HN_Backend.Data;
  
 using HN_Project.DTOs;
 using HN_Project.Interface; 
