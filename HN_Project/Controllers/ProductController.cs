@@ -1,4 +1,5 @@
-﻿using HN_Project.DTOs;
+﻿using HN_Backend.DTOs;
+using HN_Project.DTOs;
 using HN_Project.Mapper;
 using HN_Project.Service;
 using Microsoft.AspNetCore.Http;
@@ -60,6 +61,24 @@ namespace HN_Backend.Controllers
         public async Task<IActionResult> SaveProduct([FromForm] ProductVM dto)
         {
             await _productServ.SaveProduct(dto); 
+            return Ok();
+        }
+        [HttpPost("SaveProductBrand")]
+        public async Task<IActionResult> SaveProductBrand([FromForm] BrandVM dto)
+        {
+            await _productServ.SaveProductBrand(dto);
+            return Ok();
+        }
+        [HttpPost("SaveProductCategory")]
+        public async Task<IActionResult> SaveProductCategory([FromForm] ProductCategoryVM dto)
+        {
+            await _productServ.SaveProductCategory(dto);
+            return Ok();
+        }
+        [HttpPost("SaveProductGroup")]
+        public async Task<IActionResult> SaveProductGroup([FromForm] ProductGroupVM dto)
+        {
+            await _productServ.SaveProductGroup(dto);
             return Ok();
         }
     }

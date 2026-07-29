@@ -49,7 +49,7 @@ builder.Services.AddScoped<ICollectionDetail, CollectionDetailRepository>();
 builder.Services.AddScoped<ISalesOrderSerial, SalesOrderDetailSerialRepository>();
 
 builder.Services.AddScoped<PointOfSalesService>();
- 
+builder.Services.AddScoped<ImageService>();
 
 builder.Services.AddCors(options =>
 {
