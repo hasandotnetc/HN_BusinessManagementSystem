@@ -9,7 +9,7 @@
         public long BrandId { get; set; }
         public long GroupId { get; set; }
 
-        public string Code { get; set; } = null!;
+        public string? Code { get; set; } 
 
         public string Name { get; set; } = null!;
 
@@ -32,7 +32,7 @@
         //public DateTime? CreateOn { get; set; }
         public IFormFile? ProductImage { get; set; }
 
-        public long EntryBy { get; set; }
+        public long EntryBy { get; set; } = 1;
 
     }
 }

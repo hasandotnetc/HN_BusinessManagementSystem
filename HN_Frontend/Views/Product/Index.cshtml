@@ -224,8 +224,8 @@
 
                     <!-- Warranty Row -->
                     <div class="d-flex align-items-center mb-0">
-                        <label class="inline-label" for="txtWarranty">Warranty</label>
-                        <input type="text" id="txtWarranty" class="form-control custom-form-control w-100" placeholder="e.g. 1 Year">
+                        <label class="inline-label" for="txtWarranty">Warranty Months</label>
+                        <input type="number" id="txtWarranty" class="form-control custom-form-control w-100" placeholder="e.g. 6">
                     </div>
                 </div>
 
@@ -432,7 +432,6 @@
             return isPercent ? (mainPrice * inputVal) / 100 : inputVal;
         }
 
-
         function handleFormSubmit(e) {
             e.preventDefault();
 
@@ -443,80 +442,62 @@
                 return;
             }
 
-            const product = {
-                ProductName: $("#txtProductName").val().trim(),
-                ModelNo: $("#txtModelNo").val(),
-                Price: mainPrice,
+            var formData = new FormData();
 
-                Discount: calculateCalculatedValue('Discount', mainPrice),
-                Vat: calculateCalculatedValue('Vat', mainPrice),
-                Tax: calculateCalculatedValue('Tax', mainPrice),
+            formData.append("Name", $("#txtProductName").val().trim());
+            formData.append("Model", $("#txtModelNo").val());
+            // formData.append("Price", mainPrice);
+            const discount = calculateCalculatedValue("Discount", mainPrice);
 
-                IsDiscountPercent: $("#chkDiscountMode").prop("checked"),
-                IsVatPercent: $("#chkVatMode").prop("checked"),
-                IsTaxPercent: $("#chkTaxMode").prop("checked"),
+            const priceAfterDiscount = mainPrice - discount; 
+            const vat = calculateCalculatedValue("Vat", priceAfterDiscount); 
+            const tax = calculateCalculatedValue("Tax", priceAfterDiscount);
 
-                Warranty: $("#txtWarranty").val(),
+            formData.append("Price", mainPrice);
+            formData.append("Discount", discount);
+            formData.append("Vat", vat);
+            formData.append("Tax", tax);
+             
+            formData.append("IsDiscountPercent", $("#chkDiscountMode").prop("checked"));
+            formData.append("IsVatPercent", $("#chkVatMode").prop("checked"));
+            formData.append("IsTaxPercent", $("#chkTaxMode").prop("checked"));
 
-                IsSerialProduct: $("#chkSerialProduct").prop("checked"),
+            // formData.append("Warranty", $("#txtWarranty").val());
+            formData.append("Warranty", parseFloat($("#txtWarranty").val()) || 0);
+             const serialAvailable = $("#chkSerialProduct").is(":checked") ? "Y" : "N";
+            formData.append("SerialAvailable", serialAvailable);
 
-                GroupId: $("#ddlGroup").val(),
-                CategoryId: $("#ddlCategory").val(),
-                BrandId: $("#ddlBrand").val()
-            };
+            formData.append("GroupId", $("#ddlGroup").val());
+            formData.append("CategoryId", $("#ddlCategory").val());
+            formData.append("BrandId", $("#ddlBrand").val());
 
-            console.log(product);fileProductPicture
+            // Image
+            var file = $("#fileProductPicture")[0].files[0];
+            if (file) {
+                formData.append("ProductImage", file);
+            }
+            formData.forEach((value, key) => {
+                console.log(key, ":", value);
+            });
+            // return;
+            $.ajax({
+                url: "https://localhost:7008/api/Product/SaveProduct",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
 
-            saveProduct(product);
+                success: function (res) {
+                    alert("Saved Successfully");
+                    console.log(res);
+                },
+
+                error: function (err) {
+                    console.error(err);
+                    alert("Failed to save product.");
+                }
+            });
         }
-
-
-        // function saveProduct() {
-
-        //     var formData = new FormData();
-
-        //     formData.append("ProductName", $("#txtProductName").val());
-        //     formData.append("ModelNo", $("#txtModelNo").val());
-        //     formData.append("Price", $("#numPrice").val());
-
-        //     formData.append("Discount", calculateCalculatedValue('Discount', $("#numPrice").val()));
-        //     formData.append("Vat", calculateCalculatedValue('Vat', $("#numPrice").val()));
-        //     formData.append("Tax", calculateCalculatedValue('Tax', $("#numPrice").val());
-
-        //     formData.append("IsDiscountPercent", $("#chkDiscountMode").prop("checked"));
-        //     formData.append("IsVatPercent", $("#chkVatMode").prop("checked"));
-        //     formData.append("IsTaxPercent", $("#chkTaxMode").prop("checked"));
-
-        //     formData.append("IsSerialProduct", $("#chkSerialProduct").prop("checked"));
-
-        //     formData.append("Warranty", $("#txtWarranty").val());
-
-        //     formData.append("GroupId", $("#ddlGroup").val());
-        //     formData.append("CategoryId", $("#ddlCategory").val());
-        //     formData.append("BrandId", $("#ddlBrand").val());
-
-        //     var file = $("#fileProductPicture")[0].files[0];
-
-        //     if (file) {
-        //         formData.append("Image", file);
-        //     }
-
-        //     $.ajax({
-        //         url: "https://localhost:7008/api/Product/Save",
-        //         type: "POST",
-        //         data: formData,
-        //         processData: false,
-        //         contentType: false,
-
-        //         success: function (res) {
-        //             alert("Saved Successfully");
-        //         },
-
-        //         error: function (err) {
-        //             console.log(err);
-        //         }
-        //     });
-        // }
 
         function resetForm() {
             document.getElementById('productForm').reset();
@@ -528,10 +509,42 @@
 
 
 
+        function calculateCalculatedValue(type, price) { 
+            let value = 0;
+            let isPercent = false; 
+            switch (type) {
+                case "Discount":
+                    value = parseFloat($("#numDiscount").val()) || 0;
+                    isPercent = $("#chkDiscountMode").prop("checked");
+                    break;
 
+                case "Vat":
+                    value = parseFloat($("#numVat").val()) || 0;
+                    isPercent = $("#chkVatMode").prop("checked");
+                    break;
+
+                case "Tax":
+                    value = parseFloat($("#numTax").val()) || 0;
+                    isPercent = $("#chkTaxMode").prop("checked");
+                    break;
+            }
+
+            if (isPercent) {
+                return (price * value) / 100;
+            }
+
+            return value;
+        }
 
 
         const API_BASE_URL = "https://localhost:7008/api/Product";
+        const IMAGE_BASE_URL = "https://localhost:7008/";
+        // const IMAGE_BASE_URL = "https://localhost:7008/uploads/";
+        // const DEFAULT_IMAGE = "Upload/Product/no-image.png";
+
+        const DEFAULT_IMAGE = `${IMAGE_BASE_URL}/Upload/Product/no-image.png`;
+        console.log(DEFAULT_IMAGE);
+
 
         $(document).ready(function () {
 
@@ -636,19 +649,17 @@
 
         });
 
-                function LoadProducts() {
-
+        function LoadProducts() {
             $.ajax({
-
                 url: "https://localhost:7008/api/SearchingByDapper/GetProductByPaginationRequest", 
                 type: "GET", 
                 data: { 
                     Page: currentPage, 
                     PageSize: pageSize, 
-                      Search: ($("#txtSearch").val() || "").trim()
+                    Search: ($("#txtSearch").val() || "").trim()
                 },
                 success: function (res) {
-                      console.log(res);
+                    console.log(res);
                     BindTable(res.data);
                     totalPages = res.totalPages;
                     CreatePagination();
@@ -660,75 +671,56 @@
                          ${res.totalRecords}
                          Products`
                     );
-
-                }
-             
+                }             
             });
-
         }
 
 
-                function BindTable(data) {
-
+        function BindTable(data) {
             let html = "";
-
             if (data.length == 0) {
-
                 $("#productTableBody").html("");
-
                 $("#emptyStatePlaceholder").show();
-
                 return;
-
             }
-
             $("#emptyStatePlaceholder").hide();
-
             $.each(data,function(index,item){
-
+                // console.log('amar sonar bangla');
+                // console.log(getImageUrl(item.imageUrl));
+                // console.log('123');
                 html += `
-        <tr>
-
-        <td>${((currentPage-1)*pageSize)+(index+1)}</td>
-
-        <td>
-        <img src="${item.image}"
-        width="40">
-        </td>
-
-        <td>${item.productName}</td>
-
-        <td>${item.model}</td>
-
-        <td>${item.groupName}</td>
-
-        <td>${item.categoryName}</td>
-
-        <td>${item.brandName}</td>
-
-        <td>${item.price}</td>
-
-        <td>${item.stockType}</td>
-
-        <td>
-
-        <button class="btn btn-sm btn-warning">
-        Edit
-        </button>
-
-        </td>
-
-        </tr>
-        `;
+                        <tr>
+                        <td>${((currentPage-1)*pageSize)+(index+1)}</td>
+                        <td>
+                        <img
+                            src="${getImageUrl(item.imageUrl)}"
+                            width="50"
+                            height="50"
+                             style="object-fit: cover;"
+                            loading="lazy"
+                            onerror="this.onerror=null;this.src='${DEFAULT_IMAGE}'">
+                        </td>
+                        <td>${item.productName}</td>
+                        <td>${item.model}</td>
+                        <td>${item.groupName}</td>
+                        <td>${item.categoryName}</td>
+                        <td>${item.brandName}</td>
+                        <td>${item.price}</td>
+                        <td>${item.stockType}</td>
+                        <td>
+                        <button class="btn btn-sm btn-warning">
+                        Edit
+                        </button>
+                        </td>
+                        </tr>
+                        `;
 
             });
-
             $("#productTableBody").html(html);
-
         }
 
 
-                function CreatePagination() {
+        function CreatePagination() {
 
             let html = "";
 
@@ -787,7 +779,7 @@
         }
 
 
-                function GoPage(page){
+        function GoPage(page){
 
             if(page<1)
                 return;
@@ -802,7 +794,7 @@
         }
 
 
-                $("#txtSearch").keyup(function(){
+        $("#txtSearch").keyup(function(){
 
             currentPage=1;
 
@@ -810,7 +802,7 @@
 
         });
 
-                $("#ddlPageSize").change(function(){
+        $("#ddlPageSize").change(function(){
 
             pageSize=parseInt($(this).val());
 
@@ -820,6 +812,21 @@
 
         });
 
+        // function getImageUrl(path) {
+        //     if (!path || path.trim() === "")
+        //         return DEFAULT_IMAGE;
+        //     return IMAGE_BASE_URL + path;
+        // }
+
+        function getImageUrl(path) {
+            console.log('getImageUrl');
+            console.log(path);
+            if (!path || path.trim() === "")
+                return DEFAULT_IMAGE;
+            console.log(DEFAULT_IMAGE);
+
+            return IMAGE_BASE_URL + path;
+        }
 
     </script>
 }
