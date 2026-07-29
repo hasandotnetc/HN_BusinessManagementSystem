@@ -77,54 +77,5 @@ public class ImageService
 
         if (!contentTypes.Contains(file.ContentType))
             throw new Exception("Invalid image.");
-    }
-    //private void Validate(IFormFile file)
-    //{
-    //    if (file == null)
-    //        throw new Exception("Image is required.");
-
-    //    if (file.Length == 0)
-    //        throw new Exception("Image file is empty.");
-
-    //    // Maximum 5 MB
-    //    const long maxSize = 5 * 1024 * 1024;
-
-    //    if (file.Length > maxSize)
-    //        throw new Exception("Image size cannot exceed 5 MB.");
-
-    //    // Allowed Extensions
-    //    string[] allowedExtensions =
-    //    {
-    //        ".jpg",
-    //        ".jpeg",
-    //        ".png",
-    //        ".webp"
-    //    };
-
-    //    // Allowed Content Types
-    //    string[] allowedContentTypes =
-    //    {
-    //        "image/jpeg",
-    //        "image/png",
-    //        "image/webp"
-    //    };
-
-    //    string extension = Path.GetExtension(file.FileName).ToLower();
-
-    //    if (!allowedExtensions.Contains(extension))
-    //        throw new Exception("Only JPG, JPEG, PNG and WEBP images are allowed.");
-
-    //    if (!allowedContentTypes.Contains(file.ContentType))
-    //        throw new Exception("Invalid image content type.");
-
-    //    try
-    //    {
-    //        using var stream = file.OpenReadStream();
-    //        using var image = Image.Load(stream);
-    //    }
-    //    catch
-    //    {
-    //        throw new Exception("Invalid image file.");
-    //    }
-    //}
+    } 
 }

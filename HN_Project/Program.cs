@@ -73,7 +73,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection(); 
+app.UseHttpsRedirection();
+app.UseStaticFiles();  //for loading imageUrl show Image.
 
 app.UseCors();
    
@@ -90,7 +91,6 @@ app.MapControllers();
 app.Run();
 
 
- 
 
 //# Overwrites ApplicationDbContext and Models in-place safely
 //Scaffold - DbContext "Name=DefaultConnection" Microsoft.EntityFrameworkCore.SqlServer - OutputDir Data - Context ApplicationDbContext - Force

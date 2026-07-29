@@ -57,7 +57,7 @@ namespace HN_Project.Service
                 var product = new Product
                 {
                     Name = vm.Name,
-                    Code = vm.Code,
+                    Code = vm.Code??"",
                     Model = vm.Model,
                     SerialAvailable = vm.SerialAvailable,
                     Price = vm.Price,
