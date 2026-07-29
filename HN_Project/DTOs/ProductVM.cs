@@ -30,6 +30,7 @@
         public string? Picture { get; set; }
 
         //public DateTime? CreateOn { get; set; }
+        public IFormFile? ProductImage { get; set; }
 
         public long EntryBy { get; set; }
 

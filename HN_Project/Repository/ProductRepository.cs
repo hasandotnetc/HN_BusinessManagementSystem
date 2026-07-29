@@ -1,7 +1,8 @@
 ﻿using HN_Backend.Data;
+using HN_Backend.DTOs;
 using HN_Backend.Interface;
 using HN_Project.DTOs;
-using HN_Shared.DTOs;
+//using HN_Shared.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace HN_Backend.Repository
@@ -32,9 +33,9 @@ namespace HN_Backend.Repository
 
         }
 
-        public async Task<List<CategoryVM>> GetAllProductCategoryList()
+        public async Task<List<ProductCategoryVM>> GetAllProductCategoryList()
         {
-            return await _db.Categories.AsNoTracking().Select(b => new CategoryVM
+            return await _db.Categories.AsNoTracking().Select(b => new ProductCategoryVM
             {
                 CategoryId = b.CategoryId,
                 Name = b.Name
@@ -71,29 +72,24 @@ namespace HN_Backend.Repository
 
         public async Task SaveProduct(Product _product)
         {
-            //var product = new Product
-            //{
-            //    //ProductId = _product.ProductId,
-            //    Name = _product.Name,
-            //    Code = _product.Code,
-            //    Model = _product.Model,
-            //    SerialAvailable = _product.SerialAvailable,
-            //    Price = _product.Price,
-            //    Discount = _product.Discount,
-            //    Vat = _product.Vat,
-            //    Tax = _product.Tax,
-            //    Warranty = _product.Warranty,
-            //    Picture = _product.Picture,
-            //    EntryBy = 1,
-            //    GroupId = _product.GroupId,
-            //    CategoryId = _product.CategoryId,
-            //    BrandId = _product.BrandId,
-            //    // Map other properties as needed
-            //};
             _db.Products.Add(_product);
             await _db.SaveChangesAsync();
         }
-
+        public async Task SaveProductBrand(Brand _brand)
+        {
+            _db.Brands.Add(_brand);
+            await _db.SaveChangesAsync();
+        }
+        public async Task SaveProductCategory(Category _category)
+        {
+            _db.Categories.Add(_category);
+            await _db.SaveChangesAsync();
+        }
+        public async Task SaveProductGroup(ProductGroup _productGroup)
+        {
+            _db.ProductGroups.Add(_productGroup);
+            await _db.SaveChangesAsync();
+        }
 
 
     }

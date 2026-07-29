@@ -27,6 +27,11 @@
 
   <ItemGroup>
     <Folder Include="Helpers\" />
+    <Folder Include="wwwroot\Upload\Customer\" />
+    <Folder Include="wwwroot\Upload\Employee\" />
+    <Folder Include="wwwroot\Upload\Brand\" />
+    <Folder Include="wwwroot\Upload\Category\" />
+    <Folder Include="wwwroot\Upload\Product\" />
   </ItemGroup>
 
 </Project>
