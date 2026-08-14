@@ -99,7 +99,7 @@ namespace HN_Project.Service
                 var _brand = new Brand
                 {
                     Name = brand.Name,
-                    Code = brand.Code, 
+                    Code = brand.Code??"123", 
                     Picture = imagePath,
                     EntryBy = 1, 
                 };
@@ -130,7 +130,7 @@ namespace HN_Project.Service
                 var _category = new Category
                 {
                     Name = pcVM.Name,
-                    Code = pcVM.Code,
+                    Code = pcVM.Code??"123",
                     Picture = imagePath,
                     EntryBy = 1,
                 };

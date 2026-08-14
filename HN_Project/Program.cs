@@ -47,6 +47,8 @@ builder.Services.AddScoped<ISalesOrderDetail, SalesOrderDetailRepository>();
 builder.Services.AddScoped<ICollectionIn, CollectionRepository>();
 builder.Services.AddScoped<ICollectionDetail, CollectionDetailRepository>();
 builder.Services.AddScoped<ISalesOrderSerial, SalesOrderDetailSerialRepository>();
+builder.Services.AddScoped<ISupplier, SupplierRepository>();
+builder.Services.AddScoped<SupplierService>();
 
 builder.Services.AddScoped<PointOfSalesService>();
 builder.Services.AddScoped<ImageService>();
@@ -71,18 +73,16 @@ if (app.Environment.IsDevelopment())
 {
     //app.UseDeveloperExceptionPage();
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();  //for loading imageUrl show Image.
-
+app.UseRouting();
 app.UseCors();
    
-
-app.UseSwagger();
-app.UseSwaggerUI();
-
-
+ 
 
 app.UseAuthorization();
 

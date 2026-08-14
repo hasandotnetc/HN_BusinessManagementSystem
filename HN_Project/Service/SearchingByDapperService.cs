@@ -12,6 +12,13 @@ namespace HN_Project.Service
         {
             _searchDapp = searchDapp;
         }
+
+        public async Task<List<CurrentStockProductVM>> GetProductByNameCodeModelNoWithCurrentStock(string objParam)
+        {
+            return await _searchDapp.GetProductByNameCodeModelNoWithCurrentStock(objParam);
+        }
+
+
         public async Task<List<CurrentStockProductVM>> GetProductByNameCodeSerialModelNoWithCurrentStock(string objParam)
         {
             return await _searchDapp.GetProductByNameCodeSerialModelNoWithCurrentStock(objParam);
