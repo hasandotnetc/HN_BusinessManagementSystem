@@ -17,7 +17,7 @@ namespace HN_Project.Controllers
             _empService = empService;
         }
 
-        [HttpGet("{objParam}")]
+        [HttpGet("GetEmployeeByCodeNamePhone/{objParam}")]
         public async Task<IActionResult> GetEmployeeByCodeNamePhone(string objParam)
         {
             var getEmployeeList= await _empService.GetEmployeeByCodeNamePhone(objParam);

@@ -3,47 +3,62 @@
 }
 
 <!-- ================= REBECCAPURPLE PERFECT INLINE LAYOUT ================= -->
-<style>
+
+ <style>
     :root {
-        --rebecca-solid: #663399;
-        --rebecca-dark-bg: #231942;
-        --rebecca-gold: #e0aa3e;
-        --rebecca-gold-hover: #cc962d;
-        --rebecca-border: #804db3;
-        --rebecca-table-header: #52297a;
+        /* Primary Brand Palette */
+        --rebecca-solid: #663399;           /* RebeccaPurple */
+        --rebecca-dark: #4b2375;            /* Darker Purple Hover */
+        --rebecca-gold: #e0aa3e;            /* Action Accent Gold */
+        --rebecca-gold-hover: #cc962d;      /* Accent Gold Hover */
+        --rebecca-light-bg: #f3f4f6;        /* Soft Dashboard Page Background */
+        --rebecca-card-bg: #ffffff;         /* Premium White Container Surface */
+        --rebecca-border: #e5e7eb;          /* Subtle Light Dividers */
+        
+        /* Typography Colors */
+        --text-dark: #1f2937;               /* Crisp Dark Text */
+        --text-muted: #6b7280;              /* Secondary Label Text */
+        --text-purple: #663399;             /* Highlight Labels */
     }
 
+    /* Base Layout Container */
     .product-workspace-wrapper {
-        background-color: var(--rebecca-dark-bg);
-        color: #ffffff;
+        background-color: var(--rebecca-light-bg);
+        color: var(--text-dark);
         border-radius: 8px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
+    /* Premium White Cards */
     .form-card-premium {
-        background-color: var(--rebecca-solid) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 6px;
-        padding: 14px 16px !important;
+        background-color: var(--rebecca-card-bg) !important;
+        border: 1px solid var(--rebecca-border);
+        border-radius: 8px;
+        padding: 16px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
     }
 
-    .section-title-gold {
-        color: var(--rebecca-gold);
-        font-weight: 600;
-        font-size: 14px;
+    /* Solid Purple Header Bar */
+    .section-header-banner {
+        background-color: var(--rebecca-solid);
+        color: #ffffff;
+        padding: 8px 14px;
+        border-radius: 6px;
+        margin-bottom: 16px;
     }
 
     .section-title-White {
-        color: white;
+        color: #ffffff;
         font-weight: 600; 
         font-size: 14px;
+        letter-spacing: 0.5px;
     }
 
-    /* Standardized inline row items alignment */
+    /* Labels & Input Controls */
     .inline-label {
-        color: #ffffff;
+        color: #374151;
         font-size: 12px;
-        font-weight: 500;
+        font-weight: 600;
         white-space: nowrap;
         min-width: 95px;
         display: flex;
@@ -52,30 +67,36 @@
 
     .custom-form-control {
         background-color: #ffffff !important;
-        color: #111111 !important;
-        border: 1px solid var(--rebecca-border) !important;
+        color: var(--text-dark) !important;
+        border: 1px solid #d1d5db !important;
         border-radius: 4px !important;
         padding: 4px 8px;
         font-size: 12px;
         height: 28px !important;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
 
-    /* Style for the 'Per(%)' indicator text */
+    .custom-form-control:focus {
+        border-color: var(--rebecca-solid) !important;
+        box-shadow: 0 0 0 2px rgba(102, 51, 153, 0.2) !important;
+    }
+
+    /* Indicators & Checkboxes */
     .per-text-indicator {
         font-size: 11px;
-        color: #dfd5f0;
+        color: var(--text-muted);
         white-space: nowrap;
         font-weight: 500;
     }
 
-    /* Clean Checkbox Design matching the drawing layout */
     .row-aligned-checkbox {
         width: 15px;
         height: 15px;
         cursor: pointer;
-        accent-color: var(--rebecca-gold);
+        accent-color: var(--rebecca-solid);
     }
 
+    /* Primary & Utility Buttons */
     .btn-gold-action {
         background-color: var(--rebecca-gold);
         color: #1a0f30 !important;
@@ -84,28 +105,53 @@
         padding: 5px 20px;
         border-radius: 4px;
         font-size: 12px;
+        transition: background-color 0.2s ease;
     }
 
-        .btn-gold-action:hover {
-            background-color: var(--rebecca-gold-hover);
-        }
+    .btn-gold-action:hover {
+        background-color: var(--rebecca-gold-hover);
+    }
 
     .btn-purple-utility {
-        background-color: #52297a;
+        background-color: var(--rebecca-solid);
         color: #ffffff !important;
-        border: 1px solid rgba(255,255,255,0.15);
+        border: none;
         border-radius: 4px;
-        padding: 2px 10px;
+        padding: 2px 12px;
         font-size: 11px;
         height: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: background-color 0.2s ease;
     }
 
+    .btn-purple-utility:hover {
+        background-color: var(--rebecca-dark);
+    }
+
+    .btn-purple-outline {
+        background-color: #ffffff;
+        color: var(--rebecca-solid) !important;
+        border: 1px solid var(--rebecca-solid);
+        border-radius: 4px;
+        padding: 2px 12px;
+        font-size: 11px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .btn-purple-outline:hover {
+        background-color: #f3e8ff;
+    }
+
+    /* File Uploader Box */
     .uploader-box {
-        border: 1px dashed rgba(255,255,255,0.4);
-        background-color: rgba(0, 0, 0, 0.15);
+        border: 2px dashed #d1d5db;
+        background-color: #fafafa;
         border-radius: 6px;
         cursor: pointer;
         height: 125px;
@@ -114,47 +160,135 @@
         align-items: center;
         justify-content: center;
         position: relative;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
     }
 
+    .uploader-box:hover {
+        border-color: var(--rebecca-solid);
+        background-color: #f3e8ff;
+    }
+
+    /* Table & Container Styling */
     .premium-table-container {
         border-radius: 6px;
         overflow: hidden;
         border: 1px solid var(--rebecca-border);
         min-height: 220px;
         font-size: 12px;
+        background-color: #ffffff;
     }
 
     .premium-data-table th {
-        background-color: var(--rebecca-table-header) !important;
-        color: #e2d5f0 !important;
-        font-weight: 500;
+        background-color: var(--rebecca-solid) !important;
+        color: #ffffff !important;
+        font-weight: 600;
         font-size: 12px;
-        font-style:initial;
         padding: 8px 10px !important;
+        border: none !important;
     }
 
     .premium-data-table td {
         background-color: transparent !important;
-        color: #ffffff !important;
-        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+        color: var(--text-dark) !important;
+        border-bottom: 1px solid var(--rebecca-border) !important;
         padding: 8px 10px !important;
     }
 
+    .premium-data-table tbody tr:hover {
+        background-color: #fafafa !important;
+    }
+
     .mandatory-star {
-        color: #ff4d4d;
+        color: #dc2626;
         margin-left: 2px;
     }
+
+    /* Action Buttons in Table */
+    .btn-action-edit {
+        background-color: var(--rebecca-gold);
+        color: #1a0f30;
+        font-weight: 600;
+        border-radius: 4px;
+        padding: 2px 8px;
+        font-size: 11px;
+        border: none;
+    }
+
+    .btn-action-edit:hover {
+        background-color: var(--rebecca-gold-hover);
+    }
+
+
+
+     
+    /* ================== Modal-POP Up CSS Style  ======================*/
+
+    /* Blurred background effect for modals */
+    .modal-backdrop.show {
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        background-color: rgba(15, 23, 42, 0.4);
+    }
+
+    /* Shared utility button styling */
+    .btn-purple-utility {
+        background-color: rebeccapurple;
+        color: #fff;
+        border: none;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+        .btn-purple-utility:hover {
+            background-color: #53287d;
+            color: #fff;
+        }
+
+    /* Modal and Form Inputs */
+    .modal-content {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .custom-input,
+    .custom-form-control {
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .custom-input:focus,
+        .custom-form-control:focus {
+            border-color: rebeccapurple;
+            box-shadow: 0 0 0 0.25rem rgba(102, 51, 153, 0.25);
+        }
+
+    .mandatory-star {
+        color: #dc3545;
+    }
+
+    .inline-label {
+        min-width: 90px;
+        font-weight: 600;
+    }
+
+
+
 </style>
+
+
 
 <div class="container-fluid p-2 product-workspace-wrapper my-0">
 
     <!-- ================= ROW 1: PRODUCT FORM SECTION ================= -->
     <div class="form-card-premium mb-3">
-        <div class="border-bottom border-secondary pb-1 mb-3 d-flex align-items-center">
+      @*   <div class="border-bottom border-secondary pb-1 mb-3 d-flex align-items-center">
+            <i class="fa-solid fa-square-poll-horizontal text-warning me-2" style="font-size: 13px;"></i>
+            <h2 class="section-title-White m-0 text-uppercase tracking-wider">Product Information</h2>
+        </div> *@
+        <div class="section-header-banner d-flex align-items-center">
             <i class="fa-solid fa-square-poll-horizontal text-warning me-2" style="font-size: 13px;"></i>
             <h2 class="section-title-White m-0 text-uppercase tracking-wider">Product Information</h2>
         </div>
-
         <form id="productForm" onsubmit="handleFormSubmit(event)" novalidate>
             <div class="row g-3 align-items-start">
 
@@ -168,26 +302,35 @@
                             <div id="errProductName" class="text-danger d-none" style="font-size:10px; position:absolute;">Required</div>
                         </div>
                     </div>
+
+                       <!-- Code No -->
+                    <div class="d-flex align-items-center mb-3">
+                        <label class="inline-label" for="txtProductCode">Code No</label>
+                        <input type="text" id="txtProductCode" class="form-control custom-form-control" readonly disabled>
+                    </div>
+
+
                     <!-- Model No -->
                     <div class="d-flex align-items-center mb-3">
-                        <label class="inline-label" for="txtModelNo">Model No</label>
+                        <label class="inline-label" for="txtModelNo">Model No <span class="mandatory-star">*</span></label>
                         <input type="text" id="txtModelNo" class="form-control custom-form-control" placeholder="Enter model number">
                     </div>
                     <!-- Price -->
                     <div class="d-flex align-items-center mb-3">
-                        <label class="inline-label" for="numPrice">Price<span class="mandatory-star">*</span></label>
+                        <label class="inline-label" for="numPrice">Price@* <span class="mandatory-star">*</span> *@</label>
                         <div class="w-100">
                             <input type="number" id="numPrice" class="form-control custom-form-control" placeholder="0.00" step="0.01">
-                            <div id="errPrice" class="text-danger d-none" style="font-size:10px; position:absolute;">Required</div>
+                            @* <div id="errPrice" class="text-danger d-none" style="font-size:10px; position:absolute;">Required</div> *@
                         </div>
                     </div>
-                    <!-- Serial Product: Transformed into perfect row matching layout -->
+                    
+                    <!-- Warranty Row -->
                     <div class="d-flex align-items-center mb-0">
-                        <label class="inline-label" for="chkSerialProduct">Serial Product</label>
-                        <div class="d-flex align-items-center" style="height: 28px;">
-                            <input type="checkbox" id="chkSerialProduct" class="row-aligned-checkbox">
-                        </div>
+                        <label class="inline-label" for="txtWarranty">Warranty Months</label>
+                        <input type="number" id="txtWarranty" class="form-control custom-form-control w-100" placeholder="e.g. 6">
                     </div>
+
+
                 </div>
 
                 <!-- COLUMN 2: Beautiful Single-Line Convertible Operations (Discount, VAT, Tax) -->
@@ -196,7 +339,7 @@
                     <div class="d-flex align-items-center mb-3">
                         <label class="inline-label" id="lblDiscount" for="numDiscount">Discount ($)</label>
                         <div class="d-flex align-items-center gap-2 w-100">
-                            <input type="number" id="numDiscount" class="form-control custom-form-control w-100" placeholder="0.00" value="0.00" step="0.01">
+                            <input type="number" id="numDiscount" class="form-control custom-form-control w-100" placeholder="0.00" step="0.01">
                             <span class="per-text-indicator">Per(%)</span>
                             <input type="checkbox" id="chkDiscountMode" onchange="toggleInputMode('Discount')" class="row-aligned-checkbox">
                         </div>
@@ -206,7 +349,7 @@
                     <div class="d-flex align-items-center mb-3">
                         <label class="inline-label" id="lblVat" for="numVat">Vat ($)</label>
                         <div class="d-flex align-items-center gap-2 w-100">
-                            <input type="number" id="numVat" class="form-control custom-form-control w-100" placeholder="0.00" value="0.00" step="0.01">
+                            <input type="number" id="numVat" class="form-control custom-form-control w-100" placeholder="0.00" step="0.01">
                             <span class="per-text-indicator">Per(%)</span>
                             <input type="checkbox" id="chkVatMode" onchange="toggleInputMode('Vat')" class="row-aligned-checkbox">
                         </div>
@@ -216,16 +359,35 @@
                     <div class="d-flex align-items-center mb-3">
                         <label class="inline-label" id="lblTax" for="numTax">Tax ($)</label>
                         <div class="d-flex align-items-center gap-2 w-100">
-                            <input type="number" id="numTax" class="form-control custom-form-control w-100" placeholder="0.00" value="0.00" step="0.01">
+                            <input type="number" id="numTax" class="form-control custom-form-control w-100" placeholder="0.00" step="0.01">
                             <span class="per-text-indicator">Per(%)</span>
                             <input type="checkbox" id="chkTaxMode" onchange="toggleInputMode('Tax')" class="row-aligned-checkbox">
                         </div>
                     </div>
+                     
+                    <!-- -->
+                    <div class="d-flex align-items-center">
+                        <label class="inline-label">
+                            Unit of Type <span class="mandatory-star">*</span>
+                        </label>
 
-                    <!-- Warranty Row -->
-                    <div class="d-flex align-items-center mb-0">
-                        <label class="inline-label" for="txtWarranty">Warranty Months</label>
-                        <input type="number" id="txtWarranty" class="form-control custom-form-control w-100" placeholder="e.g. 6">
+                        <select id="ddlProductUnitType" class="form-select custom-form-control">
+                            <option value="">-- Select Unit of Type --</option>
+                            <option value="PC">PC</option>
+                            <option value="Box">Box</option>
+                            <option value="Kg">Kg</option>
+                            <option value="Litter">Litter</option>
+                            <option value="Meter">Meter</option>
+                            <option value="Standard">Standard</option>
+                        </select>
+                    </div>
+
+                    <!-- Serial Product: Transformed into perfect row matching layout -->
+                    <div class="d-flex align-items-center mb-3">
+                        <label class="inline-label" for="chkSerialProduct">Serial Product</label>
+                        <div class="d-flex align-items-center" style="height: 28px;">
+                            <input type="checkbox" id="chkSerialProduct" class="row-aligned-checkbox">
+                        </div>
                     </div>
                 </div>
 
@@ -233,119 +395,153 @@
                 <div class="col-xl-2 col-md-4">
                     <div class="uploader-box">
                         <input type="file" id="fileProductPicture" class="position-absolute w-100 h-100 top-0 start-0 opacity-0" style="cursor: pointer;" accept="image/*">
+                        
                         <div id="uploadPlaceholder" class="text-center p-1">
-                            <i class="fa-solid fa-cloud-arrow-up text-white-50 mb-1" style="font-size:16px;"></i>
-                            <div class="fw-bold text-white" style="font-size:11px;">Click to upload image</div>
-                            <div style="font-size: 9px;" class="text-white-50">PNG, JPG up to 5MB</div>
+                            <i class="fa-solid fa-cloud-arrow-up text-purple mb-1" style="font-size:16px; color: #663399;"></i>
+                            <div class="fw-bold text-dark" style="font-size:11px;">Click to upload image</div>
+                            <div style="font-size: 9px;" class="text-muted">PNG, JPG up to 5MB</div>
                         </div>
                         <img id="imgPreview" class="w-100 h-100 object-fit-contain d-none rounded" alt="Preview">
                     </div>
+                     
                 </div>
 
                 <!-- COLUMN 4: Dropdowns Selector Fields -->
                  
-
                 <div class="col-xl-4 col-md-8">
-                     
+
+                    <!-- GROUP -->
                     <div class="d-flex align-items-center mb-3">
                         <label class="inline-label">
                             Group <span class="mandatory-star">*</span>
                         </label>
-
                         <div class="d-flex gap-1 w-100">
-
-                            <select id="ddlGroup" class="form-select custom-form-control">
-                            </select>
-
-                            <button type="button" class="btn btn-purple-utility">
+                            <select id="ddlGroup" class="form-select custom-form-control"></select>
+                            <button id="btnAddNewGroup" type="button" class="btn btn-purple-utility">
                                 <i class="fa-solid fa-plus me-1"></i>New
                             </button>
-
                         </div>
                     </div>
 
-                    <!-- ===========================
-                        CATEGORY
-                    =========================== -->
+                    <!-- CATEGORY -->
                     <div class="d-flex align-items-center mb-3">
                         <label class="inline-label">
                             Category <span class="mandatory-star">*</span>
                         </label>
-
                         <div class="d-flex gap-1 w-100">
-
-                            <select id="ddlCategory" class="form-select custom-form-control">
-                            </select>
-
-                            <button type="button" class="btn btn-purple-utility">
+                            <select id="ddlCategory" class="form-select custom-form-control"></select>
+                            <button id="btnAddNewCategory" type="button" class="btn btn-purple-utility">
                                 <i class="fa-solid fa-plus me-1"></i>New
                             </button>
-
                         </div>
                     </div>
 
-                    <!-- ===========================
-                        BRAND
-                    =========================== -->
-                    <div class="d-flex align-items-center">
+                    <!-- BRAND -->
+                    <div class="d-flex align-items-center mb-3">
                         <label class="inline-label">
                             Brand <span class="mandatory-star">*</span>
                         </label>
-
                         <div class="d-flex gap-1 w-100">
-
-                            <select id="ddlBrand" class="form-select custom-form-control">
-                            </select>
-
-                            <button type="button" class="btn btn-purple-utility">
+                            <select id="ddlBrand" class="form-select custom-form-control"></select>
+                            <button id="btnAddNewBrand" type="button" class="btn btn-purple-utility">
                                 <i class="fa-solid fa-plus me-1"></i>New
                             </button>
+                        </div>
+                    </div>
+
+
+                    <!-- -->
+                    <div class="d-flex align-items-center">
+                        <label class="inline-label">
+                            Product Type <span class="mandatory-star">*</span>
+                        </label>
+
+                        <select id="ddlProductType" class="form-select custom-form-control">
+                            <option value="">-- Select Product Type --</option>
+                            <option value="Inventory">Inventory</option>
+                            <option value="Service">Service (Purchase are not allow)</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <!-- REUSABLE MODAL -->
+                <div class="modal fade custom-blur-modal" id="modalAddNewItem" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 shadow-lg">
+
+                            <div class="modal-header text-white" style="background-color: rebeccapurple;">
+                                <h5 class="modal-title fw-bold" id="modalItemTitle">
+                                    <i class="fa-solid fa-folder-plus me-2"></i>Add Item
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body p-4">
+                                <form id="formAddItem" onsubmit="return false;">
+                                    <div class="mb-3">
+                                        <label id="lblItemName" for="txtItemName" class="form-label fw-semibold" style="color: #333;">Item Name</label>
+                                        <input type="text" id="txtItemName" class="form-control custom-input" placeholder="Enter name..." autocomplete="off">
+                                        <div class="invalid-feedback">Name cannot be empty.</div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer bg-light border-0">
+                                <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+
+                                <!-- DYNAMIC SAVE BUTTON WITH DEDICATED ID HANDLERS -->
+                                <button type="button" id="btnSaveModal" class="btn text-white px-4 fw-semibold" style="background-color: rebeccapurple;">
+                                    <i class="fa-solid fa-check me-1"></i>Save
+                                </button>
+                            </div>
 
                         </div>
                     </div>
                 </div>
 
+
+
+
             </div>
 
             <!-- Form Action Footer -->
-            <div class="d-flex justify-content-end gap-2 pt-2 mt-3 border-top border-secondary">
-                <button type="button" onclick="resetForm()" class="btn btn-purple-utility h-auto py-1 px-3">
+            <div class="d-flex justify-content-end gap-2 pt-2 mt-3 border-top">
+                <button type="button" onclick="resetForm()" class="btn btn-purple-outline h-auto py-1 px-3">
                     <i class="fa-solid fa-rotate-left me-1"></i> Reset
                 </button>
                 <button id="btnSave" type="submit" class="btn btn-gold-action">
                     <i class="fa-solid fa-floppy-disk me-1"></i> Save Product
                 </button>
-            </div>
+            </div> 
         </form>
     </div>
 
     <!-- ================= ROW 2: PRODUCT LIST CONTAINER ================= -->
     <div class="form-card-premium">
-        <div class="row g-2 align-items-center justify-content-between pb-1.5 mb-2 border-bottom border-secondary">
-            <div class="col-sm-4">
-                <div class="d-flex align-items-center">
-                    <i class="fa-solid fa-list-ul text-warning me-2" style="font-size:13px;"></i>
-                    <h3 class="section-title-White m-0 text-uppercase tracking-wider" style="font-size:14px;">Product List</h3>
-                </div>
+
+        <div class="section-header-banner d-flex align-items-center justify-content-between mb-0">
+            <div class="d-flex align-items-center">
+                <i class="fa-solid fa-list-ul text-warning me-2" style="font-size:13px;"></i>
+                <h3 class="section-title-White m-0 text-uppercase tracking-wider" style="font-size:14px;">Product List</h3>
             </div>
-            <div class="col-sm-8">
-                <div class="d-flex flex-wrap align-items-center justify-content-sm-end gap-2">
-                    <div class="input-group" style="max-width: 300px; height: 22px;">
-                        <input type="text" id="txtSearch" class="form-control bg-white border-secondary text-black text-xs py-0" placeholder="Search by Product or Brand or Group or Category" style="height:26px;">
-                        <button class="btn btn-purple-utility px-2 py-0" type="button" style="height:22px;"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    </div>
-                    <div class="d-flex align-items-center gap-1" style="font-size:11px;">
-                        <span class="text-white-50">Show</span>
-                        <select id="ddlPageSize" class="form-select bg-dark border-secondary text-white py-0 px-1" style="width: auto; font-size:11px; height:24px;">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                        </select>
-                    </div>
-                    <button type="button" class="btn btn-purple-utility py-0 px-2" style="font-size:11px; height:26px;"><i class="fa-solid fa-plus me-1"></i> Add Product</button>
+            <div class="d-flex align-items-center gap-2">
+                <div class="input-group" style="max-width: 300px; height: 26px;">
+                    <input type="text" id="txtSearch" class="form-control bg-white text-dark text-xs py-0" placeholder="Search product, brand, group..." style="height:26px; font-size:11px;">
+                    <button class="btn btn-purple-utility px-2 py-0" type="button" style="height:26px;"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
+                <div class="d-flex align-items-center gap-1" style="font-size:11px;">
+                    <span class="text-white-50">Show</span>
+                    <select id="ddlPageSize" class="form-select bg-white text-dark py-0 px-1" style="width: auto; font-size:11px; height:26px;">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-gold-action py-0 px-3" style="font-size:11px; height:26px;">Add</button>
             </div>
         </div>
 
+         
         <div class="table-responsive premium-table-container position-relative">
             <table class="table premium-data-table align-middle m-0">
                 <thead>
@@ -389,6 +585,51 @@
             </div>
         </div>
     </div>
+
+
+
+
+    <!-- ================= Hidden Div For POP UP/ Modal Show  ================= -->
+
+    <!-- Modal structure -->
+    <div class="modal fade custom-blur-modal" id="modalAddNewGroup" tabindex="-1" aria-labelledby="modalAddNewGroupLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+
+                <!-- Header -->
+                <div class="modal-header text-white" style="background-color: rebeccapurple;">
+                    <h5 class="modal-title fw-bold" id="modalAddNewGroupLabel">
+                        <i class="fa-solid fa-folder-plus me-2"></i>Add New Product Group
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body p-4">
+                    <form id="formAddGroup">
+                        <div class="mb-3">
+                            <label for="txtProductGroupName" class="form-label fw-semibold" style="color: #333;">Product Group Name</label>
+                            <input type="text" id="txtProductGroupName" class="form-control custom-input" placeholder="e.g., Beverages, Electronics" required autocomplete="off">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="btnSaveGroup" class="btn text-white px-4 fw-semibold" style="background-color: rebeccapurple;">
+                        <i class="fa-solid fa-check me-1"></i>Save
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 </div>
 
 <!-- ================= ENGINE LOGIC CONTAINER ================= -->
@@ -432,9 +673,9 @@
             return isPercent ? (mainPrice * inputVal) / 100 : inputVal;
         }
 
-        function handleFormSubmit(e) {
-            e.preventDefault();
-
+        $("#btnSave").click(function(){
+            // e.preventDefault();
+            // alert('hello hasan');
             const mainPrice = parseFloat($("#numPrice").val()) || 0;
 
             if ($("#txtProductName").val().trim() === "" || mainPrice <= 0) {
@@ -449,15 +690,15 @@
             // formData.append("Price", mainPrice);
             const discount = calculateCalculatedValue("Discount", mainPrice);
 
-            const priceAfterDiscount = mainPrice - discount; 
-            const vat = calculateCalculatedValue("Vat", priceAfterDiscount); 
+            const priceAfterDiscount = mainPrice - discount;
+            const vat = calculateCalculatedValue("Vat", priceAfterDiscount);
             const tax = calculateCalculatedValue("Tax", priceAfterDiscount);
 
             formData.append("Price", mainPrice);
             formData.append("Discount", discount);
             formData.append("Vat", vat);
             formData.append("Tax", tax);
-             
+
             formData.append("IsDiscountPercent", $("#chkDiscountMode").prop("checked"));
             formData.append("IsVatPercent", $("#chkVatMode").prop("checked"));
             formData.append("IsTaxPercent", $("#chkTaxMode").prop("checked"));
@@ -497,7 +738,10 @@
                     alert("Failed to save product.");
                 }
             });
-        }
+        })
+        // function handleFormSubmit(e) {
+            
+        // }
 
         function resetForm() {
             document.getElementById('productForm').reset();
@@ -539,8 +783,6 @@
 
         const API_BASE_URL = "https://localhost:7008/api/Product";
         const IMAGE_BASE_URL = "https://localhost:7008/";
-        // const IMAGE_BASE_URL = "https://localhost:7008/uploads/";
-        // const DEFAULT_IMAGE = "Upload/Product/no-image.png";
 
         const DEFAULT_IMAGE = `${IMAGE_BASE_URL}/Upload/Product/no-image.png`;
         console.log(DEFAULT_IMAGE);
@@ -563,7 +805,7 @@
                         "#ddlGroup",
                         "productGroupId",
                         "name",
-                        "Select Group"
+                        "--Select Group--"
                     ),
 
                     loadDropdown(
@@ -571,7 +813,7 @@
                         "#ddlCategory",
                         "categoryId",
                         "name",
-                        "Select Category"
+                        "--Select Category--"
                     ),
 
                     loadDropdown(
@@ -579,17 +821,11 @@
                         "#ddlBrand",
                         "brandId",
                         "name",
-                        "Select Brand"
+                        "--Select Brand--"
                     )
 
                 ]);
 
-                // Select2 ব্যবহার করলে
-                /*
-                $("#ddlGroup").select2({ width: '100%' });
-                $("#ddlCategory").select2({ width: '100%' });
-                $("#ddlBrand").select2({ width: '100%' });
-                */
 
             }
             catch (error) {
@@ -633,20 +869,12 @@
             }
 
         }
-        // $("#btnSave").click(function(){
-        //      const groupId = $("#ddlGroup").val();
-        // const categoryId = $("#ddlCategory").val();
-        // const brandId = $("#ddlBrand").val();
-
-       
-        // })
-                let currentPage = 1;
+        let currentPage = 1;
         let pageSize = 10;
         let totalPages = 0;
-                       $(document).ready(function () {
 
+        $(document).ready(function () {
             LoadProducts();
-
         });
 
         function LoadProducts() {
@@ -675,8 +903,7 @@
             });
         }
 
-
-        function BindTable(data) {
+                function BindTable(data) {
             let html = "";
             if (data.length == 0) {
                 $("#productTableBody").html("");
@@ -684,41 +911,36 @@
                 return;
             }
             $("#emptyStatePlaceholder").hide();
-            $.each(data,function(index,item){
-                // console.log('amar sonar bangla');
-                // console.log(getImageUrl(item.imageUrl));
-                // console.log('123');
+            $.each(data, function(index, item) {
                 html += `
-                        <tr>
-                        <td>${((currentPage-1)*pageSize)+(index+1)}</td>
+                    <tr>
+                        <td class="fw-semibold">${((currentPage - 1) * pageSize) + (index + 1)}</td>
                         <td>
-                        <img
-                            src="${getImageUrl(item.imageUrl)}"
-                            width="50"
-                            height="50"
-                             style="object-fit: cover;"
-                            loading="lazy"
-                            onerror="this.onerror=null;this.src='${DEFAULT_IMAGE}'">
+                            <img src="${getImageUrl(item.imageUrl)}"
+                                 width="40"
+                                 height="40"
+                                 class="rounded border"
+                                 style="object-fit: cover;"
+                                 loading="lazy"
+                                 onerror="this.onerror=null;this.src='${DEFAULT_IMAGE}'">
                         </td>
-                        <td>${item.productName}</td>
-                        <td>${item.model}</td>
-                        <td>${item.groupName}</td>
-                        <td>${item.categoryName}</td>
-                        <td>${item.brandName}</td>
-                        <td>${item.price}</td>
-                        <td>${item.stockType}</td>
-                        <td>
-                        <button class="btn btn-sm btn-warning">
-                        Edit
-                        </button>
+                        <td class="fw-semibold text-dark">${item.productName}</td>
+                        <td>${item.model || '-'}</td>
+                        <td>${item.groupName || '-'}</td>
+                        <td>${item.categoryName || '-'}</td>
+                        <td>${item.brandName || '-'}</td>
+                        <td class="fw-bold text-dark">${item.price}</td>
+                        <td><span class="badge bg-light text-dark border">${item.stockType || 'Standard'}</span></td>
+                        <td class="text-center">
+                            <button class="btn btn-action-edit">
+                                <i class="fa-solid fa-pen-to-square me-1"></i>Edit
+                            </button>
                         </td>
-                        </tr>
-                        `;
-
+                    </tr>
+                `;
             });
             $("#productTableBody").html(html);
         }
-
 
         function CreatePagination() {
 
@@ -811,13 +1033,7 @@
             LoadProducts();
 
         });
-
-        // function getImageUrl(path) {
-        //     if (!path || path.trim() === "")
-        //         return DEFAULT_IMAGE;
-        //     return IMAGE_BASE_URL + path;
-        // }
-
+         
         function getImageUrl(path) {
             console.log('getImageUrl');
             console.log(path);
@@ -827,6 +1043,168 @@
 
             return IMAGE_BASE_URL + path;
         }
+
+         
+
+          document.addEventListener('DOMContentLoaded', function () {
+          const modalEl = document.getElementById('modalAddNewItem');
+          const itemModal = new bootstrap.Modal(modalEl);
+
+          const modalTitle = document.getElementById('modalItemTitle');
+          const lblItemName = document.getElementById('lblItemName');
+          const txtItemName = document.getElementById('txtItemName');
+          const btnSaveModal = document.getElementById('btnSaveModal');
+
+          // Track active entity type ('group' | 'category' | 'brand')
+          let currentEntityType = ''; 
+          const entityConfig = {
+            group: {
+              title: '<i class="fa-solid fa-layer-group me-2"></i>Add New Product Group',
+              label: 'Product Group Name',
+              placeholder: 'e.g., Beverages, Electronics',
+              selectId: '#ddlGroup',
+              apiUrl: 'https://localhost:7008/api/Product/SaveProductGroup'
+            },
+            category: {
+              title: '<i class="fa-solid fa-tags me-2"></i>Add New Category',
+              label: 'Category Name',
+              placeholder: 'e.g., Cold Drinks, Smartphones',
+              selectId: '#ddlCategory',
+              apiUrl: 'https://localhost:7008/api/Product/SaveProductCategory'
+            },
+            brand: {
+              title: '<i class="fa-solid fa-copyright me-2"></i>Add New Brand',
+              label: 'Brand Name',
+              placeholder: 'e.g., Coca-Cola, Apple',
+              selectId: '#ddlBrand',
+              apiUrl: 'https://localhost:7008/api/Product/SaveProductBrand'
+            }
+          };
+
+          // Open modal configuration
+          function openModal(type) {
+            currentEntityType = type;
+            const config = entityConfig[type];
+
+            modalTitle.innerHTML = config.title;
+            lblItemName.textContent = config.label;
+            txtItemName.placeholder = config.placeholder;
+            txtItemName.value = '';
+            txtItemName.classList.remove('is-invalid');
+
+            itemModal.show();
+          }
+
+          // Open modal button events
+          document.getElementById('btnAddNewGroup').addEventListener('click', () => openModal('group'));
+          document.getElementById('btnAddNewCategory').addEventListener('click', () => openModal('category'));
+          document.getElementById('btnAddNewBrand').addEventListener('click', () => openModal('brand'));
+
+          // Auto-focus field after opening modal
+          modalEl.addEventListener('shown.bs.modal', function () {
+            txtItemName.focus();
+          });
+
+          // Save button dispatcher
+          btnSaveModal.addEventListener('click', function () {
+            const itemName = txtItemName.value.trim();
+
+            if (!itemName) {
+              txtItemName.classList.add('is-invalid');
+              txtItemName.focus();
+              return;
+            }
+
+            txtItemName.classList.remove('is-invalid');
+
+            // Route execution to specific AJAX API function
+            if (currentEntityType === 'group') {
+              saveGroupAPI(itemName);
+            } else if (currentEntityType === 'category') {
+              saveCategoryAPI(itemName);
+            } else if (currentEntityType === 'brand') {
+              saveBrandAPI(itemName);
+            }
+            $("#btnSaveModal").prop("disabled",true);
+          });
+
+          // ==========================================
+          // 1. SEPARATE GROUP API CALL
+          // ==========================================
+          function saveGroupAPI(groupName) {
+            const config = entityConfig.group;
+            console.log(config);
+            $.ajax({
+              url: config.apiUrl,
+              type: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify({ Name: groupName }),
+              success: function (response) {
+                // Append new item into #ddlGroup dropdown
+                const id = response.id || groupName;
+                $(config.selectId).append(new Option(groupName, id, true, true));
+
+                itemModal.hide();
+              },
+              error: function (xhr, status, error) {
+                alert('Error saving Product Group: ' + error);
+              }
+            });
+          }
+
+          // ==========================================
+          // 2. SEPARATE CATEGORY API CALL
+          // ==========================================
+          function saveCategoryAPI(categoryName) {
+            const config = entityConfig.category;
+
+            $.ajax({
+              url: config.apiUrl,
+              type: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify({ Name: categoryName }),
+              success: function (response) {
+                // Append new item into #ddlCategory dropdown
+                const id = response.id || categoryName;
+                $(config.selectId).append(new Option(categoryName, id, true, true));
+
+                itemModal.hide();
+              },
+              error: function (xhr, status, error) {
+                alert('Error saving Category: ' + error);
+              }
+            });
+          }
+
+          // ==========================================
+          // 3. SEPARATE BRAND API CALL
+          // ==========================================
+          function saveBrandAPI(brandName) {
+            const config = entityConfig.brand;
+
+            $.ajax({
+              url: config.apiUrl,
+              type: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify({ Name: brandName }),
+              success: function (response) {
+                // Append new item into #ddlBrand dropdown
+                const id = response.id || brandName;
+                $(config.selectId).append(new Option(brandName, id, true, true));
+
+                itemModal.hide();
+              },
+              error: function (xhr, status, error) {
+                alert('Error saving Brand: ' + error);
+              }
+            });
+          }
+
+        });
+
+
+
+
 
     </script>
 }

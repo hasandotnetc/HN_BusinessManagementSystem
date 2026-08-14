@@ -20,7 +20,7 @@ namespace HN_Frontend.Controllers
 
         public async Task<IActionResult> GetEmployeeByCodeNameAndPhone(string term)
         {
-            var url = $"https://localhost:7008/api/Employee/{term}";
+            var url = $"https://localhost:7008/api/Employee/GetEmployeeByCodeNamePhone/{term}";
 
             var data = await _client.GetFromJsonAsync<List<EmployeeVM>>(url);
 

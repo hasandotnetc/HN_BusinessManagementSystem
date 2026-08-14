@@ -64,19 +64,20 @@ namespace HN_Backend.Controllers
             return Ok();
         }
         [HttpPost("SaveProductBrand")]
-        public async Task<IActionResult> SaveProductBrand([FromForm] BrandVM dto)
+        public async Task<IActionResult> SaveProductBrand([FromBody] BrandVM dto)
+        //public async Task<IActionResult> SaveProductBrand([FromForm] BrandVM dto)
         {
             await _productServ.SaveProductBrand(dto);
             return Ok();
         }
-        [HttpPost("SaveProductCategory")]
-        public async Task<IActionResult> SaveProductCategory([FromForm] ProductCategoryVM dto)
+        [HttpPost("SaveProductCategory")] 
+        public async Task<IActionResult> SaveProductCategory([FromBody] ProductCategoryVM dto) 
         {
             await _productServ.SaveProductCategory(dto);
             return Ok();
         }
-        [HttpPost("SaveProductGroup")]
-        public async Task<IActionResult> SaveProductGroup([FromForm] ProductGroupVM dto)
+        [HttpPost("SaveProductGroup")] 
+        public async Task<IActionResult> SaveProductGroup([FromBody] ProductGroupVM dto)
         {
             await _productServ.SaveProductGroup(dto);
             return Ok();

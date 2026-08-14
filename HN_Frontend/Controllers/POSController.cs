@@ -31,7 +31,7 @@ namespace HN_Frontend.Controllers
 
         public async Task<IActionResult> GetProductList(string paramObj = "a")
         {
-            var url = $"https://localhost:7008/api/SearchingByDapper/{paramObj}";
+            var url = $"https://localhost:7008/api/SearchingByDapper/GetProductByNameCodeSerialModelNoWithCurrentStock/{paramObj}";
 
             var data = await _client.GetFromJsonAsync<List<CurrentStockProductVM>>(url);
 

@@ -14,16 +14,22 @@ namespace HN_Project.Controllers
         public SearchingByDapperController(SearchingByDapperService dapperService)
         {
             _dappService = dapperService;
+        } 
+
+        [HttpGet("GetProductByNameCodeModelNoWithCurrentStock")]
+        public async Task<IActionResult> GetProductByNameCodeModelNoWithCurrentStock(string paramObj)
+        {
+            var list = await _dappService.GetProductByNameCodeModelNoWithCurrentStock(paramObj);
+            return Ok(list);
         }
 
-        [HttpGet("{paramObj}")]
+        [HttpGet("GetProductByNameCodeSerialModelNoWithCurrentStock")]
         public async Task<IActionResult> GetProductByNameCodeSerialModelNoWithCurrentStock(string paramObj)
         {
             var list = await _dappService.GetProductByNameCodeSerialModelNoWithCurrentStock(paramObj); 
             return Ok(list);
         }
-
-        //[HttpGet("GetProductByPaginationRequest/{paramObj}")]
+           
         [HttpGet("GetProductByPaginationRequest")]
         public async Task<IActionResult> GetProductByPaginationRequest([FromQuery] PaginationRequest request)
         {

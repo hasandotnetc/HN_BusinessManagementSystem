@@ -31,6 +31,7 @@
     <Folder Include="wwwroot\Upload\Employee\" />
     <Folder Include="wwwroot\Upload\Brand\" />
     <Folder Include="wwwroot\Upload\Category\" />
+    <Folder Include="wwwroot\Upload\Supplier\" />
     <Folder Include="wwwroot\Upload\Product\" />
   </ItemGroup>
 

@@ -80,6 +80,46 @@ namespace HN_Project.Repository
         }
 
 
+        public async Task<List<CurrentStockProductVM>> GetProductByNameCodeModelNoWithCurrentStock(string objParam)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            string sql = @"SELECT TOP 30
+                    P.ProductId,
+                    P.Code,
+                    P.Name,
+                    P.Model,
+                    P.Price,
+                    P.Discount,
+                    P.Warranty,
+                    P.Picture,
+                    SUM(ISNULL(CS.Quantity,0)) AS Quantity,
+                    ROUND(ISNULL(SUM(NULLIF(CS.Cost,0)) / SUM(NULLIF(CS.Quantity,0)),0),2) AS Cost
+                    FROM Product P 
+                    LEFT JOIN CurrentStock CS ON P.ProductId = CS.ProductId
+                    LEFT JOIN CurrentStockDetail CSD ON CS.CurrentStockId=CSD.CurrentStockId
+                    WHERE  
+                    (P.Name LIKE @Search
+                    OR P.Code LIKE @Search
+                    OR P.Model LIKE @Search) 
+
+                    GROUP BY P.ProductId,
+                    P.Code,
+                    P.Name,
+                    P.Model,
+                    P.Price,
+                    P.Discount,
+                    P.Warranty,
+                    P.Picture"; 
+            var result = await connection.QueryAsync<CurrentStockProductVM>(
+                sql,
+                new
+                {
+                    Search = string.IsNullOrWhiteSpace(objParam) ? "" : "%" + objParam + "%" 
+                }); 
+            return result.ToList();
+        }
+
+
         public async Task<PaginationResponse<ProductPaginationVM>> GetProductByPaginationRequest(PaginationRequest request)
         {
             using var connection = new SqlConnection(_connectionString);
