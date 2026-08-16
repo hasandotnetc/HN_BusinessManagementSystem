@@ -51,8 +51,11 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
+    public virtual DbSet<UnitType> UnitTypes { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=DefaultConnection");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-E4QISLB;Database=Hasan_DB;Trusted_Connection=True;TrustServerCertificate=True;Encrypt=False;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -98,9 +101,6 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.ToTable("Category");
 
-            entity.Property(e => e.Code)
-                .HasMaxLength(50)
-                .IsUnicode(false);
             entity.Property(e => e.CreateOn)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -239,6 +239,12 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.Phone, "Customer_Phone");
 
+            entity.HasIndex(e => e.Email, "UQ_Customer_Email").IsUnique();
+
+            entity.HasIndex(e => e.Nid, "UQ_Customer_NID").IsUnique();
+
+            entity.HasIndex(e => e.Phone, "UQ_Customer_Phone").IsUnique();
+
             entity.Property(e => e.Address)
                 .HasMaxLength(500)
                 .IsUnicode(false);
@@ -279,6 +285,8 @@ public partial class ApplicationDbContext : DbContext
             entity.HasIndex(e => e.Name, "Employee_Name");
 
             entity.HasIndex(e => e.Phone, "Employee_Phone");
+
+            entity.HasIndex(e => e.Phone, "UQ_Employee_Phone").IsUnique();
 
             entity.Property(e => e.Code)
                 .HasMaxLength(100)
@@ -326,26 +334,35 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.ToTable("LoginUser");
 
+            entity.HasIndex(e => e.Code, "UQ_LoginUser_Code").IsUnique();
+
+            entity.HasIndex(e => e.Email, "UQ_LoginUser_Email").IsUnique();
+
+            entity.HasIndex(e => e.Phone, "UQ_LoginUser_Phone").IsUnique();
+
             entity.Property(e => e.Address)
                 .HasMaxLength(500)
                 .IsUnicode(false);
             entity.Property(e => e.Code)
-                .HasMaxLength(5)
+                .HasMaxLength(20)
                 .IsUnicode(false);
-            entity.Property(e => e.CreateOn)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+            entity.Property(e => e.CreateOn).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.Name)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.PasswordHash)
                 .HasMaxLength(500)
                 .IsUnicode(false);
-            entity.Property(e => e.Password).IsUnicode(false);
             entity.Property(e => e.Phone)
                 .HasMaxLength(30)
                 .IsUnicode(false);
-            entity.Property(e => e.Picture).IsUnicode(false);
+            entity.Property(e => e.Picture)
+                .HasMaxLength(500)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<PaymentMethod>(entity =>
@@ -396,6 +413,9 @@ public partial class ApplicationDbContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Picture).IsUnicode(false);
             entity.Property(e => e.Price).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.ProductType)
+                .HasMaxLength(1)
+                .IsUnicode(false);
             entity.Property(e => e.SerialAvailable)
                 .HasMaxLength(1)
                 .IsUnicode(false);
@@ -422,6 +442,11 @@ public partial class ApplicationDbContext : DbContext
                 .HasForeignKey(d => d.GroupId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Product_ProductGroup");
+
+            entity.HasOne(d => d.UnitType).WithMany(p => p.Products)
+                .HasForeignKey(d => d.UnitTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Product_UnitType");
         });
 
         modelBuilder.Entity<ProductGroup>(entity =>
@@ -545,6 +570,8 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.Name, "Supplier_Name");
 
+            entity.HasIndex(e => e.Phone, "UQ_Supplier_Phone").IsUnique();
+
             entity.Property(e => e.Address)
                 .HasMaxLength(500)
                 .IsUnicode(false);
@@ -569,6 +596,18 @@ public partial class ApplicationDbContext : DbContext
                 .HasForeignKey(d => d.EntryBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Supplier_LoginUser");
+        });
+
+        modelBuilder.Entity<UnitType>(entity =>
+        {
+            entity.ToTable("UnitType");
+
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         OnModelCreatingPartial(modelBuilder);

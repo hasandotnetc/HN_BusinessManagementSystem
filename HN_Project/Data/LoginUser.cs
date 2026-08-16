@@ -11,17 +11,21 @@ public partial class LoginUser
 
     public string Name { get; set; } = null!;
 
-    public string? Phone { get; set; }
+    public string Phone { get; set; } = null!;
 
     public string? Email { get; set; }
 
     public string? Address { get; set; }
 
-    public string? Password { get; set; }
+    public string PasswordHash { get; set; } = null!;
 
     public string? Picture { get; set; }
 
+    public bool IsActive { get; set; }
+
     public DateTime CreateOn { get; set; }
+
+    public DateTime? UpdateOn { get; set; }
 
     public virtual ICollection<Brand> Brands { get; set; } = new List<Brand>();
 

@@ -7,8 +7,6 @@ public partial class Category
 {
     public long CategoryId { get; set; }
 
-    public string Code { get; set; } = null!;
-
     public string Name { get; set; } = null!;
 
     public string? Picture { get; set; }

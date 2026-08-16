@@ -19,6 +19,10 @@ public partial class Product
 
     public string SerialAvailable { get; set; } = null!;
 
+    public string ProductType { get; set; } = null!;
+
+    public long UnitTypeId { get; set; }
+
     public decimal Price { get; set; }
 
     public decimal Discount { get; set; }
@@ -48,4 +52,6 @@ public partial class Product
     public virtual ProductGroup Group { get; set; } = null!;
 
     public virtual ICollection<SalesOrderDetail> SalesOrderDetails { get; set; } = new List<SalesOrderDetail>();
+
+    public virtual UnitType UnitType { get; set; } = null!;
 }

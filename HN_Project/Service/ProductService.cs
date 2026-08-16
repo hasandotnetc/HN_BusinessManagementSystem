@@ -130,7 +130,7 @@ namespace HN_Project.Service
                 var _category = new Category
                 {
                     Name = pcVM.Name,
-                    Code = pcVM.Code??"123",
+                    //Code = pcVM.Code??"123",
                     Picture = imagePath,
                     EntryBy = 1,
                 };
