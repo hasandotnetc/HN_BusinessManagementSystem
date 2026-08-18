@@ -33,9 +33,13 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Employee> Employees { get; set; }
 
+    public virtual DbSet<EventNoOrCodeGeneration> EventNoOrCodeGenerations { get; set; }
+
     public virtual DbSet<Location> Locations { get; set; }
 
     public virtual DbSet<LoginUser> LoginUsers { get; set; }
+
+    public virtual DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
 
     public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
 
@@ -54,8 +58,7 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<UnitType> UnitTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-E4QISLB;Database=Hasan_DB;Trusted_Connection=True;TrustServerCertificate=True;Encrypt=False;");
+        => optionsBuilder.UseSqlServer("Name=DefaultConnection");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -315,6 +318,26 @@ public partial class ApplicationDbContext : DbContext
                 .HasConstraintName("FK_Employee_LoginUser");
         });
 
+        modelBuilder.Entity<EventNoOrCodeGeneration>(entity =>
+        {
+            entity.ToTable("EventNoOrCodeGeneration");
+
+            entity.Property(e => e.CreatedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.CurrentNumberOrCode)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.EventType)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Location).WithMany(p => p.EventNoOrCodeGenerations)
+                .HasForeignKey(d => d.LocationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EventNoOrCodeGeneration_Location");
+        });
+
         modelBuilder.Entity<Location>(entity =>
         {
             entity.ToTable("Location");
@@ -363,6 +386,30 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Picture)
                 .HasMaxLength(500)
                 .IsUnicode(false);
+            entity.Property(e => e.UserLevel)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Location).WithMany(p => p.LoginUsers)
+                .HasForeignKey(d => d.LocationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_LoginUser_Location");
+        });
+
+        modelBuilder.Entity<PasswordResetOtp>(entity =>
+        {
+            entity.ToTable("PasswordResetOtp");
+
+            entity.Property(e => e.CreatedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.ExpiresDate).HasColumnType("datetime");
+            entity.Property(e => e.OtpHash).HasMaxLength(255);
+
+            entity.HasOne(d => d.User).WithMany(p => p.PasswordResetOtps)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PasswordResetOtp_LoginUser");
         });
 
         modelBuilder.Entity<PaymentMethod>(entity =>

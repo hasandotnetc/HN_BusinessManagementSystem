@@ -27,6 +27,10 @@ public partial class LoginUser
 
     public DateTime? UpdateOn { get; set; }
 
+    public long LocationId { get; set; }
+
+    public string UserLevel { get; set; } = null!;
+
     public virtual ICollection<Brand> Brands { get; set; } = new List<Brand>();
 
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
@@ -36,6 +40,10 @@ public partial class LoginUser
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+
+    public virtual Location Location { get; set; } = null!;
+
+    public virtual ICollection<PasswordResetOtp> PasswordResetOtps { get; set; } = new List<PasswordResetOtp>();
 
     public virtual ICollection<PaymentMethod> PaymentMethods { get; set; } = new List<PaymentMethod>();
 

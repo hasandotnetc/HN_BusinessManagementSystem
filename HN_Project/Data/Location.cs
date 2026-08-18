@@ -17,6 +17,10 @@ public partial class Location
 
     public virtual ICollection<CurrentStock> CurrentStocks { get; set; } = new List<CurrentStock>();
 
+    public virtual ICollection<EventNoOrCodeGeneration> EventNoOrCodeGenerations { get; set; } = new List<EventNoOrCodeGeneration>();
+
+    public virtual ICollection<LoginUser> LoginUsers { get; set; } = new List<LoginUser>();
+
     public virtual ICollection<PaymentMethod> PaymentMethods { get; set; } = new List<PaymentMethod>();
 
     public virtual ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();
