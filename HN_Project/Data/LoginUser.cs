@@ -31,9 +31,13 @@ public partial class LoginUser
 
     public string UserLevel { get; set; } = null!;
 
+    public long CompanyId { get; set; }
+
     public virtual ICollection<Brand> Brands { get; set; } = new List<Brand>();
 
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
+
+    public virtual Company Company { get; set; } = null!;
 
     public virtual ICollection<CurrentStock> CurrentStocks { get; set; } = new List<CurrentStock>();
 
@@ -54,4 +58,6 @@ public partial class LoginUser
     public virtual ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();
 
     public virtual ICollection<Supplier> Suppliers { get; set; } = new List<Supplier>();
+
+    public virtual ICollection<UserSession> UserSessions { get; set; } = new List<UserSession>();
 }

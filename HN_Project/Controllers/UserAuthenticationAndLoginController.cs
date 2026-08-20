@@ -1,7 +1,9 @@
 ﻿using Azure.Core;
 using HN_Backend.DTOs;
+using HN_Backend.Helpers;
 using HN_Backend.Service;
 using HN_Project.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +15,11 @@ namespace HN_Backend.Controllers
     public class UserAuthenticationAndLoginController : ControllerBase
     {
         private readonly UserAuthenticationAndLoginService _userAuthenticationAndLoginService;
-        public UserAuthenticationAndLoginController(UserAuthenticationAndLoginService userAuthenticationAndLoginService)
+        private readonly CurrentSessionData _currentSessionData;
+        public UserAuthenticationAndLoginController(UserAuthenticationAndLoginService userAuthenticationAndLoginService, CurrentSessionData currentSessionData)
         {
             _userAuthenticationAndLoginService = userAuthenticationAndLoginService;
+            _currentSessionData = currentSessionData;
         }
 
         [HttpPost("AddNewUser")]
@@ -71,6 +75,30 @@ namespace HN_Backend.Controllers
                 success = true,
                 message = "Login successful.",
                 data = user
+            });
+        }
+
+        [Authorize]
+        [HttpGet("GetMyProfileDashboardByUserId")]
+        public async Task<IActionResult> MyProfile()
+        {
+            
+            long userId = _currentSessionData.UserId;
+            var locationId = _currentSessionData.LocationId; 
+            var user = await _userAuthenticationAndLoginService.GetMyProfile(userId);
+
+            return Ok(user);
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _userAuthenticationAndLoginService.LogoutAsync(_currentSessionData.JwtIdentifier);
+            return Ok(new
+            {
+                success = true,
+                message = "Logout successful."
             });
         }
     }

@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
+    <Folder Include="Helpers\NewFolder\" />
     <Folder Include="wwwroot\Upload\Customer\" />
     <Folder Include="wwwroot\Upload\Employee\" />
     <Folder Include="wwwroot\Upload\Brand\" />

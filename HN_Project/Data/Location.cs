@@ -13,7 +13,11 @@ public partial class Location
 
     public DateTime CreateOn { get; set; }
 
+    public long CompanyId { get; set; }
+
     public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
+
+    public virtual Company Company { get; set; } = null!;
 
     public virtual ICollection<CurrentStock> CurrentStocks { get; set; } = new List<CurrentStock>();
 

@@ -24,5 +24,9 @@ namespace HN_Backend.DTOs
         public IFormFile? UserImage { get; set; }
         [Required(ErrorMessage = "UserLevel is required.")]
         public string UserLevel { get; set; } = null!;
+        [Required]
+        public long LocationId { get; set; }
+        [Required] 
+        public long CompanyId { get; set; }
     }
 }

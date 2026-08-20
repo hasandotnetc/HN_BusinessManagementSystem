@@ -11,12 +11,15 @@ namespace HN_Backend.Service
         private readonly IUserLoginAndAuthentication _userAuthen;
         private readonly ImageService _imageService;
         private readonly JWTTokenService _jwtTokenService;
-        public UserAuthenticationAndLoginService(IUserLoginAndAuthentication userAuthen, ImageService imgServ, ISMSorEmailServices sMSorEmailServices,JWTTokenService jWTTokenService)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public UserAuthenticationAndLoginService(IUserLoginAndAuthentication userAuthen, ImageService imgServ, ISMSorEmailServices sMSorEmailServices,JWTTokenService jWTTokenService, IHttpContextAccessor httpContextAccessor)
         {
             _userAuthen = userAuthen;
             _imageService = imgServ;
             _smsOrEmailServices = sMSorEmailServices;
             _jwtTokenService = jWTTokenService;
+            _httpContextAccessor = httpContextAccessor;
         }
          
 
@@ -47,8 +50,9 @@ namespace HN_Backend.Service
                     Address = vm.Address,
                     Picture = imagePath,
                     PasswordHash = passwordHash,
-                    LocationId = 1,
-                    UserLevel = "Admin"
+                    LocationId = vm.LocationId,
+                    CompanyId = vm.CompanyId,
+                    UserLevel = vm.UserLevel
                 };
 
                 await _userAuthen.SaveUserAsync(_user); 
@@ -116,9 +120,23 @@ namespace HN_Backend.Service
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
             if (!isPasswordValid)
                 return null;
-
-            // JWT Generate
-            var token = _jwtTokenService.GenerateToken(user);
+             
+            var jwtIdentifier = Guid.NewGuid().ToString();             
+            var token = _jwtTokenService.GenerateToken(user, jwtIdentifier);             
+            var httpContext = _httpContextAccessor.HttpContext;
+            var ipAddress = httpContext?.Connection.RemoteIpAddress?.ToString();
+            var userAgent = httpContext?.Request.Headers["User-Agent"].ToString();
+            var session = new UserSession
+            {
+                LoginUserId = user.LoginUserId,
+                Jwtidentifier = jwtIdentifier,
+                CreateOn = DateTime.UtcNow,
+                ExpiryTime = DateTime.UtcNow.AddHours(8),
+                IsRevoked = false,
+                DeviceName = userAgent,
+                IpAddress = ipAddress
+            };
+            await _userAuthen.SaveUserSessionAsync(session);  
             return new LoginResponseDto
             {
                 LoginUserId = user.LoginUserId,
@@ -127,6 +145,18 @@ namespace HN_Backend.Service
                 Email = user.Email,
                 Token = token
             };
+        }
+
+        public async Task<MyProfileDto?> GetMyProfile(long userId)
+        {
+            var _profileDashboard = await _userAuthen.GetMyProfile(userId);
+            if (_profileDashboard == null)
+                return null;
+             return _profileDashboard;             
+        }
+        public async Task LogoutAsync(string jwtIdentifier)
+        {
+            await _userAuthen.LogoutAsync(jwtIdentifier);
         }
 
     }

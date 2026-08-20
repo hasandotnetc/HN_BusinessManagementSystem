@@ -25,6 +25,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<CollectionDetail> CollectionDetails { get; set; }
 
+    public virtual DbSet<Company> Companies { get; set; }
+
     public virtual DbSet<CurrentStock> CurrentStocks { get; set; }
 
     public virtual DbSet<CurrentStockDetail> CurrentStockDetails { get; set; }
@@ -56,6 +58,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
     public virtual DbSet<UnitType> UnitTypes { get; set; }
+
+    public virtual DbSet<UserSession> UserSessions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=DefaultConnection");
@@ -178,6 +182,35 @@ public partial class ApplicationDbContext : DbContext
                 .HasForeignKey(d => d.CollectionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CollectionDetail_Collection");
+        });
+
+        modelBuilder.Entity<Company>(entity =>
+        {
+            entity.ToTable("Company");
+
+            entity.Property(e => e.CompanyLogo)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.CreatedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.LastClosingDate).HasColumnType("datetime");
+            entity.Property(e => e.Name)
+                .HasMaxLength(250)
+                .IsUnicode(false);
+            entity.Property(e => e.OpeningDate).HasColumnType("datetime");
+            entity.Property(e => e.OwnerName)
+                .HasMaxLength(250)
+                .IsUnicode(false);
+            entity.Property(e => e.Phone)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.WebsiteLink)
+                .HasMaxLength(100)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<CurrentStock>(entity =>
@@ -351,6 +384,11 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(150)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.Company).WithMany(p => p.Locations)
+                .HasForeignKey(d => d.CompanyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Location_Company");
         });
 
         modelBuilder.Entity<LoginUser>(entity =>
@@ -389,6 +427,11 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.UserLevel)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.Company).WithMany(p => p.LoginUsers)
+                .HasForeignKey(d => d.CompanyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_LoginUser_Company");
 
             entity.HasOne(d => d.Location).WithMany(p => p.LoginUsers)
                 .HasForeignKey(d => d.LocationId)
@@ -655,6 +698,30 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<UserSession>(entity =>
+        {
+            entity.ToTable("UserSession");
+
+            entity.HasIndex(e => e.Jwtidentifier, "UQ_UserSession_JWTIdentifier").IsUnique();
+
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getutcdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.DeviceName).HasMaxLength(200);
+            entity.Property(e => e.ExpiryTime).HasColumnType("datetime");
+            entity.Property(e => e.IpAddress).HasMaxLength(50);
+            entity.Property(e => e.Jwtidentifier)
+                .HasMaxLength(100)
+                .HasColumnName("JWTIdentifier");
+            entity.Property(e => e.RefreshToken).HasMaxLength(500);
+            entity.Property(e => e.RevokedTime).HasColumnType("datetime");
+
+            entity.HasOne(d => d.LoginUser).WithMany(p => p.UserSessions)
+                .HasForeignKey(d => d.LoginUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserSession_LoginUser");
         });
 
         OnModelCreatingPartial(modelBuilder);

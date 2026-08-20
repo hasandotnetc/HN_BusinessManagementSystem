@@ -17,25 +17,34 @@ namespace HN_Backend.Service
             _jwtSettings = jwtSettings.Value;
         }
 
-        public string GenerateToken(LoginUser user)
+
+        public string GenerateToken(LoginUser user, string jwtIdentifier)
         {
-            var claims = new List<Claim>{
+            var claims = new List<Claim>
+                            {
                                 new Claim(ClaimTypes.NameIdentifier, user.LoginUserId.ToString()),
-                                //new Claim(ClaimTypes.Name,user.Name),
-                                //new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
-                                new Claim("Code", user.Code)
-            };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                                new Claim("userId",user.LoginUserId.ToString()),
+                                new Claim("companyId", user.CompanyId.ToString()),
+                                new Claim("locationId", user.LocationId.ToString()),
+                                new Claim("jwtIdentifier",jwtIdentifier)
+                            };
+
+            var key = new SymmetricSecurityKey( Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+
+            var credentials = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
+
             var expiration = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes);
+
             var token = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
                 expires: expiration,
-                signingCredentials: credentials);
+                signingCredentials: credentials
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+         
     }
 }
