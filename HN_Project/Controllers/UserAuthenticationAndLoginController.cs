@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using HN_Backend.DTOs;
+using HN_Backend.DTOs.LoginInformation;
 using HN_Backend.Helpers;
 using HN_Backend.Service;
 using HN_Project.DTOs;
@@ -56,6 +57,65 @@ namespace HN_Backend.Controllers
 
             return Ok(user);
         }
+
+        [HttpPost("SendRandomCodeByEmailOrPhone")]
+        public async Task<IActionResult> SendRandomCodeByEmailOrPhone([FromForm] string objParam)
+        {
+            var result = await _userAuthenticationAndLoginService.SendRandomCodeByEmailOrPhone(objParam);
+            if (!result)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Failed to send the code. Please check the valid active user with email"
+                });
+            }
+            return Ok(new
+            {
+                success = true,
+                message = "Code sent successfully."
+            });
+        }
+
+        [HttpPatch("UpdateUserVerificationBySendCode")]
+        public async Task<IActionResult> UpdateUserVerificationBySendCode([FromBody] VerifyCodeRequest request)
+        {
+            var result = await _userAuthenticationAndLoginService.UpdateUserVerificationBySendCode(request.Email, request.Code);
+            if (!result)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Code does not match !"
+                });
+            }
+            return Ok(new
+            {
+                success = true,
+                message = "Code sent successfully."
+            });
+        }
+
+
+        [HttpPatch("UpdateLoginUserforResetPassword")]
+        public async Task<IActionResult> UpdateLoginUserforResetPassword([FromBody] VerifyCodeRequest request)
+        {
+            var result = await _userAuthenticationAndLoginService.UpdateLoginUserforResetPassword(request.Email, request.NewPassword, request.ConfirmPassword);
+            if (!result)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Code does not match !"
+                });
+            }
+            return Ok(new
+            {
+                success = true,
+                message = "Code sent successfully."
+            });
+        }
+
 
         [HttpPost("LoginUserByPassword")]
         public async Task<IActionResult> LoginUserAsync(LoginRequestDto dto)

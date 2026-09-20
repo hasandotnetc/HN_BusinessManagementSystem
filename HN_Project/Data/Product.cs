@@ -15,7 +15,7 @@ public partial class Product
 
     public string Name { get; set; } = null!;
 
-    public string? Model { get; set; }
+    public string Model { get; set; } = null!;
 
     public string SerialAvailable { get; set; } = null!;
 
@@ -23,13 +23,7 @@ public partial class Product
 
     public long UnitTypeId { get; set; }
 
-    public decimal Price { get; set; }
-
-    public decimal Discount { get; set; }
-
     public decimal Vat { get; set; }
-
-    public decimal Tax { get; set; }
 
     public decimal Warranty { get; set; }
 
@@ -41,15 +35,29 @@ public partial class Product
 
     public long GroupId { get; set; }
 
+    public long CompanyId { get; set; }
+
+    public string? IsVatPercentageOrAmount { get; set; }
+
+    public string? ProductNote { get; set; }
+
+    public string? ActiveStatus { get; set; }
+
     public virtual Brand Brand { get; set; } = null!;
 
     public virtual Category Category { get; set; } = null!;
+
+    public virtual Company Company { get; set; } = null!;
 
     public virtual ICollection<CurrentStock> CurrentStocks { get; set; } = new List<CurrentStock>();
 
     public virtual LoginUser EntryByNavigation { get; set; } = null!;
 
     public virtual ProductGroup Group { get; set; } = null!;
+
+    public virtual ICollection<ProductUnitTypeConversion> ProductUnitTypeConversions { get; set; } = new List<ProductUnitTypeConversion>();
+
+    public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = new List<PurchaseOrderDetail>();
 
     public virtual ICollection<SalesOrderDetail> SalesOrderDetails { get; set; } = new List<SalesOrderDetail>();
 

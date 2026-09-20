@@ -1,6 +1,7 @@
 ﻿using HN_Backend.Data;
-using HN_Backend.DTOs;
-using HN_Backend.Interface; 
+using HN_Backend.DTOs.LoginInformation;
+using HN_Backend.Interface;
+using System.Security.Cryptography;
 
 
 namespace HN_Backend.Service
@@ -12,14 +13,17 @@ namespace HN_Backend.Service
         private readonly ImageService _imageService;
         private readonly JWTTokenService _jwtTokenService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public UserAuthenticationAndLoginService(IUserLoginAndAuthentication userAuthen, ImageService imgServ, ISMSorEmailServices sMSorEmailServices,JWTTokenService jWTTokenService, IHttpContextAccessor httpContextAccessor)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IEventNoOrCodeGeneration _eventNoOrCodeGeneration;
+        public UserAuthenticationAndLoginService(IUserLoginAndAuthentication userAuthen, ImageService imgServ, ISMSorEmailServices sMSorEmailServices,JWTTokenService jWTTokenService, IHttpContextAccessor httpContextAccessor,IUnitOfWork unitOfWork,IEventNoOrCodeGeneration eventNoOrCodeGeneration)
         {
             _userAuthen = userAuthen;
             _imageService = imgServ;
             _smsOrEmailServices = sMSorEmailServices;
             _jwtTokenService = jWTTokenService;
             _httpContextAccessor = httpContextAccessor;
+            _unitOfWork = unitOfWork;
+            _eventNoOrCodeGeneration = eventNoOrCodeGeneration;
         }
          
 
@@ -28,62 +32,67 @@ namespace HN_Backend.Service
             return await _userAuthen.GetUserByUserNameEmailAndPhoneAsync(paramObj);
         }
 
-        public async Task<string> SaveUser(LoginUserEntryVM vm)
+        public async Task<string> SaveUser(LoginUserEntryVM _loginUser)
         {
             string? imagePath = null;
 
             try
             {
-                if (vm.UserImage != null)
+                if (_loginUser.UserImage != null)
                 {
-                    imagePath = await _imageService.SaveImageAsync(vm.UserImage, "User");
+                    imagePath = await _imageService.SaveImageAsync(_loginUser.UserImage, "User");
                 }
 
-                var passwordHash = BCrypt.Net.BCrypt.HashPassword(vm.FirstPassword);
+                var passwordHash = BCrypt.Net.BCrypt.HashPassword(_loginUser.FirstPassword);
 
+                await _unitOfWork.BeginTransactionAsync();
+                var userCode = await _eventNoOrCodeGeneration.EventCodeGeneration("User","USR",_loginUser.CompanyId);
                 var _user = new LoginUser
                 {
-                    Name = vm.Name,
-                    Code =  "SUP-0010",
-                    Phone = vm.Phone,
-                    Email = vm.Email,
-                    Address = vm.Address,
+                    Name = _loginUser.Name,
+                    Code = userCode,
+                    Phone = _loginUser.Phone,
+                    Email = _loginUser.Email,
+                    Address = _loginUser.Address,
                     Picture = imagePath,
                     PasswordHash = passwordHash,
-                    LocationId = vm.LocationId,
-                    CompanyId = vm.CompanyId,
-                    UserLevel = vm.UserLevel
+                    LocationId = _loginUser.LocationId,
+                    CompanyId = _loginUser.CompanyId,
+                    UserLevel = _loginUser.UserLevel
                 };
+                await _userAuthen.SaveUserAsync(_user);
 
-                await _userAuthen.SaveUserAsync(_user); 
-                 
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitTransactionAsync();
+
                 if (!string.IsNullOrWhiteSpace(_user.Email))
                 {
                     var emailBody = $@"
                                     <html>
                                     <body>
-                                        <h2>Welcome to HN ERP</h2>
+                                        <h2>Welcome to HN Paperless Software</h2>
 
                                         <p>Hello <strong>{_user.Name}</strong>,</p>
 
-                                        <p>
-                                            Your account has been created successfully.
+                                         <p>
+                                            Your account has been created successfully with the role of <strong>{_user.UserLevel}</strong>.
+                                            Your User Code is <strong>{_user.Code}</strong>.
                                         </p>
 
                                         <p>
-                                            You can now use your account to access the system.
+                                            Your account is currently pending approval. Please wait for the authorities to review and approve your access.
                                         </p>
 
                                         <br/>
 
                                         <p>Regards,</p>
-                                        <p><strong>HN ERP Team</strong></p>
+                                        <p><strong>HN Paperless Team</strong></p>
                                     </body>
                                     </html>";
 
                     try
                     {
-                        await _smsOrEmailServices.SendEmailAsync(_user.Email,"HN Paperless Software Account Created Successfully",emailBody);
+                        await _smsOrEmailServices.SendEmailAsync(_user.Email, "Account Created Successfully for HN Paperless Software ", emailBody);
                     }
                     catch (Exception ex)
                     {
@@ -100,12 +109,58 @@ namespace HN_Backend.Service
                 if (!string.IsNullOrEmpty(imagePath))
                 {
                     await _imageService.DeleteImageAsync(imagePath);
+                    await _unitOfWork.RollbackTransactionAsync();
                 }
 
                 throw;
             }
         }
 
+        public async Task<bool> SendRandomCodeByEmailOrPhone(string objParam)
+        {
+            string otp= RandomNumberGenerator.GetInt32(100000, 1000000).ToString();
+            var user = await _userAuthen.GetUserByUserNameEmailAndPhoneAsync(objParam);
+            if (user != null && user.IsActive == true)
+            {
+
+                var emailBody = $@"
+                                    <html>
+                                    <body>
+                                        <h2>Password Recovery Code</h2> 
+                                        <p>
+                                            Dear valuable User, </br> Your password recovery code is: <strong>{otp}</strong>. This code is valid for 5 minutes.
+                                        </p>  
+                                        <br/> 
+                                        <p>Regards,</p>
+                                        <p><strong>HN Paperless Team</strong></p>
+                                    </body>
+                                    </html>";
+
+                UserVerification userVerification = new UserVerification
+                {
+                    LoginUserId = user.LoginUserId,
+                    VerificationCode = otp,
+                    ExpiredDate = DateTime.UtcNow.AddMinutes(5),
+                    IsUsed = false,
+                    VerificationType="Email",
+                    IsActive=true
+                };
+                try
+                {
+                    await _userAuthen.SaveUserVerificationSendSMS(userVerification);
+                    await _unitOfWork.SaveChangesAsync();
+                    await _smsOrEmailServices.SendEmailAsync(objParam, "HN Paperless Password Recovery Code", emailBody);
+                    return true;
+                }
+                catch (Exception)
+                {
+
+                    throw; 
+
+                }
+            }
+            return false;
+        }
 
         public async Task<LoginResponseDto?> LoginUserAsync(string paramObj, string password)
         {
@@ -156,7 +211,42 @@ namespace HN_Backend.Service
         }
         public async Task LogoutAsync(string jwtIdentifier)
         {
-            await _userAuthen.LogoutAsync(jwtIdentifier);
+            await _userAuthen.UpdateUserSessionForLogoutAsync(jwtIdentifier);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<bool> UpdateUserVerificationBySendCode(string objParam, string OTP)
+        {
+            var user = await _userAuthen.GetUserByUserNameEmailAndPhoneAsync(objParam);
+            var _userVerification = await _userAuthen.CheckValidUserCode(user.LoginUserId, OTP);
+            if ((user != null || user.IsActive == true) && _userVerification != null)
+            {
+                _userVerification.IsVerified = true;
+                _userVerification.AttemptCount = 1;
+                _userVerification.IsUsed = true;
+                _userVerification.IsActive = false;
+                _userVerification.VerifiedDate = DateTime.UtcNow; 
+                await _userAuthen.UpdateUserVerificationBySendCode(_userVerification);
+                await _unitOfWork.SaveChangesAsync();
+
+                return true;
+            }
+            return false; 
+        }
+
+        public async Task<bool> UpdateLoginUserforResetPassword(string objParam, string password, string confirmPassword)
+        {
+            var user = await _userAuthen.GetUserByUserNameEmailAndPhoneAsync(objParam); 
+            if ((user != null || user.IsActive == true) && password == confirmPassword)
+            {
+                var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+                user.UpdateOn = DateTime.UtcNow;
+                user.PasswordHash = passwordHash; 
+                await _userAuthen.UpdateLoginUserforResetPassword(user);
+                await _unitOfWork.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
     }

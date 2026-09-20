@@ -12,7 +12,7 @@ namespace HN_Backend.Service
         private readonly ICustomerRepository _customerRepo;
         private readonly ICurrentStock _currentStockRepo;
         private readonly ICurrentStockDetail _currentStockDetailRepo;
-        private readonly IProductRepositroy _productRepo;
+        private readonly IProductRepository _productRepo;
         private readonly ISalesOrder _salesOrder;
         private readonly ISalesOrderDetail _salesOrderDetail;
         private readonly ISalesOrderSerial _salesOrderSerial;
@@ -20,7 +20,7 @@ namespace HN_Backend.Service
         private readonly ICollectionDetail _collectionDetail;
         private readonly IUnitOfWork _unitOfWork;
 
-        public PointOfSalesService(ICustomerRepository customerRepo, ICurrentStock currentStockRepo, ICurrentStockDetail currentStockDetailRepo, IProductRepositroy productRepo, ISalesOrder salesOrder, ISalesOrderDetail salesOrderDetail, ISalesOrderSerial salesOrderSerial, ICollectionIn collection, ICollectionDetail collectionDetail, IUnitOfWork unitOfWork)
+        public PointOfSalesService(ICustomerRepository customerRepo, ICurrentStock currentStockRepo, ICurrentStockDetail currentStockDetailRepo, IProductRepository productRepo, ISalesOrder salesOrder, ISalesOrderDetail salesOrderDetail, ISalesOrderSerial salesOrderSerial, ICollectionIn collection, ICollectionDetail collectionDetail, IUnitOfWork unitOfWork)
         {
             _customerRepo = customerRepo;
             _currentStockRepo = currentStockRepo;

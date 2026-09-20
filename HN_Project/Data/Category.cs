@@ -9,11 +9,13 @@ public partial class Category
 
     public string Name { get; set; } = null!;
 
-    public string? Picture { get; set; }
-
     public DateTime CreateOn { get; set; }
 
     public long EntryBy { get; set; }
+
+    public long CompanyId { get; set; }
+
+    public virtual Company Company { get; set; } = null!;
 
     public virtual LoginUser EntryByNavigation { get; set; } = null!;
 

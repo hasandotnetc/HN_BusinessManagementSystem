@@ -274,17 +274,22 @@
 
 
 </style>
+ 
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+@* <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> *@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 
 <div class="container-fluid p-2 product-workspace-wrapper my-0">
 
     <!-- ================= ROW 1: PRODUCT FORM SECTION ================= -->
     <div class="form-card-premium mb-3">
-      @*   <div class="border-bottom border-secondary pb-1 mb-3 d-flex align-items-center">
-            <i class="fa-solid fa-square-poll-horizontal text-warning me-2" style="font-size: 13px;"></i>
-            <h2 class="section-title-White m-0 text-uppercase tracking-wider">Product Information</h2>
-        </div> *@
+     
         <div class="section-header-banner d-flex align-items-center">
             <i class="fa-solid fa-square-poll-horizontal text-warning me-2" style="font-size: 13px;"></i>
             <h2 class="section-title-White m-0 text-uppercase tracking-wider">Product Information</h2>
@@ -315,36 +320,24 @@
                         <label class="inline-label" for="txtModelNo">Model No <span class="mandatory-star">*</span></label>
                         <input type="text" id="txtModelNo" class="form-control custom-form-control" placeholder="Enter model number">
                     </div>
-                    <!-- Price -->
+                    <!-- -->
+
                     <div class="d-flex align-items-center mb-3">
-                        <label class="inline-label" for="numPrice">Price@* <span class="mandatory-star">*</span> *@</label>
-                        <div class="w-100">
-                            <input type="number" id="numPrice" class="form-control custom-form-control" placeholder="0.00" step="0.01">
-                            @* <div id="errPrice" class="text-danger d-none" style="font-size:10px; position:absolute;">Required</div> *@
+                        <label class="inline-label">
+                            Unit of Type  <span class="mandatory-star">*</span>
+                        </label>
+                        <div class="d-flex gap-1 w-100">
+                            <select id="ddlProductUnitType" class="form-select custom-form-control"></select>
+                           @*  <button id="btnAddNewGroup" type="button" class="btn btn-purple-utility">
+                                <i class="fa-solid fa-plus me-1"></i>New
+                            </button> *@
                         </div>
                     </div>
-                    
-                    <!-- Warranty Row -->
-                    <div class="d-flex align-items-center mb-0">
-                        <label class="inline-label" for="txtWarranty">Warranty Months</label>
-                        <input type="number" id="txtWarranty" class="form-control custom-form-control w-100" placeholder="e.g. 6">
-                    </div>
-
-
+                        
                 </div>
-
-                <!-- COLUMN 2: Beautiful Single-Line Convertible Operations (Discount, VAT, Tax) -->
+                 
                 <div class="col-xl-3 col-md-6">
-                    <!-- Discount Row -->
-                    <div class="d-flex align-items-center mb-3">
-                        <label class="inline-label" id="lblDiscount" for="numDiscount">Discount ($)</label>
-                        <div class="d-flex align-items-center gap-2 w-100">
-                            <input type="number" id="numDiscount" class="form-control custom-form-control w-100" placeholder="0.00" step="0.01">
-                            <span class="per-text-indicator">Per(%)</span>
-                            <input type="checkbox" id="chkDiscountMode" onchange="toggleInputMode('Discount')" class="row-aligned-checkbox">
-                        </div>
-                    </div>
-
+                    
                     <!-- VAT Row -->
                     <div class="d-flex align-items-center mb-3">
                         <label class="inline-label" id="lblVat" for="numVat">Vat ($)</label>
@@ -354,34 +347,13 @@
                             <input type="checkbox" id="chkVatMode" onchange="toggleInputMode('Vat')" class="row-aligned-checkbox">
                         </div>
                     </div>
-
-                    <!-- Tax Row -->
-                    <div class="d-flex align-items-center mb-3">
-                        <label class="inline-label" id="lblTax" for="numTax">Tax ($)</label>
-                        <div class="d-flex align-items-center gap-2 w-100">
-                            <input type="number" id="numTax" class="form-control custom-form-control w-100" placeholder="0.00" step="0.01">
-                            <span class="per-text-indicator">Per(%)</span>
-                            <input type="checkbox" id="chkTaxMode" onchange="toggleInputMode('Tax')" class="row-aligned-checkbox">
-                        </div>
-                    </div>
                      
-                    <!-- -->
-                    <div class="d-flex align-items-center">
-                        <label class="inline-label">
-                            Unit of Type <span class="mandatory-star">*</span>
-                        </label>
-
-                        <select id="ddlProductUnitType" class="form-select custom-form-control">
-                            <option value="">-- Select Unit of Type --</option>
-                            <option value="PC">PC</option>
-                            <option value="Box">Box</option>
-                            <option value="Kg">Kg</option>
-                            <option value="Litter">Litter</option>
-                            <option value="Meter">Meter</option>
-                            <option value="Standard">Standard</option>
-                        </select>
+                    <!-- Warranty Row -->
+                    <div class="d-flex align-items-center mb-0">
+                        <label class="inline-label" for="txtWarranty">Warranty </label>
+                        <input type="number" id="txtWarranty" class="form-control custom-form-control w-100" placeholder="Months e.g. 6 ">
                     </div>
-
+             
                     <!-- Serial Product: Transformed into perfect row matching layout -->
                     <div class="d-flex align-items-center mb-3">
                         <label class="inline-label" for="chkSerialProduct">Serial Product</label>
@@ -389,6 +361,15 @@
                             <input type="checkbox" id="chkSerialProduct" class="row-aligned-checkbox">
                         </div>
                     </div>
+
+                    <!-- Serial Product: Transformed into perfect row matching layout -->
+                    <div class="d-flex align-items-center mb-3">
+                        <label class="inline-label" for="chkActiveStatus">Active Status</label>
+                        <div class="d-flex align-items-center" style="height: 28px;">
+                            <input type="checkbox" id="chkActiveStatus" class="row-aligned-checkbox">
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- COLUMN 3: Product Picture Upload Area -->
@@ -465,6 +446,18 @@
 
                 </div>
 
+
+                <div class="col-xl-8 col-md-6">
+                    <!-- Product Note -->
+                    <div class="d-flex align-items-center mb-3">
+                        <label class="inline-label" for="txtProductNote">Remarks/Note </label>
+                        <div class="w-100">
+                            <input type="text" id="txtProductNote" class="form-control custom-form-control" placeholder="Enter product remarks or notes" maxlength="500">
+                            @* <div id="errProductName" class="text-danger d-none" style="font-size:10px; position:absolute;">Required</div> *@
+                        </div>
+                    </div> 
+                </div> 
+
                 <!-- REUSABLE MODAL -->
                 <div class="modal fade custom-blur-modal" id="modalAddNewItem" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -504,16 +497,62 @@
 
 
             </div>
+             
+
+
 
             <!-- Form Action Footer -->
-            <div class="d-flex justify-content-end gap-2 pt-2 mt-3 border-top">
-                <button type="button" onclick="resetForm()" class="btn btn-purple-outline h-auto py-1 px-3">
-                    <i class="fa-solid fa-rotate-left me-1"></i> Reset
-                </button>
-                <button id="btnSave" type="submit" class="btn btn-gold-action">
-                    <i class="fa-solid fa-floppy-disk me-1"></i> Save Product
-                </button>
-            </div> 
+            <div class="d-flex justify-content-between align-items-center pt-2 mt-3 border-top flex-wrap gap-2">
+
+                <!-- Code Generation Options (Visible after Save or in Edit mode) -->
+                <div id="codeGeneratorSection" class="d-none d-flex align-items-center gap-2 flex-wrap">
+                    <div class="d-flex align-items-center gap-1">
+                        <label class="inline-label mb-0" style="min-width: auto; font-size: 11px;">Paper Size:</label>
+                        <select id="ddlPaperSize" class="form-select custom-form-control" style="width: 250px; height: 28px;" onchange="handlePaperSizeChange()">
+                            <option value="50x25">Standard Sticker (50mm x 25mm)</option>
+                            <option value="38x25">Small Label (38mm x 25mm)</option>
+                            <option value="100x50">Shipping Tag (100mm x 50mm)</option>
+                            <option value="A4">A4 Sheet (Multi-Label)</option>
+                        </select>
+                    </div>
+
+                    <!-- A4 Customization Options -->
+                    <div id="a4OptionsSection" class="d-none d-flex align-items-center gap-2">
+                        <input type="number" id="numA4Count" class="form-control custom-form-control" style="width: 70px;" placeholder="Count" value="24" min="1">
+                        <select id="ddlA4LabelSize" class="form-select custom-form-control" style="width: auto;">
+                            <option value="A4_24">3x8 Layout (24 Labels/Page)</option>
+                            <option value="A4_40">4x10 Layout (40 Labels/Page)</option>
+                            <option value="A4_12">2x6 Layout (12 Labels/Page)</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn btn-purple-utility gap-1" onclick="generateCode('BARCODE')">
+                        <i class="fa-solid fa-barcode"></i> Barcode
+                    </button>
+                    <button type="button" class="btn btn-purple-utility gap-1" onclick="generateCode('QRCODE')">
+                        <i class="fa-solid fa-qrcode"></i> QR Code
+                    </button>
+                </div>
+
+                <!-- Main Action Buttons -->
+                <div class="d-flex justify-content-end gap-2 ms-auto">
+                    <input type="hidden" id="txtProductId" value="0" />
+
+                    <button type="button" onclick="resetForm()" class="btn btn-purple-outline h-auto py-1 px-3">
+                        <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                    </button>
+
+                    <button id="btnSave" type="submit" class="btn btn-gold-action">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Save Product
+                    </button>
+
+                    <button id="btnUpdate" type="button" class="btn btn-gold-action d-none">
+                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit Product
+                    </button>
+                </div>
+            </div>
+             
+             
         </form>
     </div>
 
@@ -549,12 +588,14 @@
                         <th>#</th>
                         <th>Image</th>
                         <th>Product Name</th>
+                        <th>Code No</th> 
                         <th>Model No</th>
                         <th>Group</th>
                         <th>Category</th>
-                        <th>Brand</th>
-                        <th>Price</th>
-                        <th>Stock Type</th>
+                        <th>Brand</th> 
+                        <th>Unit Type</th>
+                        <th>Active</th>
+
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -585,13 +626,8 @@
             </div>
         </div>
     </div>
-
-
-
-
-    <!-- ================= Hidden Div For POP UP/ Modal Show  ================= -->
-
-    <!-- Modal structure -->
+     
+     
     <div class="modal fade custom-blur-modal" id="modalAddNewGroup" tabindex="-1" aria-labelledby="modalAddNewGroupLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
@@ -626,20 +662,51 @@
         </div>
     </div>
 
-
+     
+    <!-- Barcode / QR Code Modal -->
+    <div class="modal fade" id="modalCodePreview" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-white" style="background-color: rebeccapurple;">
+                    <h5 class="modal-title fw-bold" id="codeModalTitle">
+                        <i class="fa-solid fa-print me-2"></i> Print Preview
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4" style="background-color: #f8f9fa;">
+                    <div id="printArea" class="d-flex flex-wrap justify-content-center gap-3 bg-white p-3 shadow-sm rounded border">
+                        <!-- Code items will be rendered here dynamically -->
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gold-action px-4" onclick="printGeneratedCode()">
+                        <i class="fa-solid fa-print me-1"></i> Print
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
 </div>
-
-<!-- ================= ENGINE LOGIC CONTAINER ================= -->
+ 
 @section Scripts {
     <script>
         const imgInput = document.getElementById('fileProductPicture');
         const imgPreview = document.getElementById('imgPreview');
         const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+        const token = getAuthCookie("HN_JWT");
 
-        $(document).ready(function() {
+
+        const notyf = new Notyf({
+            duration: 3000,
+            position: { x: 'right', y: 'top' },
+            dismissible: true
+        });
+
+        $(document).ready(function() { 
             imgInput.addEventListener('change', function() {
                 const file = this.files[0];
                 if (file) {
@@ -653,13 +720,11 @@
                 }
             });
         });
-
-        // Smart dynamic labels handler
+         
         function toggleInputMode(fieldName) {
             const isChecked = document.getElementById(`chk${fieldName}Mode`).checked;
             const label = document.getElementById(`lbl${fieldName}`);
-
-            // Switch label text synchronously without breaking the design layout row
+             
             if (isChecked) {
                 label.innerText = `${fieldName} (%)`;
             } else {
@@ -673,95 +738,197 @@
             return isPercent ? (mainPrice * inputVal) / 100 : inputVal;
         }
 
-        $("#btnSave").click(function(){
-            // e.preventDefault();
-            // alert('hello hasan');
-            const mainPrice = parseFloat($("#numPrice").val()) || 0;
 
-            if ($("#txtProductName").val().trim() === "" || mainPrice <= 0) {
-                alert("Please fill required fields.");
+
+                     $("#codeGeneratorSection").removeClass("d-none");
+
+
+            $("#btnSave").click(function (e) {
+            e.preventDefault();
+
+            // Prevent saving if product code already exists on the page
+            const existingCode = $("#txtProductCode").val()?.trim();
+            if (existingCode) {
+                notyf.open({ type: 'warning', message: `Product already saved (${existingCode})` }); 
+                return;
+            }
+
+            // 1. Validation for mandatory HTML fields
+            const productName = $("#txtProductName").val().trim();
+            const modelNo = $("#txtModelNo").val().trim();
+            const unitType = $("#ddlProductUnitType").val();
+            const groupVal = $("#ddlGroup").val();
+            const categoryVal = $("#ddlCategory").val();
+            const brandVal = $("#ddlBrand").val();
+            const productType = $("#ddlProductType").val();
+
+            if (!productName || !modelNo || !unitType || !groupVal || !categoryVal || !brandVal || !productType) {
+                toastr.error("Please fill in all mandatory fields (*).", "Validation Error");
+                return;
+            }
+
+            // 2. Build FormData Object
+            var formData = new FormData();
+            formData.append("Name", productName);
+            formData.append("Model", modelNo);
+            formData.append("UnitTypeId", unitType);
+            formData.append("ProductType", productType);
+            formData.append("Note", $("#txtProductNote").val());
+
+            const vatValue = parseFloat($("#numVat").val()) || 0;
+            const vatMode = $("#chkVatMode").is(":checked") ? "P" : "A";
+            formData.append("VAT", vatValue);
+            formData.append("VatMode", vatMode);
+
+            formData.append("Warranty", parseFloat($("#txtWarranty").val()) || 0);
+            formData.append("SerialAvailable", $("#chkSerialProduct").is(":checked") ? "Y" : "N");
+            formData.append("IsActive", $("#chkActiveStatus").is(":checked") ? "Y" : "N"); 
+
+            formData.append("GroupId", groupVal);
+            formData.append("CategoryId", categoryVal);
+            formData.append("BrandId", brandVal);
+
+            var fileInput = $("#fileProductPicture")[0];
+            if (fileInput && fileInput.files.length > 0) {
+                formData.append("ProductImage", fileInput.files[0]);
+            }
+
+            // 3. Prevent Multiple Clicks
+            const $btn = $(this);
+            $btn.prop("disabled", true).text("Saving...");
+
+            // 4. AJAX Submission
+            $.ajax({
+                url: `${APP_CONFIG.API_BASE_URL}api/Product/SaveProduct`,
+                type: "POST",
+                headers: { 'Authorization': token ? `Bearer ${token}` : '' },
+                data: formData,
+                processData: false,
+                contentType: false, 
+                success: function (res) {
+                notyf.success(res.message || "Saved Successfully");
+                if (res.data) {
+                    $("#txtProductCode").val(res.data);
+                }
+                $btn.prop("disabled", true).text("Saved");
+                $("#txtProductCode").prop("disabled", true);
+                $("#ddlProductUnitType").prop("disabled", true);
+                $("#chkSerialProduct").prop("disabled", true);
+
+                $("#btnSave").addClass("d-none");
+                $("#btnUpdate").removeClass("d-none").prop("disabled", false);
+
+                // Show Barcode / QR Code Generation Section
+                $("#codeGeneratorSection").removeClass("d-none");
+
+                LoadProducts();
+            },
+         
+                 
+                error: function (xhr) { 
+                    $btn.prop("disabled", false).text("Save"); 
+                    const errRes = xhr.responseJSON;
+                    if (errRes && errRes.Message) {
+                        notyf.error(errRes.Message || "Failed to save product."); 
+                    } else {
+                        toastr.error("Failed to save product. Please try again.", "Error");
+                    }
+                    console.error("Save Error:", xhr);
+                }
+            });
+        });
+
+            $("#btnUpdate").click(function (e) {
+            e.preventDefault();
+
+            const productId = $("#txtProductId").val();
+            const productName = $("#txtProductName").val();
+            const modelNo = $("#txtModelNo").val();
+            const code = $("#txtProductCode").val();
+            const groupVal = $("#ddlGroup").val();
+            const categoryVal = $("#ddlCategory").val();
+            const brandVal = $("#ddlBrand").val();
+            const productType = $("#ddlProductType").val();
+
+            if (!productName || !modelNo || !groupVal || !categoryVal || !brandVal || !productType) {
+                notyf.error("Please fill in all mandatory fields (*).");
                 return;
             }
 
             var formData = new FormData();
+            formData.append("ProductId", productId);
+            formData.append("Name", productName);
+            formData.append("Model", modelNo);
+            formData.append("Code", code);
+            formData.append("Note", $("#txtProductNote").val());
+            formData.append("ProductType", productType);
 
-            formData.append("Name", $("#txtProductName").val().trim());
-            formData.append("Model", $("#txtModelNo").val());
-            // formData.append("Price", mainPrice);
-            const discount = calculateCalculatedValue("Discount", mainPrice);
+            const vatValue = parseFloat($("#numVat").val()) || 0;
+            const vatMode = $("#chkVatMode").is(":checked") ? "P" : "A";
+            formData.append("VAT", vatValue);
+            formData.append("VatMode", vatMode);
 
-            const priceAfterDiscount = mainPrice - discount;
-            const vat = calculateCalculatedValue("Vat", priceAfterDiscount);
-            const tax = calculateCalculatedValue("Tax", priceAfterDiscount);
-
-            formData.append("Price", mainPrice);
-            formData.append("Discount", discount);
-            formData.append("Vat", vat);
-            formData.append("Tax", tax);
-
-            formData.append("IsDiscountPercent", $("#chkDiscountMode").prop("checked"));
-            formData.append("IsVatPercent", $("#chkVatMode").prop("checked"));
-            formData.append("IsTaxPercent", $("#chkTaxMode").prop("checked"));
-
-            // formData.append("Warranty", $("#txtWarranty").val());
             formData.append("Warranty", parseFloat($("#txtWarranty").val()) || 0);
-             const serialAvailable = $("#chkSerialProduct").is(":checked") ? "Y" : "N";
-            formData.append("SerialAvailable", serialAvailable);
+            formData.append("SerialAvailable", $("#chkSerialProduct").is(":checked") ? "Y" : "N");
+            formData.append("IsActive", $("#chkActiveStatus").is(":checked") ? "Y" : "N");
 
-            formData.append("GroupId", $("#ddlGroup").val());
-            formData.append("CategoryId", $("#ddlCategory").val());
-            formData.append("BrandId", $("#ddlBrand").val());
+            formData.append("GroupId", groupVal);
+            formData.append("CategoryId", categoryVal);
+            formData.append("BrandId", brandVal);
 
-            // Image
-            var file = $("#fileProductPicture")[0].files[0];
-            if (file) {
-                formData.append("ProductImage", file);
+            var fileInput = $("#fileProductPicture")[0];
+            if (fileInput && fileInput.files.length > 0) {
+                formData.append("ProductImage", fileInput.files[0]);
             }
-            formData.forEach((value, key) => {
-                console.log(key, ":", value);
-            });
-            // return;
+
+            const $btn = $(this);
+            $btn.prop("disabled", true).text("Updating...");
+            console.log(formData);
+       
             $.ajax({
-                url: "https://localhost:7008/api/Product/SaveProduct",
-                type: "POST",
+                url: `${APP_CONFIG.API_BASE_URL}api/Product/UpdateProduct`, // Ready for your API route
+                type: "PUT", // or POST depending on endpoint standard
+                headers: { 'Authorization': token ? `Bearer ${token}` : '' },
                 data: formData,
                 processData: false,
                 contentType: false,
-
                 success: function (res) {
-                    alert("Saved Successfully");
-                    console.log(res);
+                    notyf.success(res.message || "Product updated successfully!");
+                    $btn.prop("disabled", false).text("Edit Product");
+                    LoadProducts();
                 },
-
-                error: function (err) {
-                    console.error(err);
-                    alert("Failed to save product.");
+                error: function (xhr) {
+                    $btn.prop("disabled", false).text("Edit Product");
+                    const errRes = xhr.responseJSON;
+                    notyf.error(errRes?.message || errRes?.Message || "Failed to update product.");
                 }
             });
-        })
-        // function handleFormSubmit(e) {
-            
-        // }
+        });
 
-        function resetForm() {
-            document.getElementById('productForm').reset();
+            function resetForm() {
+            $("#txtProductId").val("0");
+            $("#productForm")[0].reset();
+
+            // Re-enable form controls
+            $("#txtProductCode").val("").prop("disabled", true);
+            $("#ddlProductUnitType").prop("disabled", false);
+            $("#chkSerialProduct").prop("disabled", false);
+
+            // Toggle back action buttons
+            $("#btnSave").removeClass("d-none").prop("disabled", false).text("Save Product");
+            $("#btnUpdate").addClass("d-none");
+
+            // Reset Image Preview
             imgPreview.src = "";
             imgPreview.classList.add('d-none');
             uploadPlaceholder.classList.remove('d-none');
-            ['Discount', 'Vat', 'Tax'].forEach(mode => toggleInputMode(mode));
-        }
-
-
+        } 
 
         function calculateCalculatedValue(type, price) { 
             let value = 0;
             let isPercent = false; 
             switch (type) {
-                case "Discount":
-                    value = parseFloat($("#numDiscount").val()) || 0;
-                    isPercent = $("#chkDiscountMode").prop("checked");
-                    break;
-
+              
                 case "Vat":
                     value = parseFloat($("#numVat").val()) || 0;
                     isPercent = $("#chkVatMode").prop("checked");
@@ -779,19 +946,14 @@
 
             return value;
         }
+         
+        const IMAGE_BASE_URLA =`${APP_CONFIG.API_BASE_URL}`; 
+        const DEFAULT_IMAGEA = `${IMAGE_BASE_URLA}/Upload/Product/no-image.png`;
+        console.log(DEFAULT_IMAGEA);
 
 
-        const API_BASE_URL = "https://localhost:7008/api/Product";
-        const IMAGE_BASE_URL = "https://localhost:7008/";
-
-        const DEFAULT_IMAGE = `${IMAGE_BASE_URL}/Upload/Product/no-image.png`;
-        console.log(DEFAULT_IMAGE);
-
-
-        $(document).ready(function () {
-
-            loadMasterDropdowns();
-
+        $(document).ready(function () { 
+            loadMasterDropdowns(); 
         });
 
         async function loadMasterDropdowns() {
@@ -800,16 +962,27 @@
 
                 await Promise.all([
 
-                    loadDropdown(
-                        `${API_BASE_URL}/AllProductGroupList`,
+                    loadDropdown( 
+                        `${APP_CONFIG.API_BASE_URL}api/Product/AllProductGroupList`,
                         "#ddlGroup",
                         "productGroupId",
                         "name",
                         "--Select Group--"
                     ),
 
+                     loadDropdown(
+                        // `${API_BASE_URLA}/AllProductGroupList`,
+                        `${APP_CONFIG.API_BASE_URL}api/Product/AllUnitTypeList`,
+                        "#ddlProductUnitType",
+                        "unitTypeId",
+                        "name",
+                        "--Select Unit Type--"
+                    ),
+
+
                     loadDropdown(
-                        `${API_BASE_URL}/AllProductCategoryList`,
+                        // `${API_BASE_URLA}/AllProductCategoryList`, 
+                        `${APP_CONFIG.API_BASE_URL}api/Product/AllProductCategoryList`,
                         "#ddlCategory",
                         "categoryId",
                         "name",
@@ -817,7 +990,8 @@
                     ),
 
                     loadDropdown(
-                        `${API_BASE_URL}/AllProductBrandList`,
+                        // `${API_BASE_URLA}/AllProductBrandList`,
+                        `${APP_CONFIG.API_BASE_URL}api/Product/AllProductBrandList`,
                         "#ddlBrand",
                         "brandId",
                         "name",
@@ -836,39 +1010,22 @@
 
         }
 
-        async function loadDropdown(apiUrl, ddlId, valueField, textField, defaultText) {
-
-            try {
-
+        async function loadDropdown(apiUrl, ddlId, valueField, textField, defaultText) { 
+            try { 
                 const response = await fetch(apiUrl);
 
                 if (!response.ok)
-                    throw new Error("Failed to Load : " + apiUrl);
-
-                const data = await response.json();
-
-                let html = `<option value="">${defaultText}</option>`;
-
-                data.forEach(item => {
-
-                    html += `
-                        <option value="${item[valueField]}">
-                            ${item[textField]}
-                        </option>
-                    `;
-
-                });
-
-                $(ddlId).html(html);
-
+                    throw new Error("Failed to Load : " + apiUrl); 
+                const data = await response.json(); 
+                let html = `<option value="">${defaultText}</option>`; 
+                data.forEach(item => {   html += `   <option value="${item[valueField]}">  ${item[textField]}   </option>  `; }); 
+                $(ddlId).html(html); 
             }
-            catch (error) {
-
-                console.error(error);
-
-            }
-
+            catch (error) { 
+                console.error(error); 
+            } 
         }
+
         let currentPage = 1;
         let pageSize = 10;
         let totalPages = 0;
@@ -878,8 +1035,8 @@
         });
 
         function LoadProducts() {
-            $.ajax({
-                url: "https://localhost:7008/api/SearchingByDapper/GetProductByPaginationRequest", 
+            $.ajax({ 
+                url:`${APP_CONFIG.API_BASE_URL}api/SearchingByDapper/GetProductByPaginationRequest`,
                 type: "GET", 
                 data: { 
                     Page: currentPage, 
@@ -903,15 +1060,21 @@
             });
         }
 
+
                 function BindTable(data) {
+                    console.log('bind table data');
+                    console.log(data);
             let html = "";
-            if (data.length == 0) {
+            if (!data || data.length === 0) {
                 $("#productTableBody").html("");
                 $("#emptyStatePlaceholder").show();
                 return;
             }
             $("#emptyStatePlaceholder").hide();
-            $.each(data, function(index, item) {
+
+            $.each(data, function(index, item) { 
+                const itemJson = JSON.stringify(item).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+
                 html += `
                     <tr>
                         <td class="fw-semibold">${((currentPage - 1) * pageSize) + (index + 1)}</td>
@@ -922,17 +1085,20 @@
                                  class="rounded border"
                                  style="object-fit: cover;"
                                  loading="lazy"
-                                 onerror="this.onerror=null;this.src='${DEFAULT_IMAGE}'">
+                                 onerror="this.onerror=null;this.src='${DEFAULT_IMAGEA}'">
                         </td>
                         <td class="fw-semibold text-dark">${item.productName}</td>
+                        <td>${item.code || '-'}</td> 
                         <td>${item.model || '-'}</td>
                         <td>${item.groupName || '-'}</td>
                         <td>${item.categoryName || '-'}</td>
                         <td>${item.brandName || '-'}</td>
-                        <td class="fw-bold text-dark">${item.price}</td>
-                        <td><span class="badge bg-light text-dark border">${item.stockType || 'Standard'}</span></td>
+                        <td><span class="badge bg-light text-dark border">${item.unitTypeName || 'Standard'}</span></td>
+
+                        <td>${item.activeStatus || '-'}</td>
+                        
                         <td class="text-center">
-                            <button class="btn btn-action-edit">
+                            <button class="btn btn-action-edit" onclick="EditProduct('${itemJson}')">
                                 <i class="fa-solid fa-pen-to-square me-1"></i>Edit
                             </button>
                         </td>
@@ -942,62 +1108,69 @@
             $("#productTableBody").html(html);
         }
 
+            function EditProduct(jsonString) {
+            const item = typeof jsonString === 'string' ? JSON.parse(jsonString) : jsonString;
+
+            // 1. Populate Hidden ID and Form Controls
+            $("#txtProductId").val(item.productId || 0);
+            $("#txtProductName").val(item.productName || "");
+            $("#txtProductCode").val(item.code || "");
+            $("#txtModelNo").val(item.model || "");
+
+            $("#ddlProductUnitType").val(item.unitTypeId || "").prop("disabled", true);  
+            $("#ddlGroup").val(item.productGroupId || item.groupId || "");
+            $("#ddlCategory").val(item.categoryId || "");
+            $("#ddlBrand").val(item.brandId || ""); 
+        const mappedType = item.productType === "I" ? "Inventory" : (item.productType === "S" ? "Service" : item.productType);
+        $("#ddlProductType").val(mappedType || "").prop("disabled", true); 
+        $("#chkSerialProduct").prop("checked", item.serialAvailable === "Y").prop("disabled", true);
+         
+            $("#txtProductNote").val(item.productNote || "");
+             
+            $("#numVat").val(item.vat || 0);
+            const isVatPercent = (item.isVatPercentageOrAmount === "P");
+            $("#chkVatMode").prop("checked", isVatPercent);
+            toggleInputMode('Vat');
+
+            $("#txtWarranty").val(item.warranty || 0); 
+            $("#chkActiveStatus").prop("checked", item.activeStatus === "Y" || item.isActive === true);
+             
+            if (item.imageUrl) {
+                imgPreview.src = getImageUrl(item.imageUrl);
+                imgPreview.classList.remove('d-none');
+                uploadPlaceholder.classList.add('d-none');
+            } else {
+                imgPreview.src = "";
+                imgPreview.classList.add('d-none');
+                uploadPlaceholder.classList.remove('d-none');
+            }
+             
+            $("#btnSave").addClass("d-none");
+            $("#btnUpdate").removeClass("d-none").prop("disabled", false).text("Edit Product");
+             
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+ 
         function CreatePagination() {
-
             let html = "";
-
             html += `
-        <li class="page-item ${currentPage==1?'disabled':''}">
-
-        <a class="page-link"
-        href="#"
-        onclick="GoPage(${currentPage-1})">
-
-        Previous
-
-        </a>
-
-        </li>
-        `;
+            <li class="page-item ${currentPage==1?'disabled':''}"> 
+                <a class="page-link" href="#"  onclick="GoPage(${currentPage-1})">   Previous </a> 
+            </li> `;
 
             for(let i=1;i<=totalPages;i++){
 
-                html+=`
-        <li class="page-item ${currentPage==i?'active':''}">
-
-        <a class="page-link"
-
-        href="#"
-
-        onclick="GoPage(${i})">
-
-        ${i}
-
-        </a>
-
-        </li>
-        `;
-
+                html+=`  
+                <li class="page-item ${currentPage==i?'active':''}"> 
+                    <a class="page-link" href="#"   onclick="GoPage(${i})"> ${i}  </a> 
+                </li> `; 
             }
 
             html+=`
-        <li class="page-item ${currentPage==totalPages?'disabled':''}">
-
-        <a class="page-link"
-
-        href="#"
-
-        onclick="GoPage(${currentPage+1})">
-
-        Next
-
-        </a>
-
-        </li>
-        `;
-
-            $("#pagination").html(html);
-
+            <li class="page-item ${currentPage==totalPages?'disabled':''}"> 
+                 <a class="page-link"  href="#"   onclick="GoPage(${currentPage+1})">  Next </a> 
+            </li>  `; 
+            $("#pagination").html(html); 
         }
 
 
@@ -1038,10 +1211,10 @@
             console.log('getImageUrl');
             console.log(path);
             if (!path || path.trim() === "")
-                return DEFAULT_IMAGE;
-            console.log(DEFAULT_IMAGE);
+                return DEFAULT_IMAGEA;
+            console.log(DEFAULT_IMAGEA);
 
-            return IMAGE_BASE_URL + path;
+            return IMAGE_BASE_URLA + path;
         }
 
          
@@ -1054,35 +1227,40 @@
           const lblItemName = document.getElementById('lblItemName');
           const txtItemName = document.getElementById('txtItemName');
           const btnSaveModal = document.getElementById('btnSaveModal');
-
-          // Track active entity type ('group' | 'category' | 'brand')
+           
           let currentEntityType = ''; 
           const entityConfig = {
             group: {
               title: '<i class="fa-solid fa-layer-group me-2"></i>Add New Product Group',
               label: 'Product Group Name',
               placeholder: 'e.g., Beverages, Electronics',
-              selectId: '#ddlGroup',
-              apiUrl: 'https://localhost:7008/api/Product/SaveProductGroup'
+              selectId: '#ddlGroup', 
+              apiUrl : `${APP_CONFIG.API_BASE_URL}api/Product/SaveProductGroup`
             },
             category: {
               title: '<i class="fa-solid fa-tags me-2"></i>Add New Category',
               label: 'Category Name',
               placeholder: 'e.g., Cold Drinks, Smartphones',
-              selectId: '#ddlCategory',
-              apiUrl: 'https://localhost:7008/api/Product/SaveProductCategory'
+              selectId: '#ddlCategory', 
+              apiUrl : `${APP_CONFIG.API_BASE_URL}api/Product/SaveProductCategory`
+
             },
             brand: {
               title: '<i class="fa-solid fa-copyright me-2"></i>Add New Brand',
               label: 'Brand Name',
               placeholder: 'e.g., Coca-Cola, Apple',
-              selectId: '#ddlBrand',
-              apiUrl: 'https://localhost:7008/api/Product/SaveProductBrand'
+              selectId: '#ddlBrand', 
+              apiUrl : `${APP_CONFIG.API_BASE_URL}api/Product/SaveProductBrand`
+
             }
           };
-
-          // Open modal configuration
-          function openModal(type) {
+           
+        function appendToSelect(selectId, text, value) {
+            const $dropdown = $(selectId); 
+            $dropdown.append(new Option(text, value, true, true)).trigger('change');
+        }
+         
+        function openModal(type) {
             currentEntityType = type;
             const config = entityConfig[type];
 
@@ -1091,120 +1269,1722 @@
             txtItemName.placeholder = config.placeholder;
             txtItemName.value = '';
             txtItemName.classList.remove('is-invalid');
+             
+            $("#btnSaveModal").prop("disabled", false);
 
             itemModal.show();
-          }
-
-          // Open modal button events
-          document.getElementById('btnAddNewGroup').addEventListener('click', () => openModal('group'));
-          document.getElementById('btnAddNewCategory').addEventListener('click', () => openModal('category'));
-          document.getElementById('btnAddNewBrand').addEventListener('click', () => openModal('brand'));
-
-          // Auto-focus field after opening modal
-          modalEl.addEventListener('shown.bs.modal', function () {
+        }
+         
+        document.getElementById('btnAddNewGroup').addEventListener('click', () => openModal('group'));
+        document.getElementById('btnAddNewCategory').addEventListener('click', () => openModal('category'));
+        document.getElementById('btnAddNewBrand').addEventListener('click', () => openModal('brand'));
+         
+        modalEl.addEventListener('shown.bs.modal', function () {
             txtItemName.focus();
-          });
-
-          // Save button dispatcher
-          btnSaveModal.addEventListener('click', function () {
+        });
+         
+        btnSaveModal.addEventListener('click', function () {
             const itemName = txtItemName.value.trim();
 
             if (!itemName) {
-              txtItemName.classList.add('is-invalid');
-              txtItemName.focus();
-              return;
+                txtItemName.classList.add('is-invalid');
+                txtItemName.focus();
+                return;
             }
 
             txtItemName.classList.remove('is-invalid');
-
-            // Route execution to specific AJAX API function
+             
+            const $btn = $("#btnSaveModal");
+            if ($btn.prop("disabled")) return;
+            $btn.prop("disabled", true); 
             if (currentEntityType === 'group') {
-              saveGroupAPI(itemName);
+                saveGroupAPI(itemName);
             } else if (currentEntityType === 'category') {
-              saveCategoryAPI(itemName);
+                saveCategoryAPI(itemName);
             } else if (currentEntityType === 'brand') {
-              saveBrandAPI(itemName);
+                saveBrandAPI(itemName);
             }
-            $("#btnSaveModal").prop("disabled",true);
-          });
-
-          // ==========================================
-          // 1. SEPARATE GROUP API CALL
-          // ==========================================
-          function saveGroupAPI(groupName) {
+        });
+         
+        function saveGroupAPI(groupName) {
+            // alert(groupName);
             const config = entityConfig.group;
-            console.log(config);
             $.ajax({
-              url: config.apiUrl,
-              type: 'POST',
-              contentType: 'application/json',
-              data: JSON.stringify({ Name: groupName }),
-              success: function (response) {
-                // Append new item into #ddlGroup dropdown
-                const id = response.id || groupName;
-                $(config.selectId).append(new Option(groupName, id, true, true));
+                url: config.apiUrl,
+                type: 'POST',
+                headers: { 'Authorization': token ? `Bearer ${token}` : '' },
+                contentType: 'application/json',
+                data: JSON.stringify({ Name: groupName }),
+                success: function (response) {
+                    console.log(response); 
+                    const createdId = response.data ; // || response.Id || (response.data && response.data.id) || response.Data;
 
-                itemModal.hide();
-              },
-              error: function (xhr, status, error) {
-                alert('Error saving Product Group: ' + error);
-              }
+                    if (createdId) {
+                        appendToSelect(config.selectId, groupName, createdId);
+                        notyf.success("Product Group saved successfully!");
+                        itemModal.hide();
+                    } else {
+                        notyf.error("Saved, but failed to retrieve entity ID.");
+                    }
+                },
+                error: function (xhr) {
+                    const errRes = xhr.responseJSON;
+                    const msg = errRes?.message || errRes?.Message || "Error saving Product Group.";
+                    notyf.error(msg);
+                },
+                complete: function () { 
+                    $("#btnSaveModal").prop("disabled", false);
+                }
             });
-          }
-
-          // ==========================================
-          // 2. SEPARATE CATEGORY API CALL
-          // ==========================================
-          function saveCategoryAPI(categoryName) {
+        }
+         
+        function saveCategoryAPI(categoryName) {
             const config = entityConfig.category;
-
             $.ajax({
-              url: config.apiUrl,
-              type: 'POST',
-              contentType: 'application/json',
-              data: JSON.stringify({ Name: categoryName }),
-              success: function (response) {
-                // Append new item into #ddlCategory dropdown
-                const id = response.id || categoryName;
-                $(config.selectId).append(new Option(categoryName, id, true, true));
-
-                itemModal.hide();
-              },
-              error: function (xhr, status, error) {
-                alert('Error saving Category: ' + error);
-              }
+                url: config.apiUrl,
+                type: 'POST',
+                headers: { 'Authorization': token ? `Bearer ${token}` : '' },
+                contentType: 'application/json',
+                data: JSON.stringify({ Name: categoryName }),
+                success: function (response) {
+                       console.log(response);
+                       const createdId = response.data ; 
+                    if (createdId) {
+                        appendToSelect(config.selectId, categoryName, createdId);
+                        notyf.success("Category saved successfully!");
+                        itemModal.hide();
+                    } else {
+                        notyf.error("Saved, but failed to retrieve entity ID.");
+                    }
+                },
+                error: function (xhr) {
+                    const errRes = xhr.responseJSON;
+                    const msg = errRes?.message || errRes?.Message || "Error saving Category.";
+                    notyf.error(msg);
+                },
+                complete: function () {
+                    $("#btnSaveModal").prop("disabled", false);
+                }
             });
-          }
-
-          // ==========================================
-          // 3. SEPARATE BRAND API CALL
-          // ==========================================
-          function saveBrandAPI(brandName) {
+        }
+         
+        function saveBrandAPI(brandName) {
             const config = entityConfig.brand;
-
             $.ajax({
-              url: config.apiUrl,
-              type: 'POST',
-              contentType: 'application/json',
-              data: JSON.stringify({ Name: brandName }),
-              success: function (response) {
-                // Append new item into #ddlBrand dropdown
-                const id = response.id || brandName;
-                $(config.selectId).append(new Option(brandName, id, true, true));
-
-                itemModal.hide();
-              },
-              error: function (xhr, status, error) {
-                alert('Error saving Brand: ' + error);
-              }
+                url: config.apiUrl,
+                type: 'POST',
+                headers: { 'Authorization': token ? `Bearer ${token}` : '' },
+                contentType: 'application/json',
+                data: JSON.stringify({ Name: brandName }),
+                success: function (response) {
+                       console.log(response);
+                       const createdId = response.data ; 
+                    if (createdId) {
+                        appendToSelect(config.selectId, brandName, createdId);
+                        notyf.success("Brand saved successfully!");
+                        itemModal.hide();
+                    } else {
+                        notyf.error("Saved, but failed to retrieve entity ID.");
+                    }
+                },
+                error: function (xhr) {
+                    const errRes = xhr.responseJSON;
+                    const msg = errRes?.message || errRes?.Message || "Error saving Brand.";
+                    notyf.error(msg);
+                },
+                complete: function () {
+                    $("#btnSaveModal").prop("disabled", false);
+                }
             });
-          }
+        }
+          
 
         });
 
 
+                // Toggle A4 Custom Controls
+        function handlePaperSizeChange() {
+            const paperSize = $("#ddlPaperSize").val();
+            if (paperSize === "A4") {
+                $("#a4OptionsSection").removeClass("d-none");
+            } else {
+                $("#a4OptionsSection").addClass("d-none");
+            }
+        }
+
+        // Update resetForm method to hide barcode option
+        const originalResetForm = resetForm;
+        resetForm = function() {
+            $("#txtProductId").val("0");
+            $("#productForm")[0].reset();
+
+            $("#txtProductCode").val("").prop("disabled", true);
+            $("#ddlProductUnitType").prop("disabled", false);
+            $("#chkSerialProduct").prop("disabled", false);
+
+            $("#btnSave").removeClass("d-none").prop("disabled", false).text("Save Product");
+            $("#btnUpdate").addClass("d-none");
+           // $("#codeGeneratorSection").addClass("d-none"); // Hide Code Section
+
+            imgPreview.src = "";
+            imgPreview.classList.add('d-none');
+            uploadPlaceholder.classList.remove('d-none');
+        };
+
+        // Update EditProduct method to show barcode option
+        const originalEditProduct = EditProduct;
+        EditProduct = function(jsonString) {
+            originalEditProduct(jsonString);
+            $("#codeGeneratorSection").removeClass("d-none"); // Show Code Section in Edit Mode
+        };
+
+
+                async function getCompanyDetails() {
+            try {
+                const response = await $.ajax({
+                    url: `${APP_CONFIG.API_BASE_URL}api/Company/GetCompanyAllInformation`, // Adjust base controller if needed
+                    type: "GET",
+                    headers: { 'Authorization': token ? `Bearer ${token}` : '' }
+                });
+
+                console.log('hello hasan comp');
+                console.log();
+                console.log(response);
+                // Pick first company object or default fallback
+                const comp = Array.isArray(response) ? response[0] : (response.data ? response.data[0] : response);
+                return {
+                    companyName: comp?.name  || "My Company",
+                    websiteLink: comp?.websiteLink  || "https://example.com"
+                };
+            } catch (err) {
+                console.error("Error fetching company information:", err);
+                return { companyName: "Company Name", websiteLink: "https://example.com" };
+            }
+        }
+
+        // async function generateCode(type) {
+        //     const productName = $("#txtProductName").val().trim();
+        //     const productCode = $("#txtProductCode").val().trim();
+
+        //     if (!productCode || !productName) {
+        //         notyf.error("Product Name and Code are required to generate tags!");
+        //         return;
+        //     }
+
+        //     const paperSize = $("#ddlPaperSize").val();
+        //     let labelCount = 1;
+
+        //     if (paperSize === "A4") {
+        //         labelCount = parseInt($("#numA4Count").val()) || 24;
+        //     }
+
+        //     const $printArea = $("#printArea");
+        //     $printArea.empty(); 
+
+
+        //         if (type === 'BARCODE') {
+
+        //     $("#codeModalTitle").html(
+        //         '<i class="fa-solid fa-barcode me-2"></i> Modern Barcode Labels'
+        //     );
+
+        //     for (let i = 0; i < labelCount; i++) {
+
+        //         const cardId = `barcode-svg-${i}`;
+
+        //         const itemHtml = `
+        //             <div class="barcode-card"
+        //                  style="
+        //                     width: 170px;
+        //                     height: 100px;
+        //                     box-sizing: border-box;
+        //                     padding: 6px 8px;
+        //                     text-align: center;
+        //                     border: 1px solid var(--rebecca-solid);
+        //                     border-radius: 8px;
+        //                     background: #fff;
+        //                     overflow: hidden;
+        //                     display: flex;
+        //                     flex-direction: column;
+        //                     align-items: center;
+        //                 ">
+
+        //                 <!-- Product Name -->
+        //                 <div style="
+        //                     width: 100%;
+        //                     height: 28px;
+        //                     font-size: 11px;
+        //                     font-weight: 700;
+        //                     color: #333;
+        //                     line-height: 14px;
+        //                     text-align: center;
+
+        //                     display: -webkit-box;
+        //                     -webkit-line-clamp: 2;
+        //                     -webkit-box-orient: vertical;
+
+        //                     overflow: hidden;
+        //                     text-overflow: ellipsis;
+
+        //                     word-break: break-word;
+        //                     overflow-wrap: anywhere;
+
+        //                     flex-shrink: 0;
+        //                 ">
+        //                     ${productName}
+        //                 </div>
+
+        //                 <!-- Barcode -->
+        //                 <div style="
+        //                     width: 100%;
+        //                     height: 42px;
+        //                     display: flex;
+        //                     justify-content: center;
+        //                     align-items: center;
+        //                     flex-shrink: 0;
+        //                     margin-top: 2px;
+        //                 ">
+        //                     <svg id="${cardId}"
+        //                          style="
+        //                             max-width: 100%;
+        //                             height: 40px;
+        //                             display: block;
+        //                          ">
+        //                     </svg>
+        //                 </div>
+
+        //                 <!-- Product Code -->
+        //                 <div style="
+        //                     width: 100%;
+        //                     height: 16px;
+        //                     font-size: 10px;
+        //                     font-weight: 600;
+        //                     color: var(--rebecca-solid);
+        //                     letter-spacing: 1px;
+        //                     line-height: 16px;
+        //                     text-align: center;
+
+        //                     white-space: nowrap;
+        //                     overflow: hidden;
+        //                     text-overflow: ellipsis;
+
+        //                     flex-shrink: 0;
+        //                 ">
+        //                     ${productCode}
+        //                 </div>
+
+        //             </div>
+        //         `;
+
+        //         $printArea.append(itemHtml);
+
+        //         JsBarcode(`#${cardId}`, productCode, {
+
+        //             format: "CODE128",
+
+        //             width: 1.5,
+
+        //             height: 40,
+
+        //             displayValue: false,
+
+        //             margin: 0,
+
+        //             lineColor: "#1a0f30",
+                     
+        //             width: 1.5
+        //         });
+        //     }
+        // } 
+
+        //             else if (type === 'QRCODE') {
+
+        //     $("#codeModalTitle").html(
+        //         '<i class="fa-solid fa-qrcode me-2"></i> Modern QR Code Labels'
+        //     );
+
+        //     const companyInfo = await getCompanyDetails();
+
+        //     const qrText =
+        //         `Company: ${companyInfo.companyName}\n` +
+        //         `Web: ${companyInfo.websiteLink}\n` +
+        //         `Product: ${productName}`;
+
+        //     for (let i = 0; i < labelCount; i++) {
+
+        //         const qrContainerId = `qrcode-div-${i}`;
+
+        //         const itemHtml = `
+        //             <div class="qrcode-card bg-white"
+        //                  style="
+        //                     width: 170px;
+        //                     height: 188px;
+        //                     display: flex;
+        //                     align-items: center;
+        //                     justify-content: center;
+        //                     background: #fff;
+        //                     overflow: hidden;
+        //                  ">
+        //                 <div id="${qrContainerId}"></div>
+        //             </div>
+        //         `;
+
+        //         $printArea.append(itemHtml);
+                 
+
+        //         const utf8Bytes = new TextEncoder().encode(qrText);
+                 
+        //         let binaryData = "";
+
+        //         for (const byte of utf8Bytes) {
+        //             binaryData += String.fromCharCode(byte);
+        //         }
+
+        //         /*
+        //          * ==========================================
+        //          * CREATE QR
+        //          * ==========================================
+        //          */
+
+        //         const qr = qrcode(0, 'M');
+
+        //         qr.addData(binaryData, 'Byte');
+
+        //         qr.make();
+
+        //         /*
+        //          * ==========================================
+        //          * SVG QR
+        //          * ==========================================
+        //          */
+
+        //         const svg = qr.createSvgTag({
+        //             scalable: true,
+        //             margin: 0
+        //         });
+
+        //         const container =
+        //             document.getElementById(qrContainerId);
+
+        //         container.innerHTML = svg;
+
+        //         /*
+        //          * ==========================================
+        //          * SIZE
+        //          * ==========================================
+        //          */
+
+        //         const svgElement =
+        //             container.querySelector("svg");
+
+        //         if (svgElement) {
+
+        //             svgElement.setAttribute(
+        //                 "width",
+        //                 "165"
+        //             );
+
+        //             svgElement.setAttribute(
+        //                 "height",
+        //                 "165"
+        //             );
+
+        //             svgElement.style.width = "165px";
+        //             svgElement.style.height = "165px";
+        //             svgElement.style.display = "block";
+        //         }
+        //     }
+        // } 
+
+        //     const previewModal = new bootstrap.Modal(document.getElementById('modalCodePreview'));
+        //     previewModal.show();
+        // }
+
+
+                let generatedCodeType = null;
+
+
+        async function generateCode(type) {
+
+            generatedCodeType = type;
+
+            const productName = $("#txtProductName").val().trim();
+            const productCode = $("#txtProductCode").val().trim();
+
+            if (!productCode || !productName) {
+                notyf.error("Product Name and Code are required to generate tags!");
+                return;
+            }
+
+            const paperSize = $("#ddlPaperSize").val();
+
+            let labelCount = 1;
+
+            if (paperSize === "A4") {
+                labelCount = parseInt($("#numA4Count").val()) || 24;
+            }
+
+            const $printArea = $("#printArea");
+
+            $printArea.empty();
+
+
+            // =====================================================
+            // BARCODE
+            // =====================================================
+
+            if (type === "BARCODE") {
+
+                $("#codeModalTitle").html(
+                    '<i class="fa-solid fa-barcode me-2"></i> Barcode Labels'
+                );
+
+                for (let i = 0; i < labelCount; i++) {
+
+                    const cardId = `barcode-svg-${i}`;
+
+                    const itemHtml = `
+                        <div class="barcode-card"
+                             style="
+                                width:170px;
+                                height:100px;
+                                box-sizing:border-box;
+                                padding:6px 8px;
+                                text-align:center;
+                                border:1px solid var(--rebecca-solid);
+                                border-radius:8px;
+                                background:#fff;
+                                overflow:hidden;
+                                display:flex;
+                                flex-direction:column;
+                                align-items:center;
+                             ">
+
+                            <!-- Product Name -->
+                            <div style="
+                                width:100%;
+                                height:28px;
+                                font-size:11px;
+                                font-weight:700;
+                                color:#333;
+                                line-height:14px;
+                                text-align:center;
+
+                                display:-webkit-box;
+                                -webkit-line-clamp:2;
+                                -webkit-box-orient:vertical;
+
+                                overflow:hidden;
+                                text-overflow:ellipsis;
+
+                                word-break:break-word;
+                                overflow-wrap:anywhere;
+
+                                flex-shrink:0;
+                            ">
+                                ${productName}
+                            </div>
+
+
+                            <!-- Barcode -->
+                            <div style="
+                                width:100%;
+                                height:42px;
+                                display:flex;
+                                justify-content:center;
+                                align-items:center;
+                                flex-shrink:0;
+                                margin-top:2px;
+                            ">
+                                <svg id="${cardId}"
+                                     style="
+                                        max-width:100%;
+                                        height:40px;
+                                        display:block;
+                                     ">
+                                </svg>
+                            </div>
+
+
+                            <!-- Product Code -->
+                            <div style="
+                                width:100%;
+                                height:16px;
+                                font-size:10px;
+                                font-weight:600;
+                                color:var(--rebecca-solid);
+                                letter-spacing:1px;
+                                line-height:16px;
+                                text-align:center;
+
+                                white-space:nowrap;
+                                overflow:hidden;
+                                text-overflow:ellipsis;
+
+                                flex-shrink:0;
+                            ">
+                                ${productCode}
+                            </div>
+
+                        </div>
+                    `;
+
+                    $printArea.append(itemHtml);
+
+
+                    JsBarcode(`#${cardId}`, productCode, {
+
+                        format: "CODE128",
+
+                        width: 1.5,
+
+                        height: 40,
+
+                        displayValue: false,
+
+                        margin: 0,
+
+                        lineColor: "#1a0f30"
+                    });
+                }
+            }
+
+
+            // =====================================================
+            // QR CODE
+            // =====================================================
+
+            else if (type === "QRCODE") {
+
+                $("#codeModalTitle").html(
+                    '<i class="fa-solid fa-qrcode me-2"></i>QR Code Labels'
+                );
+
+                const companyInfo = await getCompanyDetails();
+
+                const qrText =
+                    `Company: ${companyInfo.companyName}\n` +
+                    `Web: ${companyInfo.websiteLink}\n` +
+                    `Product: ${productName}`;
+
+
+                for (let i = 0; i < labelCount; i++) {
+
+                    const qrContainerId = `qrcode-div-${i}`;
+
+                    const itemHtml = `
+                        <div class="qrcode-card bg-white"
+                             style="
+                                width:170px;
+                                height:188px;
+
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+
+                                background:#fff;
+
+                                overflow:hidden;
+                             ">
+
+                            <div id="${qrContainerId}"></div>
+
+                        </div>
+                    `;
+
+                    $printArea.append(itemHtml);
+
+
+                    /*
+                     * UTF-8
+                     */
+
+                    const utf8Bytes =
+                        new TextEncoder().encode(qrText);
+
+                    let binaryData = "";
+
+                    for (const byte of utf8Bytes) {
+                        binaryData += String.fromCharCode(byte);
+                    }
+
+
+                    /*
+                     * Create QR
+                     */
+
+                    const qr = qrcode(0, "M");
+
+                    qr.addData(binaryData, "Byte");
+
+                    qr.make();
+
+
+                    /*
+                     * SVG
+                     */
+
+                    const svg = qr.createSvgTag({
+                        scalable: true,
+                        margin: 0
+                    });
+
+
+                    const container =
+                        document.getElementById(qrContainerId);
+
+                    container.innerHTML = svg;
+
+
+                    const svgElement =
+                        container.querySelector("svg");
+
+
+                    if (svgElement) {
+
+                        svgElement.setAttribute(
+                            "width",
+                            "165"
+                        );
+
+                        svgElement.setAttribute(
+                            "height",
+                            "165"
+                        );
+
+                        svgElement.style.width = "165px";
+
+                        svgElement.style.height = "165px";
+
+                        svgElement.style.display = "block";
+                    }
+                }
+            }
+
+
+            /*
+             * Show preview
+             */
+
+            const previewModal =
+                new bootstrap.Modal(
+                    document.getElementById("modalCodePreview")
+                );
+
+            previewModal.show();
+        }
+
+
+                async function printGeneratedCode() {
+
+            const printArea =
+                document.getElementById("printArea");
+
+            if (!printArea || !printArea.innerHTML.trim()) {
+
+                notyf.error(
+                    "No code available to print!"
+                );
+
+                return;
+            }
+
+
+            if (typeof html2canvas === "undefined") {
+
+                console.error(
+                    "html2canvas is not loaded."
+                );
+
+                notyf.error(
+                    "html2canvas library is not loaded!"
+                );
+
+                return;
+            }
+
+
+            if (
+                !window.jspdf ||
+                !window.jspdf.jsPDF
+            ) {
+
+                console.error(
+                    "jsPDF is not loaded."
+                );
+
+                notyf.error(
+                    "PDF library is not loaded!"
+                );
+
+                return;
+            }
+
+
+            try {
+
+                const { jsPDF } = window.jspdf;
+
+
+                // =====================================================
+                // A4 SETTINGS
+                // =====================================================
+
+                const marginX = 10;
+                const marginY = 10;
+
+                const cardWidth = 45;
+                const cardHeight =
+                    generatedCodeType === "BARCODE"
+                        ? 27
+                        : 50;
+
+                const gapX = 3;
+                const gapY = 3;
+
+                const columns = 4;
+                const rows =
+                    generatedCodeType === "BARCODE"
+                        ? 9
+                        : 5;
+
+
+                // =====================================================
+                // CREATE PDF
+                // =====================================================
+
+                const pdf = new jsPDF({
+
+                    orientation: "portrait",
+
+                    unit: "mm",
+
+                    format: "a4",
+
+                    compress: true
+                });
+
+
+                // =====================================================
+                // GET CARDS BASED ON TYPE
+                // =====================================================
+
+                const selector =
+                    generatedCodeType === "BARCODE"
+                        ? ".barcode-card"
+                        : ".qrcode-card";
+
+
+                const cards = Array.from(
+                    printArea.querySelectorAll(selector)
+                );
+
+
+                if (cards.length === 0) {
+
+                    notyf.error(
+                        generatedCodeType === "BARCODE"
+                            ? "No barcode found!"
+                            : "No QR code found!"
+                    );
+
+                    return;
+                }
+
+
+                // =====================================================
+                // TEMP CONTAINER
+                // =====================================================
+
+                const renderContainer =
+                    document.createElement("div");
+
+
+                renderContainer.style.position =
+                    "fixed";
+
+                renderContainer.style.left =
+                    "-100000px";
+
+                renderContainer.style.top =
+                    "0";
+
+                renderContainer.style.background =
+                    "#ffffff";
+
+                renderContainer.style.zIndex =
+                    "-9999";
+
+
+                document.body.appendChild(
+                    renderContainer
+                );
+
+
+                // =====================================================
+                // RENDER CARD
+                // =====================================================
+
+                async function addCardToPDF(
+                    card,
+                    x,
+                    y
+                ) {
+
+                    const clone =
+                        card.cloneNode(true);
+
+
+                    if (
+                        generatedCodeType ===
+                        "BARCODE"
+                    ) {
+
+                        /*
+                         * Barcode
+                         */
+
+                        clone.style.width =
+                            "170px";
+
+                        clone.style.height =
+                            "100px";
+
+                        clone.style.boxSizing =
+                            "border-box";
+
+                        clone.style.backgroundColor =
+                            "#ffffff";
+
+                        clone.style.margin =
+                            "0";
+
+                        clone.style.padding =
+                            "6px 8px";
+
+                    }
+                    else {
+
+                        /*
+                         * QR
+                         */
+
+                        clone.style.width =
+                            "170px";
+
+                        clone.style.height =
+                            "188px";
+
+                        clone.style.boxSizing =
+                            "border-box";
+
+                        clone.style.backgroundColor =
+                            "#ffffff";
+
+                        clone.style.margin =
+                            "0";
+
+                        clone.style.padding =
+                            "0";
+                    }
+
+
+                    clone.style.fontFamily =
+                        "Arial, sans-serif";
+
+                    clone.style.transform =
+                        "none";
+
+                    clone.style.boxShadow =
+                        "none";
+
+
+                    renderContainer.innerHTML =
+                        "";
+
+                    renderContainer.appendChild(
+                        clone
+                    );
+
+
+                    await new Promise(
+                        resolve =>
+                            requestAnimationFrame(
+                                resolve
+                            )
+                    );
+
+
+                    // =================================================
+                    // HIGH RESOLUTION
+                    // =================================================
+
+                    const canvas =
+                        await html2canvas(
+                            clone,
+                            {
+
+                                scale: 4,
+
+                                useCORS: true,
+
+                                allowTaint: false,
+
+                                backgroundColor:
+                                    "#ffffff",
+
+                                logging: false,
+
+                                imageTimeout:
+                                    15000,
+
+                                width: 170,
+
+                                height:
+                                    generatedCodeType ===
+                                    "BARCODE"
+                                        ? 100
+                                        : 188,
+
+                                windowWidth: 170,
+
+                                windowHeight:
+                                    generatedCodeType ===
+                                    "BARCODE"
+                                        ? 100
+                                        : 188
+                            }
+                        );
+
+
+                    const imageData =
+                        canvas.toDataURL(
+                            "image/png"
+                        );
+
+
+                    // =================================================
+                    // ADD TO PDF
+                    // =================================================
+
+                    pdf.addImage(
+
+                        imageData,
+
+                        "PNG",
+
+                        x,
+
+                        y,
+
+                        cardWidth,
+
+                        cardHeight,
+
+                        undefined,
+
+                        "NONE"
+                    );
+                }
+
+
+                // =====================================================
+                // PAGE GENERATION
+                // =====================================================
+
+                let index = 0;
+
+                let pageNumber = 0;
+
+
+                while (index < cards.length) {
+
+                    if (pageNumber > 0) {
+
+                        pdf.addPage();
+                    }
+
+
+                    for (
+                        let row = 0;
+                        row < rows;
+                        row++
+                    ) {
+
+                        for (
+                            let col = 0;
+                            col < columns;
+                            col++
+                        ) {
+
+                            if (
+                                index >=
+                                cards.length
+                            ) {
+                                break;
+                            }
+
+
+                            const x =
+                                marginX +
+                                col *
+                                (cardWidth + gapX);
+
+
+                            const y =
+                                marginY +
+                                row *
+                                (cardHeight + gapY);
+
+
+                            await addCardToPDF(
+
+                                cards[index],
+
+                                x,
+
+                                y
+                            );
+
+
+                            index++;
+                        }
+                    }
+
+
+                    pageNumber++;
+                }
+
+
+                // =====================================================
+                // CLEAN
+                // =====================================================
+
+                document.body.removeChild(
+                    renderContainer
+                );
+
+
+                // =====================================================
+                // OPEN PDF
+                // =====================================================
+
+                const blob =
+                    pdf.output("blob");
+
+
+                const url =
+                    URL.createObjectURL(blob);
+
+
+                window.open(
+                    url,
+                    "_blank"
+                );
+
+
+                notyf.success(
+                    generatedCodeType === "BARCODE"
+                        ? "Barcode PDF generated successfully!"
+                        : "QR Code PDF generated successfully!"
+                );
+
+
+                setTimeout(
+                    () => {
+                        URL.revokeObjectURL(
+                            url
+                        );
+                    },
+                    60000
+                );
+
+
+            }
+            catch (error) {
+
+                console.error(
+                    "PDF generation error:",
+                    error
+                );
+
+                notyf.error(
+                    "Failed to generate PDF!"
+                );
+            }
+        }
 
 
 
+        //         async function printGeneratedCode() {
+
+        //     const printArea = document.getElementById("printArea");
+
+        //     if (!printArea || !printArea.innerHTML.trim()) {
+        //         notyf.error("No code available to print!");
+        //         return;
+        //     }
+
+        //     // Check html2canvas
+        //     if (typeof html2canvas === "undefined") {
+        //         console.error("html2canvas is not loaded.");
+        //         notyf.error("html2canvas library is not loaded!");
+        //         return;
+        //     }
+
+        //     // Check jsPDF
+        //     if (!window.jspdf || !window.jspdf.jsPDF) {
+        //         console.error("jsPDF is not loaded.");
+        //         notyf.error("PDF library is not loaded!");
+        //         return;
+        //     }
+
+        //     try {
+
+        //         const { jsPDF } = window.jspdf;
+                 
+
+        //         const pageWidth = 210;   // mm
+        //         const pageHeight = 297;  // mm
+
+        //         const marginX = 10;
+        //         const marginY = 10;
+
+        //         // 4 columns × 5 rows = 20 labels
+        //         const columns = 4;
+        //         const rows = 5;
+
+        //         const gapX = 3;
+        //         const gapY = 3;
+
+        //         const cardWidth = 45;
+        //         const cardHeight = 50;
+
+        //         /*
+        //          * ================================
+        //          * CREATE PDF
+        //          * ================================
+        //          */
+
+        //         const pdf = new jsPDF({
+        //             orientation: "portrait",
+        //             unit: "mm",
+        //             format: "a4",
+        //             compress: true
+        //         });
+
+        //         const cards = Array.from(
+        //             printArea.querySelectorAll(".qrcode-card")
+        //         );
+
+        //         if (cards.length === 0) {
+        //             notyf.error("No QR code found!");
+        //             return;
+        //         }
+                 
+        //         const renderContainer = document.createElement("div");
+
+        //         renderContainer.style.position = "fixed";
+        //         renderContainer.style.left = "-100000px";
+        //         renderContainer.style.top = "0";
+        //         renderContainer.style.width = "170px";
+        //         renderContainer.style.background = "#ffffff";
+        //         renderContainer.style.zIndex = "-9999";
+
+        //         document.body.appendChild(renderContainer);
+                 
+
+        //         async function addCardToPDF(card, x, y) {
+
+        //             // Clone card
+        //             const clone = card.cloneNode(true);
+
+        //             /*
+        //              * Force exact rendering size
+        //              */
+        //             clone.style.width = "170px";
+        //             clone.style.height = "188px";
+        //             clone.style.boxSizing = "border-box";
+
+        //             clone.style.backgroundColor = "#ffffff";
+        //             clone.style.margin = "0";
+        //             clone.style.padding = "8px";
+
+        //             /*
+        //              * Make sure Bangla/English text
+        //              * uses browser rendering.
+        //              */
+        //             clone.style.fontFamily =
+        //                 "Arial, 'Noto Sans Bengali', 'SolaimanLipi', sans-serif";
+
+        //             /*
+        //              * Remove Bootstrap effects that can
+        //              * sometimes affect screenshot rendering.
+        //              */
+        //             clone.style.transform = "none";
+        //             clone.style.boxShadow = "none";
+
+        //             renderContainer.innerHTML = "";
+        //             renderContainer.appendChild(clone);
+
+        //             /*
+        //              * Wait for browser to render
+        //              */
+        //             await new Promise(resolve =>
+        //                 requestAnimationFrame(resolve)
+        //             );
+                     
+
+        //             const canvas = await html2canvas(clone, {
+
+        //                 scale: 4,
+
+        //                 useCORS: true,
+
+        //                 allowTaint: false,
+
+        //                 backgroundColor: "#ffffff",
+
+        //                 logging: false,
+
+        //                 imageTimeout: 15000,
+
+        //                 /*
+        //                  * Keep exact dimensions
+        //                  */
+        //                 width: 170,
+        //                 height: 188,
+
+        //                 windowWidth: 170,
+        //                 windowHeight: 188
+        //             });
+
+
+        //             /*
+        //              * Convert to PNG
+        //              */
+        //             const imageData = canvas.toDataURL(
+        //                 "image/png"
+        //             );
+
+
+        //             /*
+        //              * Put image into exact physical
+        //              * A4 size.
+        //              */
+        //             pdf.addImage(
+        //                 imageData,
+        //                 "PNG",
+        //                 x,
+        //                 y,
+        //                 cardWidth,
+        //                 cardHeight,
+        //                 undefined,
+        //                 "NONE"
+        //             );
+        //         } 
+
+        //         let index = 0;
+
+        //         while (index < cards.length) {
+                     
+        //             if (index > 0) {
+        //                 pdf.addPage();
+        //             }
+                     
+
+        //             for (let row = 0; row < rows; row++) {
+
+        //                 for (let col = 0; col < columns; col++) {
+
+        //                     if (index >= cards.length) {
+        //                         break;
+        //                     }
+
+        //                     const x =
+        //                         marginX +
+        //                         col * (cardWidth + gapX);
+
+        //                     const y =
+        //                         marginY +
+        //                         row * (cardHeight + gapY);
+
+
+        //                     await addCardToPDF(
+        //                         cards[index],
+        //                         x,
+        //                         y
+        //                     );
+
+        //                     index++;
+        //                 }
+
+        //             }
+        //         } 
+
+        //         document.body.removeChild(renderContainer);
+                 
+
+        //         const blob = pdf.output("blob");
+
+        //         const url = URL.createObjectURL(blob);
+
+        //         window.open(url, "_blank");
+
+
+        //         notyf.success(
+        //             "PDF generated successfully!"
+        //         );
+                 
+        //         setTimeout(() => {
+        //             URL.revokeObjectURL(url);
+        //         }, 60000);
+
+
+        //     } catch (error) {
+
+        //         console.error(
+        //             "PDF generation error:",
+        //             error
+        //         );
+
+        //         notyf.error(
+        //             "Failed to generate PDF!"
+        //         );
+        //     }
+        // }
+
+
+
+
+
+        //====================== working perfect ==============
+
+        //         async function printGeneratedCode() {
+
+        //     const printArea = document.getElementById("printArea");
+
+        //     if (!printArea || !printArea.innerHTML.trim()) {
+        //         notyf.error("No code available to print!");
+        //         return;
+        //     }
+
+        //     if (!window.jspdf) {
+        //         console.error("jsPDF is not loaded.");
+        //         notyf.error("PDF library is not loaded!");
+        //         return;
+        //     }
+
+        //     try {
+
+        //         const { jsPDF } = window.jspdf;
+
+        //         const pdf = new jsPDF({
+        //             orientation: "portrait",
+        //             unit: "mm",
+        //             format: "a4"
+        //         });
+
+        //         const cards = printArea.querySelectorAll(".qrcode-card");
+
+        //         if (cards.length === 0) {
+        //             notyf.error("No QR code found!");
+        //             return;
+        //         }
+
+        //         // A4 dimensions
+        //         const pageWidth = 210;
+        //         const pageHeight = 297;
+
+        //         const marginX = 10;
+        //         const marginY = 10;
+
+        //         const cardWidth = 45;
+        //         const cardHeight = 50;
+
+        //         const gapX = 3;
+        //         const gapY = 3;
+
+        //         const columns = 4;
+        //         const rows = 5;
+
+        //         let index = 0;
+
+        //         for (let row = 0; row < rows; row++) {
+
+        //             for (let col = 0; col < columns; col++) {
+
+        //                 if (index >= cards.length) {
+        //                     break;
+        //                 }
+
+        //                 const card = cards[index];
+
+        //                 const x = marginX + col * (cardWidth + gapX);
+        //                 const y = marginY + row * (cardHeight + gapY);
+
+        //                 // Border
+        //                 pdf.setDrawColor(180, 180, 180);
+        //                 pdf.rect(x, y, cardWidth, cardHeight);
+
+        //                 // Company
+        //                 const companyElement = card.children[0];
+
+        //                 pdf.setFontSize(8);
+        //                 pdf.setFont(undefined, "bold");
+
+        //                 pdf.text(
+        //                     companyElement.innerText || "",
+        //                     x + cardWidth / 2,
+        //                     y + 5,
+        //                     {
+        //                         align: "center",
+        //                         maxWidth: cardWidth - 4
+        //                     }
+        //                 );
+
+        //                 // QR Canvas
+        //                 const qrCanvas = card.querySelector("canvas");
+
+        //                 if (qrCanvas) {
+
+        //                     // Use PNG with original QR canvas
+        //                     const qrImage = qrCanvas.toDataURL(
+        //                         "image/png",
+        //                         1.0
+        //                     );
+
+        //                     const qrSize = 30;
+
+        //                     pdf.addImage(
+        //                         qrImage,
+        //                         "PNG",
+        //                         x + (cardWidth - qrSize) / 2,
+        //                         y + 7,
+        //                         qrSize,
+        //                         qrSize,
+        //                         undefined,
+        //                         "NONE"
+        //                     );
+        //                 }
+
+        //                 // Product name
+        //                 const productElement = card.children[2];
+
+        //                 pdf.setFontSize(7);
+        //                 pdf.setFont(undefined, "normal");
+
+        //                 pdf.text(
+        //                     productElement.innerText || "",
+        //                     x + cardWidth / 2,
+        //                     y + 40,
+        //                     {
+        //                         align: "center",
+        //                         maxWidth: cardWidth - 4
+        //                     }
+        //                 );
+
+        //                 // Website
+        //                 const websiteElement = card.children[3];
+
+        //                 pdf.setFontSize(5.5);
+
+        //                 pdf.text(
+        //                     websiteElement.innerText || "",
+        //                     x + cardWidth / 2,
+        //                     y + 45,
+        //                     {
+        //                         align: "center",
+        //                         maxWidth: cardWidth - 4
+        //                     }
+        //                 );
+
+        //                 index++;
+        //             }
+        //         }
+
+        //         // If more than 20 labels
+        //         while (index < cards.length) {
+
+        //             pdf.addPage();
+
+        //             for (let row = 0; row < rows; row++) {
+
+        //                 for (let col = 0; col < columns; col++) {
+
+        //                     if (index >= cards.length) {
+        //                         break;
+        //                     }
+
+        //                     const card = cards[index];
+
+        //                     const x = marginX + col * (cardWidth + gapX);
+        //                     const y = marginY + row * (cardHeight + gapY);
+
+        //                     pdf.setDrawColor(180, 180, 180);
+        //                     pdf.rect(x, y, cardWidth, cardHeight);
+
+        //                     const companyElement = card.children[0];
+
+        //                     pdf.setFontSize(8);
+        //                     pdf.setFont(undefined, "bold");
+
+        //                     pdf.text(
+        //                         companyElement.innerText || "",
+        //                         x + cardWidth / 2,
+        //                         y + 5,
+        //                         {
+        //                             align: "center",
+        //                             maxWidth: cardWidth - 4
+        //                         }
+        //                     );
+
+        //                     const qrCanvas = card.querySelector("canvas");
+
+        //                     if (qrCanvas) {
+
+        //                         const qrImage =
+        //                             qrCanvas.toDataURL("image/png", 1.0);
+
+        //                         const qrSize = 30;
+
+        //                         pdf.addImage(
+        //                             qrImage,
+        //                             "PNG",
+        //                             x + (cardWidth - qrSize) / 2,
+        //                             y + 7,
+        //                             qrSize,
+        //                             qrSize,
+        //                             undefined,
+        //                             "NONE"
+        //                         );
+        //                     }
+
+        //                     const productElement = card.children[2];
+
+        //                     pdf.setFontSize(7);
+
+        //                     pdf.text(
+        //                         productElement.innerText || "",
+        //                         x + cardWidth / 2,
+        //                         y + 40,
+        //                         {
+        //                             align: "center",
+        //                             maxWidth: cardWidth - 4
+        //                         }
+        //                     );
+
+        //                     const websiteElement = card.children[3];
+
+        //                     pdf.setFontSize(5.5);
+
+        //                     pdf.text(
+        //                         websiteElement.innerText || "",
+        //                         x + cardWidth / 2,
+        //                         y + 45,
+        //                         {
+        //                             align: "center",
+        //                             maxWidth: cardWidth - 4
+        //                         }
+        //                     );
+
+        //                     index++;
+        //                 }
+        //             }
+        //         }
+
+        //         // Open PDF
+        //         const blob = pdf.output("blob");
+        //         const url = URL.createObjectURL(blob);
+
+        //         window.open(url, "_blank");
+
+        //         notyf.success("PDF generated successfully!");
+
+        //     } catch (error) {
+
+        //         console.error("PDF generation error:", error);
+
+        //         notyf.error("Failed to generate PDF!");
+        //     }
+        // }
+
+
+        //===================== this is working perfect ===================
+
+        //         async function printGeneratedCode() {
+
+        //     // Check first
+        //     if (!window.jspdf) {
+        //         console.error("❌ jsPDF not loaded");
+        //         return;
+        //     }
+
+        //     if (!window.html2canvas) {
+        //         console.error("❌ html2canvas not loaded");
+        //         return;
+        //     }
+
+        //     const printArea = document.getElementById("printArea");
+
+        //     if (!printArea || !printArea.innerHTML.trim()) {
+        //         notyf.error("No code available to print!");
+        //         return;
+        //     }
+
+        //     try {
+
+        //         const { jsPDF } = window.jspdf;
+
+        //         console.log("✅ jsPDF loaded:", jsPDF);
+
+        //         const canvas = await html2canvas(printArea, {
+        //             scale: 3,
+        //             backgroundColor: "#ffffff",
+        //             useCORS: true
+        //         });
+
+        //         const imgData = canvas.toDataURL("image/png");
+
+        //         const pdf = new jsPDF({
+        //             orientation: "portrait",
+        //             unit: "mm",
+        //             format: "a4"
+        //         });
+
+        //         const pageWidth = pdf.internal.pageSize.getWidth();
+        //         const pageHeight = pdf.internal.pageSize.getHeight();
+
+        //         const margin = 10;
+
+        //         const imgWidth = pageWidth - (margin * 2);
+        //         const imgHeight =
+        //             (canvas.height * imgWidth) / canvas.width;
+
+        //         pdf.addImage(
+        //             imgData,
+        //             "PNG",
+        //             margin,
+        //             margin,
+        //             imgWidth,
+        //             imgHeight
+        //         );
+
+        //         pdf.autoPrint();
+
+        //         const blob = pdf.output("blob");
+        //         const url = URL.createObjectURL(blob);
+
+        //         window.open(url, "_blank");
+
+        //         notyf.success("PDF generated successfully!");
+
+        //     } catch (error) {
+
+        //         console.error("PDF generation error:", error);
+
+        //         notyf.error("Failed to generate PDF!");
+        //     }
+        // }
     </script>
 }

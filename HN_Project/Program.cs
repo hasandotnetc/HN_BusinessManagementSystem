@@ -33,12 +33,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 
 //-------------------- DI For Controller ----------------//
+builder.Services.AddScoped<ICompany, CompanyRepository>();
+builder.Services.AddScoped<CompanyService>(); 
+builder.Services.AddScoped<ILocation, LocationRepository>();
+builder.Services.AddScoped<LocationService>(); 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<ISearchingByDapperRepository, SearchingByDapperRepository>();
 builder.Services.AddScoped<SearchingByDapperService>();
-builder.Services.AddScoped<IProductRepositroy, ProductRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ProductService>();
+
+builder.Services.AddScoped<ICustomerGroup, CustomerGroupRepository>();
+builder.Services.AddScoped<CustomerGroupService>();
+
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -59,7 +67,11 @@ builder.Services.AddScoped<JWTTokenService>();
 builder.Services.Configure<EmailSettingsDto>(builder.Configuration.GetSection("EmailSettings"));   //Email Sender Credential Setting from appsettings.json file.
 builder.Services.AddScoped<ISMSorEmailServices, SMSorEmailServices>();
 builder.Services.Configure<JwtSettingsDto>(builder.Configuration.GetSection("JwtSettings"));
-
+builder.Services.AddScoped<IEventNoOrCodeGeneration,EventNoOrCodeGenerationRepository>();
+builder.Services.AddScoped<IPaymentMethod, PaymentMethodRepository>();
+builder.Services.AddScoped<PaymentMethodService>();
+builder.Services.AddScoped<IPurchaseOrder, PurchaseOrderRepository>();
+builder.Services.AddScoped<PurchaseOrderService>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
