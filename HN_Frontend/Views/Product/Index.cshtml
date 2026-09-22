@@ -1010,21 +1010,49 @@
 
         }
 
-        async function loadDropdown(apiUrl, ddlId, valueField, textField, defaultText) { 
-            try { 
-                const response = await fetch(apiUrl);
-
+        async function loadDropdown(apiUrl, ddlId, valueField, textField, defaultText) {
+            try {
+               // alert(token);
+                const response = await fetch(apiUrl, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": token ? `Bearer ${token}` : ""
+                    }
+                });
+                // alert(token);
                 if (!response.ok)
-                    throw new Error("Failed to Load : " + apiUrl); 
-                const data = await response.json(); 
-                let html = `<option value="">${defaultText}</option>`; 
-                data.forEach(item => {   html += `   <option value="${item[valueField]}">  ${item[textField]}   </option>  `; }); 
-                $(ddlId).html(html); 
+                    throw new Error("Failed to Load : " + apiUrl);
+
+                const data = await response.json();
+
+                let html = `<option value="">${defaultText}</option>`;
+
+                data.forEach(item => {
+                    html += `<option value="${item[valueField]}">${item[textField]}</option>`;
+                });
+
+                $(ddlId).html(html);
             }
-            catch (error) { 
-                console.error(error); 
-            } 
+            catch (error) {
+                console.error(error);
+            }
         }
+
+        // async function loadDropdown(apiUrl, ddlId, valueField, textField, defaultText) { 
+        //     try { 
+        //         const response = await fetch(apiUrl);
+
+        //         if (!response.ok)
+        //             throw new Error("Failed to Load : " + apiUrl); 
+        //         const data = await response.json(); 
+        //         let html = `<option value="">${defaultText}</option>`; 
+        //         data.forEach(item => {   html += `   <option value="${item[valueField]}">  ${item[textField]}   </option>  `; }); 
+        //         $(ddlId).html(html); 
+        //     }
+        //     catch (error) { 
+        //         console.error(error); 
+        //     } 
+        // }
 
         let currentPage = 1;
         let pageSize = 10;
