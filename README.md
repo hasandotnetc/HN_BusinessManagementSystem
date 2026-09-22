@@ -1,0 +1,1 @@
+It will be a full Business ERP Solution Package with Administration & Security to Accounts with Code First Repository with .Net WEB API + Frontend + .FastReport + SMS/Email Notification + others tools used
