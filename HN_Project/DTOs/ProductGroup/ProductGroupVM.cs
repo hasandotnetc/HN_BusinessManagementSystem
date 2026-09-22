@@ -1,4 +1,4 @@
-﻿namespace HN_Backend.DTOs
+﻿namespace HN_Backend.DTOs.ProductGroup
 {
     public class ProductGroupVM
     {

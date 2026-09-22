@@ -1,5 +1,5 @@
-﻿using HN_Project.DTOs;
-using HN_Backend.Data;
+﻿using HN_Backend.Data;
+using HN_Backend.DTOs.Customer;
 
 namespace HN_Project.Mapper
 {
@@ -17,7 +17,7 @@ namespace HN_Project.Mapper
                 Address = customer.Address,
                 OpeningBalance = customer.OpeningBalance,
                 TotalSales = customer.TotalSales,
-                DueAmount = customer.DueAmount,
+                //DueAmount = customer.DueAmount,
                 Picture = customer.Picture,
             };
         }

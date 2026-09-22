@@ -1,219 +1,777 @@
-﻿<!DOCTYPE html>
+﻿@inject IConfiguration Configuration
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - HN_Frontend</title>
-    <script type="importmap"></script>
+
+    <!-- 🔒 1. AUTHENTICATION GUARD: লগইন না থাকলে সরাসরি Login Page-এ পাঠাবে -->
+    <script>
+        const APP_CONFIG = {
+            API_BASE_URL: '@Configuration["ApiSettings:BaseUrl"]'
+        };
+
+        function getAuthCookie(name) {
+            let value = `; ${document.cookie}`;
+            let parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        // টোকেন না থাকলে সরাসরি লগইন পেজে রিডাইরেক্ট করবে
+        const jwtToken = getAuthCookie("HN_JWT");
+        if (!jwtToken) {
+            window.location.href = '/Account/Login';
+        }
+    </script>
 
     <!-- Bootstrap & Toastr CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-
-    <!-- FontAwesome for Modern Navigation Icons -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <!-- Custom Modern Site Styling overrides -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HN_Frontend.styles.css" asp-append-version="true" />
 
     <style>
-        /* Modern RebeccaPurple Neon Style Navigation Theme */
+        /* =========================================================
+                           🛠️ CONTROLLER: SIDEBAR & TOPBAR DIMENSIONS CONTROL
+                           ========================================================= */
         :root {
             --rebecca-main: #663399;
-            --rebecca-dark: #4b236d;
+            --rebecca-dark: #3c1a5b;
             --rebecca-light: #7b3fa8;
+            --sidebar-width: 190px;
+            --topbar-height: 60px;
         }
 
         body {
-            background-color: #f8f9fa;
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
         }
 
-        /* Fixed / Freezing Sticky Header Wrapper */
-        header.sticky-header {
-            position: sticky;
+        /* ---------------------------------------------------------
+                           1. SMOOTH PAGE LOADER ANIMATION
+                           --------------------------------------------------------- */
+        #page-loader {
+            position: fixed;
             top: 0;
-            z-index: 1030; /* Ensure navbar stays above all page content */
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
-        /* Glassmorphic Top Navbar */
-        .custom-navbar {
-            background: linear-gradient(135deg, var(--rebecca-dark), var(--rebecca-main)) !important;
-            box-shadow: 0 4px 20px rgba(102, 51, 153, 0.25);
-            padding: 0.6rem 1.5rem;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
+        .loader-spinner {
+            width: 42px;
+            height: 42px;
+            border: 4px solid #e9d5ff;
+            border-top: 4px solid var(--rebecca-main);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
-        .navbar-brand-modern {
-            color: #ffffff !important;
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ---------------------------------------------------------
+                           2. LEFT SIDEBAR NAVIGATION STYLES
+                           --------------------------------------------------------- */
+        .app-sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, var(--rebecca-dark) 0%, #220e35 100%);
+            color: #ffffff;
+            z-index: 1040;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 3px 0 12px rgba(0, 0, 0, 0.12);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            height: var(--topbar-height);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 1.1rem;
             font-weight: 800;
-            letter-spacing: 0.5px;
-            font-size: 1.35rem;
+            color: #fff;
+            text-decoration: none;
+            gap: 8px;
+        }
+
+            .sidebar-brand i {
+                color: #d8b4fe;
+                font-size: 1.25rem;
+            }
+
+        .sidebar-menu {
+            padding: 0.8rem 0;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .menu-category-title {
+            padding: 0.6rem 1rem 0.2rem;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: rgba(255, 255, 255, 0.45);
+            font-weight: 700;
+        }
+
+        .sidebar-link {
+            padding: 0.55rem 1rem;
+            color: rgba(255, 255, 255, 0.8) !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            font-size: 0.84rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+            .sidebar-link:hover, .sidebar-link.active {
+                color: #ffffff !important;
+                background: rgba(255, 255, 255, 0.1);
+                border-left-color: #c084fc;
+            }
+
+            .sidebar-link .link-icon {
+                width: 20px;
+                font-size: 0.95rem;
+                margin-right: 6px;
+                text-align: center;
+            }
+
+        .submenu {
+            background: rgba(0, 0, 0, 0.25);
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .submenu-link {
+            padding: 0.45rem 1rem 0.45rem 2.6rem;
+            color: rgba(255, 255, 255, 0.7) !important;
+            display: block;
+            text-decoration: none;
+            font-size: 0.78rem;
+            transition: all 0.2s ease;
+        }
+
+            .submenu-link:hover, .submenu-link.active {
+                color: #ffffff !important;
+                background: rgba(255, 255, 255, 0.08);
+            }
+
+
+
+
+
+
+        /* =========================================================
+           3. MODERN & ELEGANT TOPBAR HEADER STYLING
+           ========================================================= */
+        .app-topbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: var(--sidebar-width);
+            height: var(--topbar-height);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px); /* Clean Blur Effect */
+            z-index: 1030;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Modern Hamburger Toggle Button */
+        .btn-sidebar-toggle {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-size: 1.1rem;
+            color: #475569;
+            cursor: pointer;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+            .btn-sidebar-toggle:hover {
+                background: var(--rebecca-main);
+                color: #ffffff;
+                border-color: var(--rebecca-main);
+                box-shadow: 0 4px 10px rgba(102, 51, 153, 0.25);
+            }
+
+        .topbar-page-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-            .navbar-brand-modern i {
-                color: #e2d5f0;
-                text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        /* 🏢 Modern Company & Location Card */
+        .company-info-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 0.35rem 0.85rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+
+            .company-info-card:hover {
+                background: #ffffff;
+                border-color: #cbd5e1;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             }
 
-        /* Nav Item Typography and Hover States */
-        .nav-link-modern {
-            color: rgba(255, 255, 255, 0.85) !important;
+        .company-logo-img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #ffffff;
+            padding: 2px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .company-name-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .location-badge {
+            font-size: 0.7rem;
+            color: #64748b;
             font-weight: 500;
-            font-size: 0.92rem;
-            padding: 0.5rem 0.9rem !important;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 1px;
+        }
+
+            .location-badge i {
+                color: #ef4444;
+                font-size: 0.75rem;
+            }
+
+        /* Visual Separator Divider */
+        .header-vertical-divider {
+            width: 1px;
+            height: 26px;
+            background-color: #cbd5e1;
+            margin: 0 4px;
+        }
+
+        /* 👤 Premium User Profile Pill */
+        .user-profile-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 0.3rem 0.4rem 0.3rem 0.8rem;
+            border-radius: 30px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+
+            .user-profile-box:hover {
+                background: #ffffff;
+                border-color: #cbd5e1;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            }
+
+        .user-info-text {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+            line-height: 1.1;
+        }
+
+        .user-name {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+
+        .user-level-badge {
+            font-size: 0.63rem;
+            background: linear-gradient(135deg, #7b3fa8, #663399);
+            color: #ffffff;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: inline-block;
+            letter-spacing: 0.3px;
+            box-shadow: 0 2px 4px rgba(102, 51, 153, 0.2);
+        }
+
+        .user-avatar-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        /* 🚪 Modern Action Button: Logout */
+        .btn-logout-icon {
+            color: #64748b;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 0.95rem;
+        }
+
+            .btn-logout-icon:hover {
+                background: #fef2f2;
+                color: #ef4444;
+                border-color: #fecaca;
+                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+                transform: translateY(-1px);
+            }
+
+
+
+
+        /* ---------------------------------------------------------
+                           3. ELEGANT TOPBAR & PROFILE HEADER
+                           --------------------------------------------------------- */
+      /*   .app-topbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: var(--sidebar-width);
+            height: var(--topbar-height);
+            background: #ffffff;
+            z-index: 1030;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-sidebar-toggle {
+            background: transparent;
+            border: none;
+            font-size: 1.25rem;
+            color: #475569;
+            cursor: pointer;
+            padding: 6px 10px;
             border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 7px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            justify-content: center;
+            transition: all 0.2s ease;
         }
 
-            .nav-link-modern i {
-                font-size: 1rem;
-                opacity: 0.8;
-                transition: transform 0.2s;
+            .btn-sidebar-toggle:hover {
+                background: #f1f5f9;
+                color: var(--rebecca-main);
             }
 
-            /* Active / Hover Interactive Animation */
-            .nav-link-modern:hover {
-                color: #ffffff !important;
-                background: rgba(255, 255, 255, 0.12);
-                box-shadow: inset 0 0 5px rgba(255,255,255,0.05);
-            }
-
-                .nav-link-modern:hover i {
-                    transform: translateY(-1px);
-                    opacity: 1;
-                }
-
-        .nav-item.active .nav-link-modern {
-            color: #ffffff !important;
-            background: rgba(255, 255, 255, 0.2) !important;
-            font-weight: 600;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        /* User Profile Status Badge */
-        .system-status-badge {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+        .topbar-page-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #2ecc71;
+        .company-info-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 0.35rem 0.8rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .company-logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            border-radius: 4px;
+            background: #fff;
+            padding: 1px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .company-name-text {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.1;
+            margin: 0;
+        }
+
+        .location-badge {
+            font-size: 0.7rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 2px;
+        }
+
+        .header-vertical-divider {
+            width: 1px;
+            height: 28px;
+            background-color: #e2e8f0;
+            margin: 0 4px;
+        }
+
+        .user-profile-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            padding: 0.2rem 0.4rem;
+            border-radius: 30px;
+        }
+
+        .user-avatar-img {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            box-shadow: 0 0 8px #2ecc71;
+            object-fit: cover;
+            border: 2px solid var(--rebecca-main);
+            box-shadow: 0 2px 6px rgba(102, 51, 153, 0.2);
+        }
+
+        .user-info-text {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .user-level-badge {
+            font-size: 0.65rem;
+            background: #f3e8ff;
+            color: var(--rebecca-main);
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 1px;
+            border: 1px solid #e9d5ff;
+        }
+
+        .btn-logout-icon {
+            color: #ef4444;
+            background: #fef2f2;
+            border: 1px solid #fee2e2;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+            .btn-logout-icon:hover {
+                background: #ef4444;
+                color: #ffffff;
+                border-color: #ef4444;
+                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+                transform: translateY(-1px);
+            }
+ */
+        /* ---------------------------------------------------------
+                           4. MAIN CONTENT WRAPPER & TOGGLE RULES
+                           --------------------------------------------------------- */
+        .app-main-wrapper {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--topbar-height);
+            padding: 1.5rem;
+            min-height: calc(100vh - var(--topbar-height));
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 🟢 Collapsed State Rules (Desktop) */
+        body.sidebar-collapsed .app-sidebar {
+            transform: translateX(-100%);
+        }
+
+        body.sidebar-collapsed .app-topbar {
+            left: 0;
+        }
+
+        body.sidebar-collapsed .app-main-wrapper {
+            margin-left: 0;
+        }
+
+        /* Mobile Backdrop Overlay */
+        .sidebar-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(2px);
+            z-index: 1035;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* ---------------------------------------------------------
+                           5. RESPONSIVE BREAKPOINTS (Mobile & Tablet)
+                           --------------------------------------------------------- */
+        @@media (max-width: 767.98px) {
+            .app-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .app-topbar {
+                left: 0;
+                padding: 0 0.8rem;
+            }
+
+            .app-main-wrapper {
+                margin-left: 0;
+                padding: 1rem 0.8rem;
+            }
+            /* Show sidebar when mobile-open is toggled */
+            body.mobile-sidebar-open .app-sidebar {
+                transform: translateX(0);
+            }
+
+            body.mobile-sidebar-open .sidebar-backdrop {
+                display: block;
+                opacity: 1;
+            }
+
+            .user-info-text,
+            .header-vertical-divider,
+            .company-info-card {
+                display: none !important; /* Hide details on small mobile devices to prevent overflow */
+            }
+
+            .topbar-page-title {
+                font-size: 0.92rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Freeze Navigation Header with Sticky Top -->
-    <header class="sticky-header">
-        <!-- Top Base Responsive Nav Bar -->
-        <nav class="navbar navbar-expand-xl navbar-dark custom-navbar mb-3">
-            <div class="container-fluid">
-                <!-- Branding / Project Logo -->
-                <a class="navbar-brand navbar-brand-modern" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="fa-solid fa-circle-nodes"></i> HN_System
-                </a>
 
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <!-- Smooth Page Loader -->
+    <div id="page-loader">
+        <div class="loader-spinner"></div>
+        <div class="mt-2 text-muted fw-bold" style="font-size: 0.82rem;">Loading Workspace...</div>
+    </div>
 
-                <!-- Navigation Menus Structure -->
-                <div class="navbar-collapse collapse d-xl-inline-flex justify-content-between">
-                    <ul class="navbar-nav mx-auto gap-1">
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
-                        <!-- 1. Dashboard -->
-                        <li class="nav-item">
-                            <a class="nav-link-modern" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="fa-solid fa-chart-pie"></i> Dashboard
-                            </a>
-                        </li>
+    <!-- LEFT SIDEBAR NAVIGATION -->
+    <aside class="app-sidebar" id="appSidebar">
+        <a class="sidebar-brand" asp-controller="Home" asp-action="Index">
+            <i class="fa-solid fa-circle-nodes"></i>
+            <span>HN_System</span>
+        </a>
 
-                        <!-- 2. Product -->
-                        <li class="nav-item">
-                            <a class="nav-link-modern" asp-area="" asp-controller="Product" asp-action="Index">
-                                <i class="fa-solid fa-box-open"></i> Product
-                            </a>
-                        </li>
+        <div class="sidebar-menu">
+            <div class="menu-category-title">Main Navigation</div>
 
-                        <!-- 3. Customer -->
-                        <li class="nav-item">
-                            <a class="nav-link-modern" asp-area="" asp-controller="Customer" asp-action="Index">
-                                <i class="fa-solid fa-users"></i> Customer
-                            </a>
-                        </li>
+            <!-- 1. Dashboard -->
+            <a class="sidebar-link" asp-controller="Home" asp-action="Index">
+                <span><i class="fa-solid fa-chart-pie link-icon"></i> Dashboard</span>
+            </a>
 
-                        <!-- 4. Purchase -->
-                        <li class="nav-item">
-                            <a class="nav-link-modern" asp-area="" asp-controller="Purchase" asp-action="Index">
-                                <i class="fa-solid fa-cart-shopping"></i> Purchase
-                            </a>
-                        </li>
+            <!-- 2. Product -->
+            <a class="sidebar-link collapsed" data-bs-toggle="collapse" href="#productSubMenu" role="button" aria-expanded="false">
+                <span><i class="fa-solid fa-box-open link-icon"></i> Product</span>
+                <i class="fa-solid fa-chevron-right fs-7" style="font-size: 0.7rem;"></i>
+            </a>
+            <div class="collapse submenu" id="productSubMenu">
+                <a class="submenu-link" asp-controller="Product" asp-action="Index"><i class="fa-solid fa-list me-1"></i> Products</a>
+                <a class="submenu-link" asp-controller="Product" asp-action="ProductGroup"><i class="fa-solid fa-layer-group me-1"></i> Product Group</a>
+                <a class="submenu-link" asp-controller="Product" asp-action="Brand"><i class="fa-solid fa-copyright me-1"></i> Brand</a>
+                <a class="submenu-link" asp-controller="Product" asp-action="Category"><i class="fa-solid fa-tags me-1"></i> Category</a>
+                <a class="submenu-link" asp-controller="Product" asp-action="Price"><i class="fa-solid fa-tag me-1"></i> Price Management</a>
+                <a class="submenu-link" asp-controller="Product" asp-action="Discount"><i class="fa-solid fa-percent me-1"></i> Discount</a>
+                <a class="submenu-link" asp-controller="ProductUnitTypeConversion" asp-action="Index"><i class="fa-solid fa-percent me-1"></i> Unit Conversion</a>
+            </div>
 
-                        <!-- 5. Collection -->
-                        <li class="nav-item">
-                            <a class="nav-link-modern" asp-area="" asp-controller="Collection" asp-action="Index">
-                                <i class="fa-solid fa-hand-holding-dollar"></i> Collection
-                            </a>
-                        </li>
+            <!-- 3. Customer -->
+            <a class="sidebar-link collapsed" data-bs-toggle="collapse" href="#customerSubMenu" role="button" aria-expanded="false">
+                <span><i class="fa-solid fa-users link-icon"></i> Customer</span>
+                <i class="fa-solid fa-chevron-right fs-7" style="font-size: 0.7rem;"></i>
+            </a>
+            <div class="collapse submenu" id="customerSubMenu">
+                <a class="submenu-link" asp-controller="Customer" asp-action="Index"><i class="fa-solid fa-user-group me-1"></i> Customer List</a>
+                <a class="submenu-link" asp-controller="Customer" asp-action="CustomerGroup"><i class="fa-solid fa-users-rectangle me-1"></i> Category</a>
+            </div>
 
-                        <!-- 6. Point Of Sales (POS) -->
-                        <li class="nav-item">
-                            <a class="nav-link-modern" asp-area="" asp-controller="POS" asp-action="Index">
-                                <i class="fa-solid fa-cash-register"></i> PointOfSales
-                            </a>
-                        </li>
+            <!-- 4. Purchase -->
+            <a class="sidebar-link collapsed" data-bs-toggle="collapse" href="#purchaseSubMenu" role="button" aria-expanded="false">
+                <span><i class="fa-solid fa-cart-shopping link-icon"></i> Purchase</span>
+                <i class="fa-solid fa-chevron-right fs-7" style="font-size: 0.7rem;"></i>
+            </a>
+            <div class="collapse submenu" id="purchaseSubMenu">
+                <a class="submenu-link" asp-controller="Purchase" asp-action="Index"><i class="fa-solid fa-file-invoice me-1"></i> Purchase Orders</a>
+                <a class="submenu-link" asp-controller="Purchase" asp-action="Supplier"><i class="fa-solid fa-truck-field me-1"></i> Suppliers</a>
+            </div>
 
-                        <!-- 7. Sales Return -->
-                        <li class="nav-item">
-                            <a class="nav-link-modern" asp-area="" asp-controller="SalesReturn" asp-action="Index">
-                                <i class="fa-solid fa-arrow-rotate-left"></i> SalesReturn
-                            </a>
-                        </li>
+            <!-- 5. Collection -->
+            <a class="sidebar-link collapsed" data-bs-toggle="collapse" href="#collectionSubMenu" role="button" aria-expanded="false">
+                <span><i class="fa-solid fa-hand-holding-dollar link-icon"></i> Collection</span>
+                <i class="fa-solid fa-chevron-right fs-7" style="font-size: 0.7rem;"></i>
+            </a>
+            <div class="collapse submenu" id="collectionSubMenu">
+                <a class="submenu-link" asp-controller="Collection" asp-action="Index"><i class="fa-solid fa-receipt me-1"></i> Collections</a>
+            </div>
 
-                        <!-- 8. Reports -->
-                        <li class="nav-item">
-                            <a class="nav-link-modern" asp-area="" asp-controller="Reports" asp-action="Index">
-                                <i class="fa-solid fa-file-invoice-dollar"></i> Reports
-                            </a>
-                        </li>
+            <!-- 6. Point Of Sales (POS) -->
+            <a class="sidebar-link" asp-controller="POS" asp-action="Index">
+                <span><i class="fa-solid fa-cash-register link-icon"></i> POS System</span>
+            </a>
 
-                    </ul>
+            <!-- 7. Sales Return -->
+            <a class="sidebar-link" asp-controller="SalesReturn" asp-action="Index">
+                <span><i class="fa-solid fa-arrow-rotate-left link-icon"></i> Sales Return</span>
+            </a>
 
-                    <!-- Right Side Right Meta Widget Components -->
-                    <div class="d-flex align-items-center mt-2 mt-xl-0">
-                        <div class="system-status-badge">
-                            <span class="status-dot"></span> Core Engine Active
-                        </div>
+            <div class="menu-category-title">Analytics</div>
+
+            <!-- 8. Reports -->
+            <a class="sidebar-link collapsed" data-bs-toggle="collapse" href="#reportSubMenu" role="button" aria-expanded="false">
+                <span><i class="fa-solid fa-file-invoice-dollar link-icon"></i> Reports</span>
+                <i class="fa-solid fa-chevron-right fs-7" style="font-size: 0.7rem;"></i>
+            </a>
+            <div class="collapse submenu" id="reportSubMenu">
+                <a class="submenu-link" asp-controller="Reports" asp-action="SalesReport"><i class="fa-solid fa-chart-line me-1"></i> Sales Report</a>
+                <a class="submenu-link" asp-controller="Reports" asp-action="StockReport"><i class="fa-solid fa-boxes-stacked me-1"></i> Stock Report</a>
+            </div>
+        </div>
+    </aside> 
+
+    <!-- TOPBAR NAVIGATION HEADER -->
+    <header class="app-topbar">
+        <!-- Left Section: Toggle Button & Page Title -->
+        <div class="d-flex align-items-center gap-3">
+            <button type="button" class="btn-sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <h5 class="topbar-page-title">
+                <i class="fa-solid fa-grip-vertical text-muted fs-6"></i>
+                <span>@ViewData["Title"]</span>
+            </h5>
+        </div>
+
+        <!-- Right Section: Company Info, User Profile & Logout -->
+        <div class="d-flex align-items-center gap-2">
+
+            <!-- Company & Location Badge Card -->
+            <div class="company-info-card" id="companyLocationBox" style="display: none;">
+                <img id="headerCompanyLogo" src="/images/default-company.png" class="company-logo-img" alt="Logo" />
+                <div>
+                    <h6 class="company-name-text" id="headerCompanyName">Company Name</h6>
+                    <div class="location-badge">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span id="headerLocationName">Location Name</span>
                     </div>
                 </div>
             </div>
-        </nav>
+
+            <!-- Vertical Separator Divider -->
+            <div class="header-vertical-divider"></div>
+
+            <!-- User Profile Info Box -->
+            <div class="user-profile-box">
+                <div class="user-info-text">
+                    <span class="user-name" id="headerUserName">Loading...</span>
+                    <div><span class="user-level-badge" id="headerUserLevel">User</span></div>
+                </div>
+                <img id="headerUserPicture" src="https://ui-avatars.com/api/?name=User&background=663399&color=fff" class="user-avatar-img" alt="User Avatar" />
+            </div>
+
+            <!-- Redesigned Logout Button -->
+            <a href="javascript:void(0)" onclick="handleLogout()" class="btn-logout-icon ms-1" title="Logout Account">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+
+        </div>
     </header>
 
-    <!-- Global Full-Width Core Content Section -->
-    <div class="container-fluid px-3">
-        <main role="main" class="pb-4">
+    <!-- GLOBAL MAIN CONTENT AREA -->
+    <div class="app-main-wrapper">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
@@ -223,20 +781,150 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 
-    <!-- Script to dynamically handle the Active CSS Class highlighting -->
     <script>
+        const API_BASE_URL = "https://localhost:7008/api";
+        const IMAGE_BASE_URL = "https://localhost:7008/";
+        const DEFAULT_IMAGE = `${IMAGE_BASE_URL}Upload/Product/no-image.png`;
+
         $(document).ready(function () {
-            var currentUrl = window.location.pathname.toLowerCase();
-            $('.navbar-nav .nav-item a').each(function () {
-                var menuUrl = $(this).attr('href').toLowerCase();
-                if (currentUrl === menuUrl || (menuUrl !== '/' && currentUrl.startsWith(menuUrl))) {
-                    $(this).closest('.nav-item').addClass('active');
+            // Dismiss page loader animation smoothly
+            setTimeout(function () {
+                $('#page-loader').css({ opacity: 0, visibility: 'hidden' });
+            }, 250);
+
+            // -----------------------------------------------------------
+            // 🟢 SIDEBAR TOGGLE & RESPONSIVE LOGIC
+            // -----------------------------------------------------------
+            // ১. ডেস্কটপের জন্য আগের সেভ করা পছন্দ (Preference) লোড করা
+            if ($(window).width() >= 768) {
+                if (localStorage.getItem("sidebar_collapsed") === "true") {
+                    $('body').addClass('sidebar-collapsed');
+                }
+            }
+
+            // ২. Toggle Button Click Event
+            $('#sidebarToggle').on('click', function () {
+                if ($(window).width() < 768) {
+                    // Mobile View: Open/Close Drawer Overlay
+                    $('body').toggleClass('mobile-sidebar-open');
+                } else {
+                    // Desktop View: Toggle Collapse Full Width Mode
+                    $('body').toggleClass('sidebar-collapsed');
+                    const isCollapsed = $('body').hasClass('sidebar-collapsed');
+                    localStorage.setItem("sidebar_collapsed", isCollapsed);
                 }
             });
+
+            // ৩. Mobile Backdrop-এ ক্লিক করলে সাইডবার হাইড হয়ে যাবে
+            $('#sidebarBackdrop').on('click', function () {
+                $('body').removeClass('mobile-sidebar-open');
+            });
+
+            // Fetch User & Company Header Data via API
+            loadUserProfileDashboardData();
+
+            // Highlight Active Link
+            highlightActiveMenu();
         });
+
+        // -----------------------------------------------------------
+        // FETCH USER PROFILE & COMPANY DASHBOARD API DATA
+        // -----------------------------------------------------------
+        function loadUserProfileDashboardData() {
+            const token = getAuthCookie("HN_JWT");
+            $.ajax({
+                url: `${API_BASE_URL}/UserAuthenticationAndLogin/GetMyProfileDashboardByUserId`,
+                type: 'GET',
+                headers: {
+                    'Authorization': token ? `Bearer ${token}` : ''
+                },
+                success: function (response) {
+                    if (response) {
+                        const data = response.data || response;
+
+                        // Set User Details
+                        $('#headerUserName').text(data.userName || "User");
+                        $('#headerUserLevel').text(data.userLevel || "Staff");
+
+                        // User Image
+                        if (data.userPicture) {
+                            const userImageUrl = `${IMAGE_BASE_URL}${data.userPicture}`;
+                            $('#headerUserPicture').attr('src', userImageUrl);
+                        } else {
+                            $('#headerUserPicture').attr(
+                                'src',
+                                `https://ui-avatars.com/api/?name=${encodeURIComponent(data.userName || 'User')}&background=663399&color=fff`
+                            );
+                        }
+
+                        // Set Company & Location Details
+                        if (data.companyName) {
+                            $('#headerCompanyName').text(data.companyName);
+                            $('#headerLocationName').text(data.locationName || 'Main Branch');
+
+                            if (data.companyLogo) {
+                                $('#headerCompanyLogo').attr(
+                                    'src',
+                                    `${IMAGE_BASE_URL}${data.companyLogo}`
+                                );
+                            }
+                            $('#companyLocationBox').fadeIn(200);
+                        }
+                    }
+                },
+                error: function (xhr) {
+                    console.log("Header Profile API Fetch Error Status:", xhr.status);
+                    if (xhr.status === 401) {
+                        handleLogout(); // Token Expired, Force Logout
+                    }
+                }
+            });
+        }
+
+        function highlightActiveMenu() {
+            var currentUrl = window.location.pathname.toLowerCase();
+            $('.sidebar-menu a').each(function () {
+                var menuUrl = $(this).attr('href')?.toLowerCase();
+                if (menuUrl && currentUrl === menuUrl) {
+                    $(this).addClass('active');
+                    var parentSubmenu = $(this).closest('.submenu');
+                    if (parentSubmenu.length) {
+                        parentSubmenu.addClass('show');
+                        parentSubmenu.prev('.sidebar-link').removeClass('collapsed').attr('aria-expanded', 'true');
+                    }
+                }
+            });
+        }
+
+        // -----------------------------------------------------------
+        // LOGOUT FUNCTION
+        // -----------------------------------------------------------
+        function handleLogout() {
+            const token = getAuthCookie("HN_JWT");
+            $.ajax({
+                url: `${API_BASE_URL}/UserAuthenticationAndLogin/logout`,
+                type: 'POST',
+                headers: {
+                    'Authorization': token ? `Bearer ${token}` : ''
+                },
+                success: function (response) {
+                    document.cookie = "HN_JWT=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    toastr.success("System Logout for you!");
+                    setTimeout(function () {
+                        window.location.href = '/Account/Login';
+                    }, 500);
+                },
+                error: function (xhr, status, error) {
+                    alert('failed');
+                    console.error("Logout API error");
+                    console.error("Status:", xhr.status);
+                    console.error("Error:", error);
+                    console.error("Response:", xhr.responseText);
+                }
+            });
+        }
     </script>
 </body>
 </html>

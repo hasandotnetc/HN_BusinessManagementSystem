@@ -1,0 +1,13 @@
+﻿namespace HN_Backend.DTOs.LoginInformation
+{
+    public class LoginResponseDto
+    {
+        public long LoginUserId { get; set; }
+        public string? Code { get; set; }
+        public string? Name { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
+        public string? Token { get; set; }
+        public string? Picture { get; set; } 
+    }
+}

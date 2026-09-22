@@ -1,4 +1,4 @@
-﻿namespace HN_Project.DTOs
+﻿namespace HN_Backend.DTOs.Customer
 {
     public class CustomerVM
     {

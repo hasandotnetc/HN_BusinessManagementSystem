@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
     <PackageReference Include="Dapper" Version="2.1.79" />
+    <PackageReference Include="MailKit" Version="4.17.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.19" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.16">
       <PrivateAssets>all</PrivateAssets>
@@ -26,11 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
+    <Folder Include="Helpers\NewFolder\" />
     <Folder Include="wwwroot\Upload\Customer\" />
     <Folder Include="wwwroot\Upload\Employee\" />
     <Folder Include="wwwroot\Upload\Brand\" />
     <Folder Include="wwwroot\Upload\Category\" />
+    <Folder Include="wwwroot\Upload\CompanyLogo\" />
+    <Folder Include="wwwroot\Upload\User\" />
     <Folder Include="wwwroot\Upload\Supplier\" />
     <Folder Include="wwwroot\Upload\Product\" />
   </ItemGroup>

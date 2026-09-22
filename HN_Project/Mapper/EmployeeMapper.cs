@@ -1,5 +1,5 @@
-﻿using HN_Project.DTOs;
-using HN_Backend.Data;
+﻿using HN_Backend.Data;
+using HN_Backend.DTOs.Employee;
 
 namespace HN_Project.Mapper
 {

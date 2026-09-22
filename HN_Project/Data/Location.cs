@@ -13,11 +13,21 @@ public partial class Location
 
     public DateTime CreateOn { get; set; }
 
+    public long CompanyId { get; set; }
+
     public virtual ICollection<Collection> Collections { get; set; } = new List<Collection>();
+
+    public virtual Company Company { get; set; } = null!;
 
     public virtual ICollection<CurrentStock> CurrentStocks { get; set; } = new List<CurrentStock>();
 
-    public virtual ICollection<PaymentMethod> PaymentMethods { get; set; } = new List<PaymentMethod>();
+    public virtual ICollection<EventNoGeneration> EventNoGenerations { get; set; } = new List<EventNoGeneration>();
+
+    public virtual ICollection<LoginUser> LoginUsers { get; set; } = new List<LoginUser>();
+
+    public virtual ICollection<PurchaseOrder> PurchaseOrderDeliveryToNavigations { get; set; } = new List<PurchaseOrder>();
+
+    public virtual ICollection<PurchaseOrder> PurchaseOrderLocations { get; set; } = new List<PurchaseOrder>();
 
     public virtual ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();
 }

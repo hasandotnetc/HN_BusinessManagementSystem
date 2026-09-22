@@ -2,6 +2,8 @@
 using HN_Project.Mapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using HN_Backend.DTOs.Customer;
 
 namespace HN_Project.Controllers
 { 
@@ -19,11 +21,29 @@ namespace HN_Project.Controllers
         public async Task<IActionResult> GetCustomerByCodeNameAndPhone(string paramObj)
         {
             var data = await _customerService.GetCustomerByCodeNameAndPhone(paramObj);
-            var list = data.Select(x => CustomerMapper.CustomerVMMapper(x)).ToList(); 
-            //if(list.Count == 0)
-                //return NotFound("No Data Found");
+            var list = data.Select(x => CustomerMapper.CustomerVMMapper(x)).ToList();  
             return Ok(list);
         }
-         
+        [Authorize]
+        [HttpPost]
+        [Route("CreateCustomer")]
+        public async Task<IActionResult> CreateCustomer([FromForm] CustomerCreateDto customerDto)
+        {
+            var result = await _customerService.CreateCustomerAsync(customerDto);
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPut]
+        [Route("UpdateCustomer")]
+        public async Task<IActionResult> UpdateCustomer([FromForm] CustomerUpdateDto customerDto)
+        {
+            var result = await _customerService.UpdateCustomerAsync(customerDto);
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

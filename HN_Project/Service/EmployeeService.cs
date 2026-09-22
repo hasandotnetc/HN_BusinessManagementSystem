@@ -1,5 +1,7 @@
-﻿using HN_Project.Interface;
-using HN_Backend.Data;
+﻿using HN_Backend.Data;
+using HN_Backend.DTOs.Employee;
+using HN_Backend.Helpers;
+using HN_Project.Interface;
 
 namespace HN_Project.Service
 {
@@ -7,13 +9,16 @@ namespace HN_Project.Service
     public class EmployeeService
     {
         private readonly IEmployeeRepository _empRepo;
-        public  EmployeeService(IEmployeeRepository empRepo)
+        private readonly CurrentSessionData _currentSessionData;
+        public  EmployeeService(IEmployeeRepository empRepo, CurrentSessionData currentSessionData)
         {
             _empRepo = empRepo;
+            _currentSessionData = currentSessionData;
         }
-        public async Task<List<Employee>> GetEmployeeByCodeNamePhone(string objParam)
+        public async Task<List<EmployeeAutocompleteDto>> GetEmployeeByCodeNamePhone(string objParam)
         {
-            return await _empRepo.GetEmployeeByCodeNamePhone(objParam);
+            long companyId = _currentSessionData.CompanyId;
+            return await _empRepo.GetEmployeeByCodeNamePhone(objParam, companyId);
         }
     }
 }

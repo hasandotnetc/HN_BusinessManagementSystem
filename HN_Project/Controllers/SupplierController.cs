@@ -1,5 +1,6 @@
 ﻿using HN_Backend.DTOs;
 using HN_Backend.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,24 +15,47 @@ namespace HN_Backend.Controllers
         {
                 _supplierServ = supplierService;
         }
-        [HttpGet("GetSupplierByNameCodePhone")]
+        //[HttpGet("GetSupplierByNameCodePhone")]
+        //public async Task<IActionResult> GetSupplierByNameCodePhone(string objParam)
+        //{
+        //    var supplierList = await _supplierServ.GetSupplierByCodeNamePhone(objParam); 
+        //    var _list = supplierList.ToList(); 
+        //    return Ok(_list);
+        //}
+
+        [Authorize]
+        [HttpGet]
+        [Route("GetSupplierByNameCodePhone")]
         public async Task<IActionResult> GetSupplierByNameCodePhone(string objParam)
         {
             var supplierList = await _supplierServ.GetSupplierByCodeNamePhone(objParam); 
-            var _list = supplierList.ToList(); 
-            return Ok(_list);
+            return Ok(supplierList); 
         }
-        [HttpPost("SaveSupplier")]
-        public async Task<IActionResult>  SaveSupplier([FromForm] SupplierVM vm)
+
+        [Authorize]
+        [HttpGet]
+        [Route("GetSupplierInformation/{SupplierId}")]
+        public async Task<IActionResult> GetSupplierInformation(long SupplierId)
         {
-            var supplierCode  = await _supplierServ.SaveSupplier(vm);
-            return Ok(new
+            var supplierInfo = await _supplierServ.GetSupplierInformationById(SupplierId);
+            if (supplierInfo == null)
             {
-                success = true,
-                message = "Supplier saved successfully.",
-                code = supplierCode
-            });
-            //return Ok(new { message = "Supplier saved successfully." });
-        }
+                return NotFound(new { message = "Supplier not found." });
+            }
+            return Ok(supplierInfo);
+        } 
+
+        //[HttpPost("SaveSupplier")]
+        //public async Task<IActionResult>  SaveSupplier([FromForm] SupplierVM vm)
+        //{
+        //    var supplierCode  = await _supplierServ.SaveSupplier(vm);
+        //    return Ok(new
+        //    {
+        //        success = true,
+        //        message = "Supplier saved successfully.",
+        //        code = supplierCode
+        //    });
+        //    //return Ok(new { message = "Supplier saved successfully." });
+        //}
     }
 }
