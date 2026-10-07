@@ -57,6 +57,8 @@ public partial class Product
 
     public virtual ICollection<ProductUnitTypeConversion> ProductUnitTypeConversions { get; set; } = new List<ProductUnitTypeConversion>();
 
+    public virtual ICollection<PurchaseInDetail> PurchaseInDetails { get; set; } = new List<PurchaseInDetail>();
+
     public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = new List<PurchaseOrderDetail>();
 
     public virtual ICollection<SalesOrderDetail> SalesOrderDetails { get; set; } = new List<SalesOrderDetail>();

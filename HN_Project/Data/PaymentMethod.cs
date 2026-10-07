@@ -23,6 +23,8 @@ public partial class PaymentMethod
 
     public virtual ICollection<PaymentMethod> InverseCompany { get; set; } = new List<PaymentMethod>();
 
+    public virtual ICollection<PurchaseIn> PurchaseIns { get; set; } = new List<PurchaseIn>();
+
     public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new List<PurchaseOrder>();
 
     public virtual ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();

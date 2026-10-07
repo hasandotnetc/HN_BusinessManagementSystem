@@ -61,6 +61,8 @@ builder.Services.AddScoped<ISupplier, SupplierRepository>();
 builder.Services.AddScoped<SupplierService>();
 builder.Services.AddScoped<IUserLoginAndAuthentication, UserAuthenticationAndLoginRepository>();
 builder.Services.AddScoped<UserAuthenticationAndLoginService>();
+builder.Services.AddScoped<IVatTax, VatTaxRepository>();
+builder.Services.AddScoped<VatTaxService>();
 builder.Services.AddScoped<PointOfSalesService>();
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<JWTTokenService>();
@@ -72,6 +74,10 @@ builder.Services.AddScoped<IPaymentMethod, PaymentMethodRepository>();
 builder.Services.AddScoped<PaymentMethodService>();
 builder.Services.AddScoped<IPurchaseOrder, PurchaseOrderRepository>();
 builder.Services.AddScoped<PurchaseOrderService>();
+
+builder.Services.AddScoped<IPurchase, PurchaseRepository>();
+builder.Services.AddScoped<PurchaseService>();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>

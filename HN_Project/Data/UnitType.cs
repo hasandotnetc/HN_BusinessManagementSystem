@@ -15,5 +15,7 @@ public partial class UnitType
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
+    public virtual ICollection<PurchaseInDetail> PurchaseInDetails { get; set; } = new List<PurchaseInDetail>();
+
     public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = new List<PurchaseOrderDetail>();
 }

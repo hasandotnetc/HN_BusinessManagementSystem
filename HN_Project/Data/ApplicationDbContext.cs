@@ -15,6 +15,12 @@ public partial class ApplicationDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Account> Accounts { get; set; }
+
+    public virtual DbSet<AccountsGroup> AccountsGroups { get; set; }
+
+    public virtual DbSet<AccountsSubGroup> AccountsSubGroups { get; set; }
+
     public virtual DbSet<Bank> Banks { get; set; }
 
     public virtual DbSet<Brand> Brands { get; set; }
@@ -26,6 +32,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<CollectionDetail> CollectionDetails { get; set; }
 
     public virtual DbSet<Company> Companies { get; set; }
+
+    public virtual DbSet<ControlAccount> ControlAccounts { get; set; }
 
     public virtual DbSet<CurrentStock> CurrentStocks { get; set; }
 
@@ -49,11 +57,21 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
 
+    public virtual DbSet<PostedTransaction> PostedTransactions { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<ProductGroup> ProductGroups { get; set; }
 
     public virtual DbSet<ProductUnitTypeConversion> ProductUnitTypeConversions { get; set; }
+
+    public virtual DbSet<PurchaseIn> PurchaseIns { get; set; }
+
+    public virtual DbSet<PurchaseInDetail> PurchaseInDetails { get; set; }
+
+    public virtual DbSet<PurchaseInDetailSerial> PurchaseInDetailSerials { get; set; }
+
+    public virtual DbSet<PurchaseInDetailTax> PurchaseInDetailTaxes { get; set; }
 
     public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
 
@@ -67,6 +85,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<SalesOrderSerial> SalesOrderSerials { get; set; }
 
+    public virtual DbSet<SubsidiaryAccount> SubsidiaryAccounts { get; set; }
+
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
     public virtual DbSet<Tax> Taxes { get; set; }
@@ -77,11 +97,139 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<UserVerification> UserVerifications { get; set; }
 
+    public virtual DbSet<Voucher> Vouchers { get; set; }
+
+    public virtual DbSet<VoucherDetail> VoucherDetails { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=DefaultConnection");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Account>(entity =>
+        {
+            entity.HasKey(e => e.AccountsId);
+
+            entity.Property(e => e.ActiveStatus)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+            entity.Property(e => e.BalanceType)
+                .HasMaxLength(6)
+                .IsUnicode(false);
+            entity.Property(e => e.Code)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(250);
+            entity.Property(e => e.Notes).HasMaxLength(500);
+            entity.Property(e => e.OpeningBalance).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.OpeningDate).HasColumnType("datetime");
+            entity.Property(e => e.StatementType)
+                .HasMaxLength(15)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.AccountsGroup).WithMany(p => p.Accounts)
+                .HasForeignKey(d => d.AccountsGroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Accounts_AccountsGroup");
+
+            entity.HasOne(d => d.AccountsSubGroup).WithMany(p => p.Accounts)
+                .HasForeignKey(d => d.AccountsSubGroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Accounts_AccountsSubGroup");
+
+            entity.HasOne(d => d.CompanyNavigation).WithMany(p => p.Accounts)
+                .HasForeignKey(d => d.Company)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Accounts_Company");
+
+            entity.HasOne(d => d.ControlAccounts).WithMany(p => p.Accounts)
+                .HasForeignKey(d => d.ControlAccountsId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Accounts_ControlAccounts");
+
+            entity.HasOne(d => d.EntryByNavigation).WithMany(p => p.Accounts)
+                .HasForeignKey(d => d.EntryBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Accounts_LoginUser");
+
+            entity.HasOne(d => d.Location).WithMany(p => p.Accounts)
+                .HasForeignKey(d => d.LocationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Accounts_Location");
+
+            entity.HasOne(d => d.SubsidiaryAccounts).WithMany(p => p.Accounts)
+                .HasForeignKey(d => d.SubsidiaryAccountsId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Accounts_SubsidiaryAccounts");
+        });
+
+        modelBuilder.Entity<AccountsGroup>(entity =>
+        {
+            entity.ToTable("AccountsGroup");
+
+            entity.Property(e => e.BalanceType)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+            entity.Property(e => e.Code)
+                .HasMaxLength(2)
+                .IsUnicode(false);
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(25);
+
+            entity.HasOne(d => d.CompanyNavigation).WithMany(p => p.AccountsGroups)
+                .HasForeignKey(d => d.Company)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AccountsGroup_Company");
+
+            entity.HasOne(d => d.EntryByNavigation).WithMany(p => p.AccountsGroups)
+                .HasForeignKey(d => d.EntryBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AccountsGroup_LoginUser");
+
+            entity.HasOne(d => d.Location).WithMany(p => p.AccountsGroups)
+                .HasForeignKey(d => d.LocationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AccountsGroup_Location");
+        });
+
+        modelBuilder.Entity<AccountsSubGroup>(entity =>
+        {
+            entity.ToTable("AccountsSubGroup");
+
+            entity.Property(e => e.Code)
+                .HasMaxLength(2)
+                .IsUnicode(false);
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(150);
+
+            entity.HasOne(d => d.AccountsGroup).WithMany(p => p.AccountsSubGroups)
+                .HasForeignKey(d => d.AccountsGroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AccountsSubGroup_AccountsGroup");
+
+            entity.HasOne(d => d.CompanyNavigation).WithMany(p => p.AccountsSubGroups)
+                .HasForeignKey(d => d.Company)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AccountsSubGroup_Company");
+
+            entity.HasOne(d => d.EntryByNavigation).WithMany(p => p.AccountsSubGroups)
+                .HasForeignKey(d => d.EntryBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AccountsSubGroup_LoginUser");
+
+            entity.HasOne(d => d.Location).WithMany(p => p.AccountsSubGroups)
+                .HasForeignKey(d => d.LocationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AccountsSubGroup_Location");
+        });
+
         modelBuilder.Entity<Bank>(entity =>
         {
             entity.ToTable("Bank");
@@ -230,10 +378,46 @@ public partial class ApplicationDbContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<ControlAccount>(entity =>
+        {
+            entity.HasKey(e => e.ControlAccountsId);
+
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(150);
+
+            entity.HasOne(d => d.AccountsGroup).WithMany(p => p.ControlAccounts)
+                .HasForeignKey(d => d.AccountsGroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ControlAccounts_AccountsGroup");
+
+            entity.HasOne(d => d.AccountsSubGroup).WithMany(p => p.ControlAccounts)
+                .HasForeignKey(d => d.AccountsSubGroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ControlAccounts_AccountsSubGroup");
+
+            entity.HasOne(d => d.CompanyNavigation).WithMany(p => p.ControlAccounts)
+                .HasForeignKey(d => d.Company)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ControlAccounts_Company");
+
+            entity.HasOne(d => d.EntryByNavigation).WithMany(p => p.ControlAccounts)
+                .HasForeignKey(d => d.EntryBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ControlAccounts_LoginUser");
+
+            entity.HasOne(d => d.Location).WithMany(p => p.ControlAccounts)
+                .HasForeignKey(d => d.LocationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ControlAccounts_Location");
+        });
+
         modelBuilder.Entity<CurrentStock>(entity =>
         {
             entity.ToTable("CurrentStock");
 
+            entity.Property(e => e.CurrentStockId).ValueGeneratedNever();
             entity.Property(e => e.Cost).HasColumnType("decimal(18, 3)");
             entity.Property(e => e.CreateOn)
                 .HasDefaultValueSql("(getdate())")
@@ -244,6 +428,11 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.StockInTypeRefNo)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.Company).WithMany(p => p.CurrentStocks)
+                .HasForeignKey(d => d.CompanyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CurrentStock_Company");
 
             entity.HasOne(d => d.EntryByNavigation).WithMany(p => p.CurrentStocks)
                 .HasForeignKey(d => d.EntryBy)
@@ -272,6 +461,7 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasIndex(e => e.SerialNo, "CurrentStockDetail_SerialNo");
 
+            entity.Property(e => e.CurrentStockDetailId).ValueGeneratedNever();
             entity.Property(e => e.SerialNo)
                 .HasMaxLength(250)
                 .IsUnicode(false);
@@ -593,6 +783,50 @@ public partial class ApplicationDbContext : DbContext
                 .HasConstraintName("FK_PaymentMethod_LoginUser");
         });
 
+        modelBuilder.Entity<PostedTransaction>(entity =>
+        {
+            entity.ToTable("PostedTransaction");
+
+            entity.Property(e => e.Amount).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.BalanceType)
+                .HasMaxLength(6)
+                .IsUnicode(false);
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Accounts).WithMany(p => p.PostedTransactions)
+                .HasForeignKey(d => d.AccountsId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PostedTransaction_Accounts");
+
+            entity.HasOne(d => d.CompanyNavigation).WithMany(p => p.PostedTransactions)
+                .HasForeignKey(d => d.Company)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PostedTransaction_Company");
+
+            entity.HasOne(d => d.EntryByNavigation).WithMany(p => p.PostedTransactions)
+                .HasForeignKey(d => d.EntryBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PostedTransaction_LoginUser");
+
+            entity.HasOne(d => d.Location).WithMany(p => p.PostedTransactions)
+                .HasForeignKey(d => d.LocationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PostedTransaction_Location");
+
+            entity.HasOne(d => d.VoucherDetail).WithMany(p => p.PostedTransactions)
+                .HasForeignKey(d => d.VoucherDetailId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PostedTransaction_VoucherDetail");
+
+            entity.HasOne(d => d.Voucher).WithMany(p => p.PostedTransactions)
+                .HasForeignKey(d => d.VoucherId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PostedTransaction_Voucher");
+        });
+
         modelBuilder.Entity<Product>(entity =>
         {
             entity.ToTable("Product");
@@ -715,6 +949,180 @@ public partial class ApplicationDbContext : DbContext
             entity.HasOne(d => d.UpdateByNavigation).WithMany(p => p.ProductUnitTypeConversionUpdateByNavigations)
                 .HasForeignKey(d => d.UpdateBy)
                 .HasConstraintName("FK_ProductUnitTypeConversion_LoginUserUpdate");
+        });
+
+        modelBuilder.Entity<PurchaseIn>(entity =>
+        {
+            entity.ToTable("PurchaseIn");
+
+            entity.Property(e => e.PurchaseInId).ValueGeneratedNever();
+            entity.Property(e => e.AdditionalCost).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.Amount).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.Approved)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+            entity.Property(e => e.ApprovedTime).HasColumnType("datetime");
+            entity.Property(e => e.Cancelled)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+            entity.Property(e => e.CancelledTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.Discount).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.DiscountType)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+            entity.Property(e => e.PreviousDeu).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.PurchaseInNo)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.ReferenceNo)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.Remarks).HasMaxLength(500);
+            entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.Updated)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+            entity.Property(e => e.UpdatedTime).HasColumnType("datetime");
+
+            entity.HasOne(d => d.ApprovedByNavigation).WithMany(p => p.PurchaseInApprovedByNavigations)
+                .HasForeignKey(d => d.ApprovedBy)
+                .HasConstraintName("FK_PurchaseIn_LoginUser_Approved");
+
+            entity.HasOne(d => d.CancelledByNavigation).WithMany(p => p.PurchaseInCancelledByNavigations)
+                .HasForeignKey(d => d.CancelledBy)
+                .HasConstraintName("FK_PurchaseIn_LoginUser_Cancelled");
+
+            entity.HasOne(d => d.CompanyNavigation).WithMany(p => p.PurchaseIns)
+                .HasForeignKey(d => d.Company)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseIn_Company");
+
+            entity.HasOne(d => d.EntryByNavigation).WithMany(p => p.PurchaseInEntryByNavigations)
+                .HasForeignKey(d => d.EntryBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseIn_LoginUser");
+
+            entity.HasOne(d => d.Location).WithMany(p => p.PurchaseIns)
+                .HasForeignKey(d => d.LocationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseIn_Location");
+
+            entity.HasOne(d => d.PaymentMethod).WithMany(p => p.PurchaseIns)
+                .HasForeignKey(d => d.PaymentMethodId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Supplier_PaymentMethod");
+
+            entity.HasOne(d => d.Supplier).WithMany(p => p.PurchaseIns)
+                .HasForeignKey(d => d.SupplierId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Supplier_Location");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.PurchaseInUpdatedByNavigations)
+                .HasForeignKey(d => d.UpdatedBy)
+                .HasConstraintName("FK_PurchaseIn_LoginUser_Updated");
+
+            entity.HasOne(d => d.Voucher).WithMany(p => p.PurchaseIns)
+                .HasForeignKey(d => d.VoucherId)
+                .HasConstraintName("FK_PurchaseIn_Voucher");
+        });
+
+        modelBuilder.Entity<PurchaseInDetail>(entity =>
+        {
+            entity.ToTable("PurchaseInDetail");
+
+            entity.Property(e => e.PurchaseInDetailId).ValueGeneratedNever();
+            entity.Property(e => e.AdditionalCost).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.BatchNo)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.Cost).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.DiscountAmount).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.DiscountType)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+            entity.Property(e => e.ExpiryDate).HasColumnType("datetime");
+            entity.Property(e => e.LotNo)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.ManufactureDate).HasColumnType("datetime");
+            entity.Property(e => e.PurchaseInAdditionalCost).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.PurchaseInDiscount).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.PurchaseInDiscountType)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+            entity.Property(e => e.Quantity).HasColumnType("decimal(18, 3)");
+
+            entity.HasOne(d => d.Location).WithMany(p => p.PurchaseInDetails)
+                .HasForeignKey(d => d.LocationId)
+                .HasConstraintName("FK_PurchaseInDetail_Location");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.PurchaseInDetails)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseInDetail_Product");
+
+            entity.HasOne(d => d.PurchaseIn).WithMany(p => p.PurchaseInDetails)
+                .HasForeignKey(d => d.PurchaseInId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseInDetail_PurchaseIn");
+
+            entity.HasOne(d => d.UnitTypeNavigation).WithMany(p => p.PurchaseInDetails)
+                .HasForeignKey(d => d.UnitType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseInDetail_UnitType");
+        });
+
+        modelBuilder.Entity<PurchaseInDetailSerial>(entity =>
+        {
+            entity.ToTable("PurchaseInDetailSerial");
+
+            entity.Property(e => e.PurchaseInDetailSerialId).ValueGeneratedNever();
+            entity.Property(e => e.SerialNo)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.PurchaseInDetail).WithMany(p => p.PurchaseInDetailSerials)
+                .HasForeignKey(d => d.PurchaseInDetailId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseInDetailSerial_PurchaseInDetail");
+
+            entity.HasOne(d => d.PurchaseIn).WithMany(p => p.PurchaseInDetailSerials)
+                .HasForeignKey(d => d.PurchaseInId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseInDetailSerial_PurchaseIn");
+        });
+
+        modelBuilder.Entity<PurchaseInDetailTax>(entity =>
+        {
+            entity.ToTable("PurchaseInDetailTax");
+
+            entity.Property(e => e.PurchaseInDetailTaxId).ValueGeneratedNever();
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.TaxOn)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.PurchaseInDetail).WithMany(p => p.PurchaseInDetailTaxes)
+                .HasForeignKey(d => d.PurchaseInDetailId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseInDetailTax_PurchaseInDetail");
+
+            entity.HasOne(d => d.PurchaseIn).WithMany(p => p.PurchaseInDetailTaxes)
+                .HasForeignKey(d => d.PurchaseInId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseInDetailTax_PurchaseIn");
+
+            entity.HasOne(d => d.Tax).WithMany(p => p.PurchaseInDetailTaxes)
+                .HasForeignKey(d => d.TaxId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PurchaseInDetailTax_Tax");
         });
 
         modelBuilder.Entity<PurchaseOrder>(entity =>
@@ -970,6 +1378,46 @@ public partial class ApplicationDbContext : DbContext
                 .HasConstraintName("FK_SalesOrderSerial_SalesOrder");
         });
 
+        modelBuilder.Entity<SubsidiaryAccount>(entity =>
+        {
+            entity.HasKey(e => e.SubsidiaryAccountsId);
+
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(150);
+
+            entity.HasOne(d => d.AccountsGroup).WithMany(p => p.SubsidiaryAccounts)
+                .HasForeignKey(d => d.AccountsGroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SubsidiaryAccounts_AccountsGroup");
+
+            entity.HasOne(d => d.AccountsSubGroup).WithMany(p => p.SubsidiaryAccounts)
+                .HasForeignKey(d => d.AccountsSubGroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SubsidiaryAccounts_AccountsSubGroup");
+
+            entity.HasOne(d => d.CompanyNavigation).WithMany(p => p.SubsidiaryAccounts)
+                .HasForeignKey(d => d.Company)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SubsidiaryAccounts_Company");
+
+            entity.HasOne(d => d.ControlAccounts).WithMany(p => p.SubsidiaryAccounts)
+                .HasForeignKey(d => d.ControlAccountsId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SubsidiaryAccounts_ControlAccounts");
+
+            entity.HasOne(d => d.EntryByNavigation).WithMany(p => p.SubsidiaryAccounts)
+                .HasForeignKey(d => d.EntryBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SubsidiaryAccounts_LoginUser");
+
+            entity.HasOne(d => d.Location).WithMany(p => p.SubsidiaryAccounts)
+                .HasForeignKey(d => d.LocationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SubsidiaryAccounts_Location");
+        });
+
         modelBuilder.Entity<Supplier>(entity =>
         {
             entity.ToTable("Supplier");
@@ -1085,6 +1533,78 @@ public partial class ApplicationDbContext : DbContext
                 .HasForeignKey(d => d.LoginUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserVerification_LoginUser");
+        });
+
+        modelBuilder.Entity<Voucher>(entity =>
+        {
+            entity.ToTable("Voucher");
+
+            entity.Property(e => e.VoucherId).ValueGeneratedNever();
+            entity.Property(e => e.Approved)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+            entity.Property(e => e.ApprovedDate).HasColumnType("datetime");
+            entity.Property(e => e.CancelledDate).HasColumnType("datetime");
+            entity.Property(e => e.CreateOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.Description).HasMaxLength(500);
+            entity.Property(e => e.PostedDate).HasColumnType("datetime");
+            entity.Property(e => e.ReferenceNo)
+                .HasMaxLength(250)
+                .IsUnicode(false);
+            entity.Property(e => e.VoucherNo)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.VoucherType)
+                .HasMaxLength(3)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.ApprovedByNavigation).WithMany(p => p.VoucherApprovedByNavigations).HasForeignKey(d => d.ApprovedBy);
+
+            entity.HasOne(d => d.CancelledByNavigation).WithMany(p => p.VoucherCancelledByNavigations).HasForeignKey(d => d.CancelledBy);
+
+            entity.HasOne(d => d.CompanyNavigation).WithMany(p => p.Vouchers)
+                .HasForeignKey(d => d.Company)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Voucher_Company");
+
+            entity.HasOne(d => d.EntryByNavigation).WithMany(p => p.VoucherEntryByNavigations)
+                .HasForeignKey(d => d.EntryBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Voucher_LoginUser");
+
+            entity.HasOne(d => d.Location).WithMany(p => p.Vouchers)
+                .HasForeignKey(d => d.LocationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Voucher_Location");
+
+            entity.HasOne(d => d.PostedByNavigation).WithMany(p => p.VoucherPostedByNavigations).HasForeignKey(d => d.PostedBy);
+
+            entity.HasOne(d => d.PrepareByNavigation).WithMany(p => p.VoucherPrepareByNavigations)
+                .HasForeignKey(d => d.PrepareBy)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        });
+
+        modelBuilder.Entity<VoucherDetail>(entity =>
+        {
+            entity.ToTable("VoucherDetail");
+
+            entity.Property(e => e.VoucherDetailId).ValueGeneratedNever();
+            entity.Property(e => e.Credit).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.Debit).HasColumnType("decimal(18, 3)");
+            entity.Property(e => e.Particulars).HasMaxLength(1000);
+
+            entity.HasOne(d => d.Accounts).WithMany(p => p.VoucherDetails)
+                .HasForeignKey(d => d.AccountsId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_VoucherDetail_Accounts");
+
+            entity.HasOne(d => d.Voucher).WithMany(p => p.VoucherDetails)
+                .HasForeignKey(d => d.VoucherId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_VoucherDetail_Voucher");
         });
 
         OnModelCreatingPartial(modelBuilder);

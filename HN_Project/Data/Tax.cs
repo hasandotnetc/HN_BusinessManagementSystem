@@ -15,5 +15,7 @@ public partial class Tax
 
     public virtual LoginUser EntryByNavigation { get; set; } = null!;
 
+    public virtual ICollection<PurchaseInDetailTax> PurchaseInDetailTaxes { get; set; } = new List<PurchaseInDetailTax>();
+
     public virtual ICollection<PurchaseOrderDetailTax> PurchaseOrderDetailTaxes { get; set; } = new List<PurchaseOrderDetailTax>();
 }

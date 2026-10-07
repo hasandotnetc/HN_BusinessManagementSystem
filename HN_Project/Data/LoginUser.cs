@@ -33,11 +33,19 @@ public partial class LoginUser
 
     public long CompanyId { get; set; }
 
+    public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
+
+    public virtual ICollection<AccountsGroup> AccountsGroups { get; set; } = new List<AccountsGroup>();
+
+    public virtual ICollection<AccountsSubGroup> AccountsSubGroups { get; set; } = new List<AccountsSubGroup>();
+
     public virtual ICollection<Brand> Brands { get; set; } = new List<Brand>();
 
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 
     public virtual Company Company { get; set; } = null!;
+
+    public virtual ICollection<ControlAccount> ControlAccounts { get; set; } = new List<ControlAccount>();
 
     public virtual ICollection<CurrentStock> CurrentStocks { get; set; } = new List<CurrentStock>();
 
@@ -59,6 +67,8 @@ public partial class LoginUser
 
     public virtual ICollection<PaymentMethod> PaymentMethods { get; set; } = new List<PaymentMethod>();
 
+    public virtual ICollection<PostedTransaction> PostedTransactions { get; set; } = new List<PostedTransaction>();
+
     public virtual ICollection<ProductGroup> ProductGroups { get; set; } = new List<ProductGroup>();
 
     public virtual ICollection<ProductUnitTypeConversion> ProductUnitTypeConversionEntryByNavigations { get; set; } = new List<ProductUnitTypeConversion>();
@@ -66,6 +76,14 @@ public partial class LoginUser
     public virtual ICollection<ProductUnitTypeConversion> ProductUnitTypeConversionUpdateByNavigations { get; set; } = new List<ProductUnitTypeConversion>();
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+
+    public virtual ICollection<PurchaseIn> PurchaseInApprovedByNavigations { get; set; } = new List<PurchaseIn>();
+
+    public virtual ICollection<PurchaseIn> PurchaseInCancelledByNavigations { get; set; } = new List<PurchaseIn>();
+
+    public virtual ICollection<PurchaseIn> PurchaseInEntryByNavigations { get; set; } = new List<PurchaseIn>();
+
+    public virtual ICollection<PurchaseIn> PurchaseInUpdatedByNavigations { get; set; } = new List<PurchaseIn>();
 
     public virtual ICollection<PurchaseOrder> PurchaseOrderApprovedByNavigations { get; set; } = new List<PurchaseOrder>();
 
@@ -77,6 +95,8 @@ public partial class LoginUser
 
     public virtual ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();
 
+    public virtual ICollection<SubsidiaryAccount> SubsidiaryAccounts { get; set; } = new List<SubsidiaryAccount>();
+
     public virtual ICollection<Supplier> SupplierEntryByNavigations { get; set; } = new List<Supplier>();
 
     public virtual ICollection<Supplier> SupplierUpdateByNavigations { get; set; } = new List<Supplier>();
@@ -86,4 +106,14 @@ public partial class LoginUser
     public virtual ICollection<UserSession> UserSessions { get; set; } = new List<UserSession>();
 
     public virtual ICollection<UserVerification> UserVerifications { get; set; } = new List<UserVerification>();
+
+    public virtual ICollection<Voucher> VoucherApprovedByNavigations { get; set; } = new List<Voucher>();
+
+    public virtual ICollection<Voucher> VoucherCancelledByNavigations { get; set; } = new List<Voucher>();
+
+    public virtual ICollection<Voucher> VoucherEntryByNavigations { get; set; } = new List<Voucher>();
+
+    public virtual ICollection<Voucher> VoucherPostedByNavigations { get; set; } = new List<Voucher>();
+
+    public virtual ICollection<Voucher> VoucherPrepareByNavigations { get; set; } = new List<Voucher>();
 }

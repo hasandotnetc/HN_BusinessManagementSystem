@@ -5,7 +5,7 @@ namespace HN_Backend.Data;
 
 public partial class CurrentStock
 {
-    public long CurrentStockId { get; set; }
+    public Guid CurrentStockId { get; set; }
 
     public long ProductId { get; set; }
 
@@ -24,6 +24,10 @@ public partial class CurrentStock
     public DateTime CreateOn { get; set; }
 
     public long EntryBy { get; set; }
+
+    public long CompanyId { get; set; }
+
+    public virtual Company Company { get; set; } = null!;
 
     public virtual ICollection<CurrentStockDetail> CurrentStockDetails { get; set; } = new List<CurrentStockDetail>();
 

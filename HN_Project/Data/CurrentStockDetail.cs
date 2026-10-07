@@ -5,9 +5,9 @@ namespace HN_Backend.Data;
 
 public partial class CurrentStockDetail
 {
-    public long CurrentStockDetailId { get; set; }
+    public Guid CurrentStockDetailId { get; set; }
 
-    public long CurrentStockId { get; set; }
+    public Guid CurrentStockId { get; set; }
 
     public string SerialNo { get; set; } = null!;
 

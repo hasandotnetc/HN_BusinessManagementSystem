@@ -41,6 +41,8 @@ public partial class Supplier
 
     public virtual LoginUser EntryByNavigation { get; set; } = null!;
 
+    public virtual ICollection<PurchaseIn> PurchaseIns { get; set; } = new List<PurchaseIn>();
+
     public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new List<PurchaseOrder>();
 
     public virtual LoginUser? UpdateByNavigation { get; set; }
