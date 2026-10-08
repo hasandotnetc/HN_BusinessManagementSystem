@@ -53,7 +53,7 @@ public partial class PurchaseIn
 
     public long LocationId { get; set; }
 
-    public long Company { get; set; }
+    public long CompanyId { get; set; }
 
     public long EntryBy { get; set; }
 
@@ -63,7 +63,7 @@ public partial class PurchaseIn
 
     public virtual LoginUser? CancelledByNavigation { get; set; }
 
-    public virtual Company CompanyNavigation { get; set; } = null!;
+    public virtual Company Company { get; set; } = null!;
 
     public virtual LoginUser EntryByNavigation { get; set; } = null!;
 

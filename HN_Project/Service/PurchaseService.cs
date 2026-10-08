@@ -54,7 +54,7 @@ namespace HN_Backend.Service
                     DiscountType = createDto.DiscountType,
                     TotalAmount = createDto.TotalAmount,
                     PreviousDeu = createDto.PreviousDeu,
-                    Company = companyId,
+                    CompanyId = companyId,
                     LocationId = locationId,
                     EntryBy = userId,
                     Approved = "N",
@@ -71,7 +71,7 @@ namespace HN_Backend.Service
                         PurchaseInId = purchaseOrder.PurchaseInId, // Set FK directly
                         ProductId = detailDto.ProductId,
                         Quantity = detailDto.Quantity,
-                        UnitType = detailDto.UnitType,
+                        UnitTypeId = detailDto.UnitTypeId,
                         Cost = detailDto.Cost,
                         AdditionalCost = detailDto.AdditionalCost,
                         PurchaseInAdditionalCost = detailDto.PurchaseInAdditionalCost,
@@ -95,6 +95,7 @@ namespace HN_Backend.Service
                             {
                                 PurchaseInDetailTaxId = Guid.NewGuid(), // Set PK
                                 PurchaseInDetailId = detailId,         // Set FK
+                                PurchaseInId = purchaseOrder.PurchaseInId, // Set FK directly
                                 TaxId = taxDto.TaxId,
                                 TaxAmount = taxDto.TaxAmount,
                                 TaxOn = taxDto.TaxOn,
@@ -112,6 +113,7 @@ namespace HN_Backend.Service
                         {
                             PurchaseInDetailSerialId = Guid.NewGuid(), // Set PK
                             PurchaseInDetailId = detailId,             // Set FK
+                            PurchaseInId = purchaseOrder.PurchaseInId, // Set FK directly
                             SerialNo = serial.SerialNo
                         };
 

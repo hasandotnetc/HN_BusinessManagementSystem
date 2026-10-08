@@ -2,7 +2,7 @@
 
 namespace HN_Frontend.Controllers
 {
-    public class PurchaseController : Controller
+    public class PurchaseOrderController : Controller
     {
         public IActionResult Index()
         {

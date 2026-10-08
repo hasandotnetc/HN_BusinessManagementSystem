@@ -996,8 +996,8 @@ public partial class ApplicationDbContext : DbContext
                 .HasForeignKey(d => d.CancelledBy)
                 .HasConstraintName("FK_PurchaseIn_LoginUser_Cancelled");
 
-            entity.HasOne(d => d.CompanyNavigation).WithMany(p => p.PurchaseIns)
-                .HasForeignKey(d => d.Company)
+            entity.HasOne(d => d.Company).WithMany(p => p.PurchaseIns)
+                .HasForeignKey(d => d.CompanyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PurchaseIn_Company");
 
@@ -1070,8 +1070,8 @@ public partial class ApplicationDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PurchaseInDetail_PurchaseIn");
 
-            entity.HasOne(d => d.UnitTypeNavigation).WithMany(p => p.PurchaseInDetails)
-                .HasForeignKey(d => d.UnitType)
+            entity.HasOne(d => d.UnitType).WithMany(p => p.PurchaseInDetails)
+                .HasForeignKey(d => d.UnitTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PurchaseInDetail_UnitType");
         });

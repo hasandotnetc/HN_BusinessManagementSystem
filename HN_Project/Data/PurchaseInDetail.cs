@@ -11,7 +11,7 @@ public partial class PurchaseInDetail
 
     public long ProductId { get; set; }
 
-    public long UnitType { get; set; }
+    public long UnitTypeId { get; set; }
 
     public decimal Quantity { get; set; }
 
@@ -49,5 +49,5 @@ public partial class PurchaseInDetail
 
     public virtual ICollection<PurchaseInDetailTax> PurchaseInDetailTaxes { get; set; } = new List<PurchaseInDetailTax>();
 
-    public virtual UnitType UnitTypeNavigation { get; set; } = null!;
+    public virtual UnitType UnitType { get; set; } = null!;
 }

@@ -1,0 +1,1442 @@
+﻿@{
+    ViewData["Title"] = "Purchase In Entry";
+}
+
+<!-- GOOGLE FONTS, BOOTSTRAP 5, BOOTSTRAP ICONS, FONT AWESOME & TOASTR -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+<style>
+    :root {
+        --rebecca-solid: #663399;
+        --rebecca-dark: #4b2375;
+        --rebecca-gold: #e0aa3e;
+        --rebecca-gold-hover: #cc962d;
+        --rebecca-light-bg: #f3f4f6;
+        --rebecca-card-bg: #ffffff;
+        --rebecca-border: #e5e7eb;
+        --text-dark: #1f2937;
+        --text-muted: #6b7280;
+    }
+
+    body {
+        background-color: var(--rebecca-light-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 0.8125rem;
+        color: var(--text-dark);
+    }
+
+    /* HIDE SPINNER ARROWS ON NUMERIC INPUTS */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .purchase-workspace-wrapper {
+        background-color: var(--rebecca-light-bg);
+        color: var(--text-dark);
+        border-radius: 8px;
+    }
+
+    .form-card-premium {
+        background-color: var(--rebecca-card-bg) !important;
+        border: 1px solid var(--rebecca-border);
+        border-radius: 8px;
+        padding: 14px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    }
+
+    .product-selection-card {
+        background: #ffffff !important;
+        border: 1px solid var(--rebecca-border);
+        border-radius: 8px;
+        padding: 14px !important;
+        box-shadow: 0 4px 8px rgba(102, 51, 153, 0.06);
+    }
+
+    .section-header-banner {
+        background-color: var(--rebecca-solid);
+        color: #ffffff;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+    }
+
+    .product-header-gradient {
+        background: linear-gradient(135deg, var(--rebecca-solid) 0%, var(--rebecca-dark) 100%) !important;
+        color: #ffffff;
+        padding: 8px 14px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+    }
+
+    .section-title-white {
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+    }
+
+    .inline-label {
+        color: #374151;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+        min-width: 90px;
+        display: flex;
+        align-items: center;
+    }
+
+    .custom-form-control {
+        background-color: #ffffff !important;
+        color: var(--text-dark) !important;
+        border: 1px solid #d1d5db !important;
+        border-radius: 4px !important;
+        padding: 3px 6px;
+        font-size: 11px;
+        height: 28px !important;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+        .custom-form-control:focus {
+            border-color: var(--rebecca-solid) !important;
+            box-shadow: 0 0 0 2px rgba(102, 51, 153, 0.2) !important;
+        }
+
+        .custom-form-control[readonly] {
+            background-color: #f1f5f9 !important;
+            color: #64748b !important;
+        }
+
+    .mandatory-star {
+        color: #dc2626;
+        margin-left: 2px;
+    }
+
+    /* REBECCA PURPLE ADD & ACTION BUTTONS */
+    .btn-gold-action {
+        background-color: var(--rebecca-gold);
+        color: #1a0f30 !important;
+        font-weight: 700;
+        border: none;
+        padding: 4px 16px;
+        border-radius: 4px;
+        font-size: 11px;
+        transition: background-color 0.2s ease;
+    }
+
+        .btn-gold-action:hover {
+            background-color: var(--rebecca-gold-hover);
+        }
+
+    .btn-purple-add {
+        background-color: var(--rebecca-solid) !important;
+        color: #ffffff !important;
+        border: none;
+        border-radius: 4px;
+        padding: 2px 12px;
+        font-size: 11px;
+        height: 28px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease;
+    }
+
+        .btn-purple-add:hover {
+            background-color: var(--rebecca-dark) !important;
+        }
+
+    .btn-purple-utility {
+        background-color: var(--rebecca-solid);
+        color: #ffffff !important;
+        border: none;
+        border-radius: 4px;
+        padding: 2px 10px;
+        font-size: 11px;
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease;
+    }
+
+        .btn-purple-utility:hover {
+            background-color: var(--rebecca-dark);
+        }
+
+    .btn-purple-outline {
+        background-color: #ffffff;
+        color: var(--rebecca-solid) !important;
+        border: 1px solid var(--rebecca-solid);
+        border-radius: 4px;
+        padding: 2px 10px;
+        font-size: 11px;
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+        .btn-purple-outline:hover {
+            background-color: #f3e8ff;
+        }
+
+    .autocomplete-wrapper {
+        position: relative;
+    }
+
+    .autocomplete-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1050;
+        background: #ffffff;
+        border: 1px solid var(--rebecca-border);
+        border-radius: 6px;
+        max-height: 260px;
+        overflow-y: auto;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        display: none;
+    }
+
+    .autocomplete-item {
+        padding: 6px 10px;
+        border-bottom: 1px solid #f1f5f9;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+        .autocomplete-item:hover, .autocomplete-item.active {
+            background-color: #f3e8ff;
+        }
+
+    .product-grid-container {
+        max-height: 380px;
+        overflow-y: auto;
+        border: 1px solid var(--rebecca-border);
+        border-radius: 6px;
+        background: #fff;
+    }
+
+    .table-two-tier {
+        margin: 0;
+        font-size: 11px;
+        width: 100%;
+    }
+
+        .table-two-tier th {
+            background-color: var(--rebecca-solid);
+            color: #ffffff;
+            padding: 6px 8px;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border: none;
+        }
+
+        .table-two-tier td {
+            padding: 4px 6px;
+            border-bottom: 1px solid var(--rebecca-border);
+            vertical-align: middle;
+        }
+
+    .tier-row-main {
+        background-color: #ffffff;
+    }
+
+    .tier-row-sub {
+        background-color: #f8fafc;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .sub-field-label {
+        font-weight: 600;
+        color: #475569;
+        font-size: 10px;
+        white-space: nowrap;
+        margin-right: 4px;
+    }
+
+    .btn-del-icon {
+        color: #ef4444;
+        background: #fee2e2;
+        border: 1px solid #fca5a5;
+        border-radius: 4px;
+        padding: 2px 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .btn-del-icon:hover {
+            background: #dc2626;
+            color: #ffffff;
+        }
+
+    .serial-trigger-btn {
+        cursor: pointer;
+        font-size: 14px;
+        transition: transform 0.15s ease;
+    }
+
+        .serial-trigger-btn:hover {
+            transform: scale(1.15);
+        }
+
+    .summary-box {
+        background-color: #fafafa;
+        border: 1px solid var(--rebecca-border);
+        border-radius: 6px;
+        padding: 12px;
+    }
+
+    .modal-header-purple {
+        background-color: var(--rebecca-solid);
+        color: #ffffff;
+    }
+
+    .serial-list-container {
+        max-height: 180px;
+        overflow-y: auto;
+        border: 1px solid var(--rebecca-border);
+        border-radius: 4px;
+    }
+
+    .notepad-textarea {
+        min-height: 95px !important;
+        resize: vertical;
+    }
+</style>
+
+<div class="container-fluid p-2 purchase-workspace-wrapper">
+
+    <!-- TOP ROW: Master Supplier & Header Controls -->
+    <div class="form-card-premium mb-2">
+        <div class="section-header-banner d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <i class="fa-solid fa-cart-shopping text-warning me-2" style="font-size: 13px;"></i>
+                <h2 class="section-title-white m-0 text-uppercase">Purchase In Entry</h2>
+            </div>
+            <span class="badge bg-light text-dark fw-bold px-2 py-1" style="font-size: 10px;">ERP V2.0</span>
+        </div>
+
+        <div class="row g-2">
+            <div class="col-xl-3 col-md-6">
+                <div class="d-flex align-items-center mb-2 autocomplete-wrapper">
+                    <label class="inline-label">Supplier <span class="mandatory-star">*</span></label>
+                    <input type="text" id="txtSupplierSearch" class="form-control custom-form-control" placeholder="Search Name/Code/Phone..." autocomplete="off" />
+                    <input type="hidden" id="hdnSupplierId" value="0" />
+                    <div id="supplierSearchResults" class="autocomplete-results"></div>
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                    <label class="inline-label">PO No</label>
+                    <input type="text" id="txtPurchaseOrderNo" class="form-control custom-form-control" placeholder="PO-XXXXX (Optional)" />
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                    <label class="inline-label">Supplier Name</label>
+                    <input type="text" id="txtSupplierName" class="form-control custom-form-control" placeholder="Readonly" readonly />
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                    <label class="inline-label">Ref No</label>
+                    <input type="text" id="txtReferenceNo" class="form-control custom-form-control" placeholder="Reference No (Optional)" />
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="d-flex align-items-center mb-2">
+                    <label class="inline-label">Supplier Code</label>
+                    <input type="text" id="txtSupplierCode" class="form-control custom-form-control" placeholder="Readonly" readonly />
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                    <label class="inline-label">Supplier Phone</label>
+                    <input type="text" id="txtSupplierPhone" class="form-control custom-form-control" placeholder="Readonly" readonly />
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                    <label class="inline-label">Address</label>
+                    <input type="text" id="txtSupplierAddress" class="form-control custom-form-control" placeholder="Readonly" readonly />
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                    <label class="inline-label">Ledger Due</label>
+                    <input type="text" id="txtLedgerDue" class="form-control custom-form-control text-end fw-bold text-danger" placeholder="" readonly />
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="d-flex align-items-center mb-2">
+                    <label class="inline-label">Purchase No</label>
+                    <input type="text" id="txtPurchaseNo" class="form-control custom-form-control fw-bold" placeholder="Auto Generated" readonly />
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                    <label class="inline-label">Date & Time <span class="mandatory-star">*</span></label>
+                    <input type="datetime-local" id="txtPurchaseDate" class="form-control custom-form-control" />
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                    <label class="inline-label">Payment Opt. <span class="mandatory-star">*</span></label>
+                    <select id="ddlPaymentMethod" class="form-select custom-form-control">
+                        <option value="">-- Select Payment --</option>
+                    </select>
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                    <label class="inline-label">Remarks</label>
+                    <input type="text" id="txtRemarks" class="form-control custom-form-control" placeholder="Optional notes..." />
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="border rounded p-2 text-center bg-light h-100 d-flex flex-column align-items-center justify-content-center">
+                    <span class="text-muted fw-semibold mb-1" style="font-size: 10px;">SUPPLIER PHOTO</span>
+                    <img id="imgSupplierPreview" src="/Upload/Product/no-image.png" class="rounded border bg-white" style="width: 80px; height: 80px; object-fit: cover;" onerror="this.onerror=null;this.src='/Upload/Product/no-image.png'" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MIDDLE ROW: Product Selection Bar with Rich Rebecca Purple Button -->
+    <div class="product-selection-card mb-2">
+        <div class="product-header-gradient d-flex align-items-center justify-content-between py-1 px-3">
+            <h6 class="section-title-white m-0"><i class="fa-solid fa-box-open me-1"></i> Product Selection Information</h6>
+            <span class="badge bg-white text-dark fw-bold px-2 py-0.5" style="font-size: 10px;">Entry Workspace</span>
+        </div>
+
+        <div class="row g-2 align-items-end">
+            <div class="col-xl-4 col-md-6 autocomplete-wrapper">
+                <label class="form-label fw-semibold mb-1 text-dark" style="font-size: 11px;">Search Product <span class="mandatory-star">*</span></label>
+                <input type="text" id="txtProductSearch" class="form-control custom-form-control" placeholder="Type Product Name / Code / Model..." autocomplete="off" />
+                <div id="productSearchResults" class="autocomplete-results"></div>
+            </div>
+
+            <div class="col-xl-2 col-md-3">
+                <label class="form-label fw-semibold mb-1 text-dark" style="font-size: 11px;">Unit Type <span class="mandatory-star">*</span></label>
+                <select id="ddlUnitType" class="form-select custom-form-control">
+                    <option value="">-- Unit --</option>
+                </select>
+            </div>
+
+            <div class="col-xl-4 col-md-9">
+                <div class="d-flex gap-2">
+                    <div class="flex-fill">
+                        <label class="form-label fw-semibold mb-0 text-muted" style="font-size: 10px;">Stock In Hand</label>
+                        <input type="text" id="txtStockInHand" class="form-control custom-form-control text-center fw-bold bg-light" placeholder="" readonly />
+                    </div>
+                    <div class="flex-fill">
+                        <label class="form-label fw-semibold mb-0 text-muted" style="font-size: 10px;">Available</label>
+                        <input type="text" id="txtStockAvailable" class="form-control custom-form-control text-center bg-light" placeholder="" readonly />
+                    </div>
+                    <div class="flex-fill">
+                        <label class="form-label fw-semibold mb-0 text-muted" style="font-size: 10px;">Booking</label>
+                        <input type="text" id="txtStockBooking" class="form-control custom-form-control text-center bg-light" placeholder="" readonly />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-2 col-md-3 text-end">
+                <button type="button" id="btnAddProduct" class="btn btn-purple-add w-100">
+                    <i class="fa-solid fa-plus me-1"></i> Add
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN GRID: Added Product List -->
+    <div class="form-card-premium mb-2">
+        <div class="product-grid-container">
+            <table class="table table-two-tier align-middle" id="tblPurchaseDetails">
+                <thead>
+                    <tr>
+                        <th width="40" class="text-center">#SL</th>
+                        <th>Product Information</th>
+                        <th width="90" class="text-center">Qty</th>
+                        <th width="100" class="text-end">Cost</th>
+                        <th width="100" class="text-end">Add. Cost</th>
+                        <th width="90" class="text-end">Discount</th>
+                        <th width="100" class="text-center">Disc. Type</th>
+                        <th width="110" class="text-end">Total Amount</th>
+                        <th width="70" class="text-center">Serial</th>
+                        <th width="50" class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="purchaseDetailsBody">
+                    <tr>
+                        <td colspan="10" class="text-center py-4 text-muted">No products added yet. Search and add items above.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- BOTTOM ROW: Summary, Master Costs, Taxes & Controls -->
+    <div class="row g-2">
+        <div class="col-xl-6 col-md-12">
+            <div class="form-card-premium h-100">
+                <div class="section-header-banner py-1 mb-2">
+                    <h6 class="section-title-white m-0" style="font-size: 12px;"><i class="fa-solid fa-percent me-1"></i> VAT & Tax Configuration</h6>
+                </div>
+                <div class="row g-2 align-items-end mb-2">
+                    <div class="col-md-5">
+                        <label class="form-label fw-semibold mb-1" style="font-size: 11px;">Tax Name</label>
+                        <select id="ddlTaxName" class="form-select custom-form-control">
+                            <option value="">-- Select Tax --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold mb-1" style="font-size: 11px;">Tax On</label>
+                        <select id="ddlTaxOn" class="form-select custom-form-control">
+                            <option value="A">Amount (A)</option>
+                            <option value="P">Percentage (P)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold mb-1" style="font-size: 11px;">Val/Rate</label>
+                        <input type="number" step="0.01" id="txtTaxValue" class="form-control custom-form-control text-end auto-clear-num" placeholder="" />
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" id="btnAddTax" class="btn btn-purple-add w-100">
+                            <i class="fa-solid fa-plus me-1"></i> Add
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive border rounded" style="max-height: 110px; overflow-y: auto;">
+                    <table class="table table-sm m-0 text-center" style="font-size: 11px;">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="text-start ps-2">Tax Name</th>
+                                <th>Tax On</th>
+                                <th class="text-end">Val/Rate</th>
+                                <th width="40">Del</th>
+                            </tr>
+                        </thead>
+                        <tbody id="taxListBody">
+                            <tr><td colspan="4" class="text-muted py-2">No Taxes Applied</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-md-12">
+            <div class="form-card-premium summary-box h-100">
+                <div class="row g-2 align-items-center mb-1">
+                    <div class="col-6 text-end fw-semibold">Master Additional Cost:</div>
+                    <div class="col-6">
+                        <input type="number" step="0.01" id="txtMasterAdditionalCost" class="form-control custom-form-control text-end auto-clear-num" placeholder="" onkeyup="recalculateGrandTotals()" />
+                    </div>
+                </div>
+
+                <div class="row g-2 align-items-center mb-1">
+                    <div class="col-3 text-end fw-semibold">Master Discount:</div>
+                    <div class="col-3">
+                        <select id="ddlMasterDiscountType" class="form-select custom-form-control" onchange="recalculateGrandTotals()">
+                            <option value="A">Amount (A)</option>
+                            <option value="P">Percentage (P)</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <input type="number" step="0.01" id="txtMasterDiscount" class="form-control custom-form-control text-end auto-clear-num" placeholder="" onkeyup="recalculateGrandTotals()" />
+                    </div>
+                </div>
+
+                <div class="row g-2 align-items-center mb-2">
+                    <div class="col-6 text-end fw-bold text-uppercase" style="font-size: 13px;">Grand Total Amount:</div>
+                    <div class="col-6">
+                        <input type="text" id="txtGrandTotalAmount" class="form-control custom-form-control text-end fw-bold text-white bg-dark" style="font-size: 14px;" placeholder="" readonly />
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 pt-2 border-top">
+                    <button type="button" class="btn btn-purple-outline" onclick="resetPurchaseForm()">
+                        <i class="fa-solid fa-rotate-left me-1"></i> Clear
+                    </button>
+                    <button type="button" id="btnSavePurchase" class="btn btn-gold-action px-4" onclick="submitPurchase()">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Save Purchase
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= MODAL: SERIAL NO MANAGER ================= -->
+<div class="modal fade" id="serialModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header modal-header-purple py-2 px-3">
+                <h6 class="modal-title fw-bold m-0" style="font-size: 13px;">
+                    <i class="fa-solid fa-barcode me-1"></i> Serial No Management
+                </h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3">
+                <div class="bg-light border rounded p-2 mb-3">
+                    <div class="fw-bold text-purple" id="modalProductName">Product Name: -</div>
+                    <div class="d-flex gap-4 mt-1" style="font-size: 11px;">
+                        <div>Quantity <span class="fw-bold text-dark ms-1" id="modalTargetQty">0</span></div>
+                        <div>Entry Qty <span class="fw-bold text-success ms-1" id="modalEntryQty">0</span></div>
+                        <div>Left Qty <span class="fw-bold text-danger ms-1" id="modalLeftQty">0</span></div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-4 mb-3" style="font-size: 11px;">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="serialMode" id="modeSerialWise" value="wise" checked onchange="toggleSerialModes()">
+                        <label class="form-check-label fw-semibold" for="modeSerialWise">Serial Wise</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="serialMode" id="modeSequence" value="seq" onchange="toggleSerialModes()">
+                        <label class="form-check-label fw-semibold" for="modeSequence">Sequence</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="serialMode" id="modeNotepad" value="note" onchange="toggleSerialModes()">
+                        <label class="form-check-label fw-semibold" for="modeNotepad">Notepad</label>
+                    </div>
+                </div>
+
+                <div id="panelSerialWise" class="mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="inline-label" style="min-width: 65px;">Serial No:</label>
+                        <input type="text" id="txtSingleSerial" class="form-control custom-form-control" placeholder="Enter Serial No..." />
+                        <button type="button" class="btn btn-purple-add" onclick="addSingleSerial()"><i class="fa-solid fa-plus me-1"></i> Add</button>
+                    </div>
+                </div>
+
+                <div id="panelSequence" class="mb-3 d-none">
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="inline-label" style="min-width: 65px;">Serial No:</label>
+                        <input type="text" id="txtSeqPrefix" class="form-control custom-form-control" style="width: 80px;" placeholder="Prefix" />
+                        <label class="fw-semibold text-muted" style="font-size:11px;">From</label>
+                        <input type="number" id="txtSeqFrom" class="form-control custom-form-control auto-clear-num" style="width: 70px;" placeholder="Start" />
+                        <label class="fw-semibold text-muted" style="font-size:11px;">To</label>
+                        <input type="number" id="txtSeqTo" class="form-control custom-form-control auto-clear-num" style="width: 70px;" placeholder="End" />
+                        <button type="button" class="btn btn-purple-add" onclick="addSequenceSerials()"><i class="fa-solid fa-plus me-1"></i> Add</button>
+                    </div>
+                </div>
+
+                <div id="panelNotepad" class="mb-3 d-none">
+                    <div class="d-flex flex-column gap-2">
+                        <textarea id="txtNotepadSerials" class="form-control custom-form-control notepad-textarea" rows="4" placeholder="Enter serial numbers line by line or separated by commas..."></textarea>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-purple-add" onclick="addNotepadSerials()"><i class="fa-solid fa-plus me-1"></i> Add</button>
+                        </div>
+                    </div>
+                </div>
+
+                <span class="fw-semibold text-dark mb-1 d-block" style="font-size: 11px;">Added Serial No List</span>
+                <div class="serial-list-container">
+                    <table class="table table-sm text-center align-middle m-0" style="font-size: 11px;">
+                        <thead class="bg-light">
+                            <tr>
+                                <th width="60"># SL</th>
+                                <th>Serial No</th>
+                                <th width="70">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="serialListBody">
+                            <tr><td colspan="3" class="text-muted py-2">No Serials Added</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer bg-light py-2 px-3 border-0">
+                <button type="button" class="btn btn-purple-utility py-1 px-3" data-bs-dismiss="modal" onclick="applySerialsToRow()">Done & Apply</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "timeOut": "3500"
+    };
+
+    var API_HOST = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.API_BASE_URL) ? APP_CONFIG.API_BASE_URL : '';
+    var DEFAULT_NO_IMAGE = API_HOST + "/Upload/Product/no-image.png";
+
+    function getApiUrl(endpoint) {
+        const cleanBase = API_HOST.endsWith('/') ? API_HOST.slice(0, -1) : API_HOST;
+        const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+        return `${cleanBase}${cleanEndpoint}`;
+    }
+
+    function getAuthCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return '';
+    }
+
+    function getAuthHeaders(contentType = 'application/json') {
+        const jwtToken = (typeof getAuthCookie === 'function') ? getAuthCookie("HN_JWT") : (typeof token !== 'undefined' ? token : '');
+        const headers = { 'Authorization': jwtToken ? `Bearer ${jwtToken}` : '' };
+        if (contentType) { headers['Content-Type'] = contentType; }
+        return headers;
+    }
+
+    let currentSelectedProduct = null;
+    let appliedTaxesList = [];
+    let activeSerialRowIndex = null;
+    let activeRowSerials = [];
+    let isAlreadySaved = false;
+
+    function isValidSerialFormat(serial) {
+        const regex = /^[a-zA-Z0-9\-_]+$/;
+        return regex.test(serial);
+    }
+
+    $(document).ready(function () {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        $('#txtPurchaseDate').val(now.toISOString().slice(0, 16));
+
+        loadPaymentMethods();
+        loadTaxesDropdown();
+        setupSupplierAutocomplete();
+        setupProductAutocomplete();
+
+        $('#btnAddProduct').on('click', handleAddProductRow);
+        $('#btnAddTax').on('click', handleAddTaxToList);
+
+        // AUTO-CLEAR ON FOCUS FOR ALL NUMERIC INPUTS (PREVENTS ERASING 0.00 MANUALLY)
+        $(document).on('focus', 'input[type="number"], .auto-clear-num', function () {
+            if ($(this).val() === '0.00' || $(this).val() === '0') {$(this).val('');
+            }
+        });
+
+        $(document).on('blur', 'input[type="number"], .auto-clear-num', function () {
+            if ($(this).val().trim() === '') {$(this).val('');
+            }
+        });
+
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.autocomplete-wrapper').length) {$('.autocomplete-results').hide();
+            }
+        });
+    });
+
+    async function loadPaymentMethods() {
+        try {
+            const res = await fetch(getApiUrl('/api/PaymentMethod/GetPaymentMethodDropdownList'), {
+                headers: getAuthHeaders('application/json')
+            });
+            if (res.ok) {
+                const data = await res.json();
+                const $ddl =$('#ddlPaymentMethod').empty().append('<option value="">-- Select Payment --</option>');
+                $.each(data, function (i, item) {
+                    $ddl.append(`<option value="${item.paymentMethodId}">${item.name || item.paymentMethodName}</option>`);
+                });
+            }
+        } catch (e) { toastr.error("Failed to load payment options."); }
+    }
+
+    function setupSupplierAutocomplete() {
+        let timer = null;
+        $('#txtSupplierSearch').on('keyup', function () {
+            clearTimeout(timer);
+            const val = $(this).val().trim();
+            if (val.length < 1) { $('#supplierSearchResults').hide(); return; }
+
+            timer = setTimeout(async () => {
+                try {
+                    const res = await fetch(getApiUrl(`/api/Supplier/GetSupplierByNameCodePhone?objParam=${encodeURIComponent(val)}`), {
+                        headers: getAuthHeaders('application/json')
+                    });
+                    if (res.ok) {
+                        const list = await res.json();
+                        renderSupplierResults(list);
+                    }
+                } catch (e) { console.error(e); }
+            }, 300);
+        });
+    }
+
+    function renderSupplierResults(list) {
+        const $box =$('#supplierSearchResults').empty();
+        if (!list || list.length === 0) { $box.hide(); return; }
+
+        $.each(list, function (i, item) {
+            const img = item.imageUrl ? `${API_HOST}/${item.imageUrl}` : DEFAULT_NO_IMAGE;
+            const html = `
+                <div class="autocomplete-item supplier-opt" data-json='${JSON.stringify(item)}'>
+                    <div class="fw-bold text-purple" style="font-size:12px;">Supplier Name: ${item.name}</div>
+                    <div class="d-flex align-items-center gap-2 mt-1">
+                        <img src="${img}" width="36" height="36" class="rounded border" style="object-fit:cover;" onerror="this.src='${DEFAULT_NO_IMAGE}'">
+                        <div style="font-size:10px;" class="text-muted">
+                            <div><strong>Code:</strong> ${item.code} | <strong>Phone:</strong> ${item.phone}</div>
+                        </div>
+                    </div>
+                </div>`;
+            $box.append(html);
+        });
+
+        $box.show();
+
+        $('.supplier-opt').on('click', function () {
+            const item = $(this).data('json');$('#hdnSupplierId').val(item.supplierId);
+            $('#txtSupplierSearch').val(item.name);
+            $('#txtSupplierName').val(item.name);
+            $('#txtSupplierCode').val(item.code);
+            $('#txtSupplierPhone').val(item.phone);
+            $('#txtSupplierAddress').val(item.address);
+            $('#txtLedgerDue').val("0.00");
+
+            if (item.imageUrl) {
+                $('#imgSupplierPreview').attr('src', `${API_HOST}/${item.imageUrl}`);
+            } else {
+                $('#imgSupplierPreview').attr('src', DEFAULT_NO_IMAGE);
+            }
+            $box.hide();
+        });
+    }
+
+    function setupProductAutocomplete() {
+        let timer = null;
+        $('#txtProductSearch').on('keyup', function () {
+            clearTimeout(timer);
+            const val = $(this).val().trim();
+            if (val.length < 1) { $('#productSearchResults').hide(); return; }
+
+            timer = setTimeout(async () => {
+                try {
+                    const res = await fetch(getApiUrl(`/api/SearchingByDapper/GetProductBySearchForDetailAndStock?objParam=${encodeURIComponent(val)}`), {
+                        headers: getAuthHeaders('application/json')
+                    });
+                    if (res.ok) {
+                        const list = await res.json();
+                        renderProductResults(list);
+                    }
+                } catch (e) { console.error(e); }
+            }, 300);
+        });
+    }
+
+    function renderProductResults(list) {
+        const $box =$('#productSearchResults').empty();
+        if (!list || list.length === 0) { $box.hide(); return; }
+
+        $.each(list, function (i, item) {
+            const img = item.picture ? `${API_HOST}/${item.picture}` : DEFAULT_NO_IMAGE;
+            const html = `
+                <div class="autocomplete-item product-opt" data-json='${JSON.stringify(item)}'>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-dark" style="font-size:12px;">Product Name: ${item.name}</span>
+                        <span class="badge bg-purple text-white px-2 py-1" style="font-size:10px;">Stock: ${item.stockUnit || 0}</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mt-1">
+                        <img src="${img}" width="34" height="34" class="rounded border" style="object-fit:cover;" onerror="this.src='${DEFAULT_NO_IMAGE}'">
+                        <div style="font-size:10px;" class="text-muted">
+                            <div><strong>Code:</strong> ${item.code} | <strong>Model:</strong> ${item.model || 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>`;
+            $box.append(html);
+        });
+
+        $box.show();
+
+        $('.product-opt').on('click', function () {
+            const item = $(this).data('json');
+            currentSelectedProduct = item;
+            $('#txtProductSearch').val(item.name);
+            $('#txtStockInHand').val(parseFloat(item.stockUnit || 0).toFixed(2));
+            $box.hide();
+
+            loadProductUnitTypes(item.productId);
+        });
+    }
+
+    async function loadProductUnitTypes(productId) {
+        try {
+            const res = await fetch(getApiUrl(`/api/Product/GetAllUnitTypeAfterProductSelection/${productId}`), {
+                headers: getAuthHeaders('application/json')
+            });
+            if (res.ok) {
+                const list = await res.json();
+                const $ddl =$('#ddlUnitType').empty().append('<option value="">-- Unit --</option>');
+                let autoSelectedId = null;
+
+                $.each(list, function (i, unit) {
+                    $ddl.append(`<option value="${unit.unitTypeId}">${unit.name}</option>`);
+                    if (unit.defaultPurchase) { autoSelectedId = unit.unitTypeId; }
+                });
+
+                if (autoSelectedId) { $ddl.val(autoSelectedId); }
+            }
+        } catch (e) { toastr.error("Failed to load product unit types."); }
+    }
+
+    function handleAddProductRow() {
+        if (!currentSelectedProduct) {
+            toastr.warning("Please search and select a product first.");
+            return;
+        }
+
+        const unitTypeId = $('#ddlUnitType').val();
+        const unitTypeName = $('#ddlUnitType option:selected').text();
+        if (!unitTypeId) {
+            toastr.warning("Please select a unit type.");
+            return;
+        }
+
+        if ($('#purchaseDetailsBody tr td').length === 1) {
+            $('#purchaseDetailsBody').empty();
+        }
+
+        const rowId = Date.now();
+        const isSerial = currentSelectedProduct.serialAvailable === "Y";
+
+        const serialIcon = isSerial
+            ? `<i class="fa-solid fa-barcode text-primary serial-trigger-btn" onclick="openSerialModal('${rowId}')" title="Configure Serial Numbers"></i>
+               <span class="badge bg-primary rounded-pill ms-1 serial-count-badge" id="badge_${rowId}">0</span>`
+            : `<i class="fa-solid fa-ban text-muted" title="Non-Serial Product"></i>`;
+
+        // Tier 1 Main Row
+        const tier1Html = `
+            <tr class="tier-row-main" id="row_main_${rowId}" data-row-id="${rowId}" data-product-id="${currentSelectedProduct.productId}" data-serial-avail="${isSerial}">
+                <td class="text-center fw-bold row-sl-number">1</td>
+                <td>
+                    <div class="fw-bold text-dark row-product-name">${currentSelectedProduct.name}</div>
+                    <span class="badge bg-light text-muted border" style="font-size:9px;">Code: ${currentSelectedProduct.code}</span>
+                    <span class="badge bg-light text-muted border" style="font-size:9px;">Model: ${currentSelectedProduct.model || 'N/A'}</span>
+                    <span class="badge bg-purple-subtle text-purple border" style="font-size:9px;">Unit: ${unitTypeName}</span>
+                    <input type="hidden" class="row-unit-id" value="${unitTypeId}" />
+                </td>
+                <td><input type="number" step="0.01" class="form-control custom-form-control text-center row-qty auto-clear-num" placeholder="0"  onkeyup="recalculateRowTotal('${rowId}')" onchange="recalculateRowTotal('${rowId}')" /></td>
+                <td><input type="number" step="0.01" class="form-control custom-form-control text-end row-cost auto-clear-num" placeholder="0" onkeyup="recalculateRowTotal('${rowId}')" /></td>
+                <td><input type="number" step="0.01" class="form-control custom-form-control text-end row-add-cost auto-clear-num" placeholder="0" onkeyup="recalculateRowTotal('${rowId}')" /></td>
+                <td><input type="number" step="0.01" class="form-control custom-form-control text-end row-discount auto-clear-num" placeholder="0" onkeyup="recalculateRowTotal('${rowId}')" /></td>
+                <td>
+                    <select class="form-select custom-form-control row-disc-type" onchange="recalculateRowTotal('${rowId}')">
+                        <option value="A">Amount (A)</option>
+                        <option value="P">Percentage (P)</option>
+                    </select>
+                </td>
+                <td class="text-end fw-bold text-dark row-total-amount">0.00</td>
+                <td class="text-center">${serialIcon}</td>
+                <td class="text-center">
+                    <button type="button" class="btn-del-icon" onclick="removeProductRow('${rowId}')"><i class="fa-solid fa-trash-can"></i></button>
+                </td>
+            </tr>`;
+
+        // Tier 2 Sub Row
+        const tier2Html = `
+            <tr class="tier-row-sub" id="row_sub_${rowId}" data-row-id="${rowId}">
+                <td></td>
+                <td colspan="9">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <span class="sub-field-label">Lot No:</span>
+                                <input type="text" class="form-control custom-form-control row-lot-no" placeholder="Lot No" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <span class="sub-field-label">Batch No:</span>
+                                <input type="text" class="form-control custom-form-control row-batch-no" placeholder="Batch No" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <span class="sub-field-label">Manufacturing Date:</span>
+                                <input type="date" class="form-control custom-form-control row-mfg-date" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <span class="sub-field-label">Expiry Date:</span>
+                                <input type="date" class="form-control custom-form-control row-exp-date" />
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>`;
+
+        $('#purchaseDetailsBody').append(tier1Html + tier2Html);
+        $(`#row_main_${rowId}`).data('serials', []);
+
+        $('#txtProductSearch').val('');
+        $('#ddlUnitType').empty().append('<option value="">-- Unit --</option>');
+        $('#txtStockInHand').val('');
+        currentSelectedProduct = null;
+
+        updateGridSerialNumbers();
+        recalculateRowTotal(rowId);
+    }
+
+    function removeProductRow(rowId) {
+        $(`#row_main_${rowId}`).remove();
+        $(`#row_sub_${rowId}`).remove();
+        updateGridSerialNumbers();
+        recalculateGrandTotals();
+
+        if ($('#purchaseDetailsBody tr').length === 0) {
+            $('#purchaseDetailsBody').html('<tr><td colspan="10" class="text-center py-4 text-muted">No products added yet. Search and add items above.</td></tr>');
+        }
+    }
+
+    function updateGridSerialNumbers() {
+        $('#purchaseDetailsBody tr.tier-row-main').each(function (index) {
+            $(this).find('.row-sl-number').text(index + 1);
+        });
+    }
+
+    /* MODERN ERP PRODUCT DETAIL DISCOUNT & LINE CALCULATION ENGINE */
+    function recalculateRowTotal(rowId) {
+        const $row =$(`#row_main_${rowId}`);
+        const qty = parseFloat($row.find('.row-qty').val()) || 0;
+        const cost = parseFloat($row.find('.row-cost').val()) || 0;
+        const addCost = parseFloat($row.find('.row-add-cost').val()) || 0;
+        const discVal = parseFloat($row.find('.row-discount').val()) || 0;
+        const discType = $row.find('.row-disc-type').val();
+
+        // Step 1: Combined Base Line Amount = Qty * (Cost + Additional Cost)
+        const lineBaseTotal = qty * (cost + addCost);
+
+        // Step 2: Line Discount Calculation
+        let lineDiscountAmount = 0;
+        if (discType === 'P') {
+            lineDiscountAmount = (lineBaseTotal * discVal) / 100;
+        } else {
+            lineDiscountAmount = discVal;
+        }
+
+        // Step 3: Line Net Amount
+        const lineNetTotal = Math.max(0, lineBaseTotal - lineDiscountAmount);
+        $row.find('.row-total-amount').text(lineNetTotal.toFixed(2));
+
+        recalculateGrandTotals();
+    }
+
+    async function loadTaxesDropdown() {
+        try {
+            const res = await fetch(getApiUrl('/api/VatTax/GetTaxes'), {
+                headers: getAuthHeaders('application/json')
+            });
+            if (res.ok) {
+                const taxes = await res.json();
+                const $ddl =$('#ddlTaxName').empty().append('<option value="">-- Select Tax --</option>');
+                $.each(taxes, function (i, t) {
+                    $ddl.append(`<option value="${t.taxId}">${t.taxName}</option>`);
+                });
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    function handleAddTaxToList() {
+        const taxId = $('#ddlTaxName').val();
+        const taxName = $('#ddlTaxName option:selected').text();
+        const taxOn = $('#ddlTaxOn').val();
+        const taxValue = parseFloat($('#txtTaxValue').val()) || 0;
+
+        if (!taxId || taxValue <= 0) {
+            toastr.warning("Please select a valid tax and entry amount.");
+            return;
+        }
+
+        appliedTaxesList = appliedTaxesList.filter(t => t.taxId != taxId);
+        appliedTaxesList.push({
+            taxId: parseInt(taxId),
+            taxName: taxName,
+            taxOn: taxOn,
+            taxValue: taxValue
+        });
+
+        renderTaxTable();
+        recalculateGrandTotals();
+    }
+
+    function renderTaxTable() {
+        const $body =$('#taxListBody').empty();
+        if (appliedTaxesList.length === 0) {
+            $body.html('<tr><td colspan="4" class="text-muted py-2">No Taxes Applied</td></tr>');
+            return;
+        }
+
+        $.each(appliedTaxesList, function (i, t) {
+            const html = `
+                <tr>
+                    <td class="text-start ps-2 fw-semibold">${t.taxName}</td>
+                    <td><span class="badge bg-light text-dark border">${t.taxOn === 'A' ? 'Amount' : 'Percentage'}</span></td>
+                    <td class="text-end fw-bold">${t.taxValue.toFixed(2)}</td>
+                    <td>
+                        <button type="button" class="btn-del-icon" onclick="removeTaxItem(${t.taxId})"><i class="fa-solid fa-xmark"></i></button>
+                    </td>
+                </tr>`;
+            $body.append(html);
+        });
+    }
+
+    function removeTaxItem(taxId) {
+        appliedTaxesList = appliedTaxesList.filter(t => t.taxId != taxId);
+        renderTaxTable();
+        recalculateGrandTotals();
+    }
+
+    /* MASTER CALCULATION & PROPORTIONAL SPLIT ENGINE */
+    function recalculateGrandTotals() {
+        let itemsNetTotal = 0;
+
+        $('#purchaseDetailsBody tr.tier-row-main').each(function () {
+            itemsNetTotal += parseFloat($(this).find('.row-total-amount').text()) || 0;
+        });
+
+        const masterAddCost = parseFloat($('#txtMasterAdditionalCost').val()) || 0;
+        const masterDiscVal = parseFloat($('#txtMasterDiscount').val()) || 0;
+        const masterDiscType = $('#ddlMasterDiscountType').val();
+
+        let masterDiscountAmount = 0;
+        if (masterDiscType === 'P') {
+            masterDiscountAmount = (itemsNetTotal * masterDiscVal) / 100;
+        } else {
+            masterDiscountAmount = masterDiscVal;
+        }
+
+        let totalTaxAmount = 0;
+        $.each(appliedTaxesList, function (i, tax) {
+            if (tax.taxOn === 'P') {
+                totalTaxAmount += (itemsNetTotal * tax.taxValue) / 100;
+            } else {
+                totalTaxAmount += tax.taxValue;
+            }
+        });
+
+        const grandTotal = Math.max(0, itemsNetTotal + masterAddCost - masterDiscountAmount + totalTaxAmount);
+        $('#txtGrandTotalAmount').val(grandTotal.toFixed(2));
+    }
+
+    function openSerialModal(rowId) {
+        activeSerialRowIndex = rowId;
+        const $row =$(`#row_main_${rowId}`);
+        const prodName = $row.find('.row-product-name').text();
+        const targetQty = parseFloat($row.find('.row-qty').val()) || 0;
+
+        activeRowSerials = [...($row.data('serials') || [])];
+
+        $('#modalProductName').text(`Product Name: ${prodName}`);
+        $('#modalTargetQty').text(targetQty);
+
+        renderModalSerials();
+        const modal = new bootstrap.Modal(document.getElementById('serialModal'));
+        modal.show();
+    }
+
+    function toggleSerialModes() {
+        const mode = $('input[name="serialMode"]:checked').val();
+        $('#panelSerialWise, #panelSequence, #panelNotepad').addClass('d-none');
+        if (mode === 'wise') $('#panelSerialWise').removeClass('d-none');
+        else if (mode === 'seq') $('#panelSequence').removeClass('d-none');
+        else if (mode === 'note') $('#panelNotepad').removeClass('d-none');
+    }
+
+    function renderModalSerials() {
+        const $body =$('#serialListBody').empty();
+        const targetQty = parseFloat($('#modalTargetQty').text()) || 0;
+        const entryQty = activeRowSerials.length;
+        const leftQty = Math.max(0, targetQty - entryQty);
+
+        $('#modalEntryQty').text(entryQty);
+        $('#modalLeftQty').text(leftQty);
+
+        if (activeRowSerials.length === 0) {
+            $body.html('<tr><td colspan="3" class="text-muted py-2">No Serials Added</td></tr>');
+            return;
+        }
+
+        $.each(activeRowSerials, function (i, sn) {
+            $body.append(`
+                <tr>
+                    <td>${i + 1 < 10 ? '0' + (i + 1) : i + 1}</td>
+                    <td class="fw-bold text-dark">${sn}</td>
+                    <td><button type="button" class="btn-del-icon" onclick="removeSerialFromModal(${i})"><i class="fa-solid fa-xmark"></i></button></td>
+                </tr>`);
+        });
+    }
+
+    function addSingleSerial() {
+        const targetQty = parseFloat($('#modalTargetQty').text()) || 0;
+        if (activeRowSerials.length >= targetQty) {
+            toastr.error(`Cannot add more serials than specified quantity (${targetQty}).`);
+            return;
+        }
+
+        const sn = $('#txtSingleSerial').val().trim();
+        if (!sn) { toastr.warning("Please enter a serial number."); return; }
+
+        if (!isValidSerialFormat(sn)) {
+            toastr.error(`Serial "${sn}" contains invalid characters or spaces. Special characters are not allowed.`);
+            return;
+        }
+
+        if (activeRowSerials.includes(sn)) {
+            toastr.warning(`Serial "${sn}" already added.`);
+            return;
+        }
+
+        activeRowSerials.push(sn);
+        $('#txtSingleSerial').val('');
+        renderModalSerials();
+    }
+
+    function addSequenceSerials() {
+        const targetQty = parseFloat($('#modalTargetQty').text()) || 0;
+        const prefix = $('#txtSeqPrefix').val().trim();
+        const from = parseInt($('#txtSeqFrom').val());
+        const to = parseInt($('#txtSeqTo').val());
+
+        if (isNaN(from) || isNaN(to) || from > to) {
+            toastr.warning("Invalid sequence range.");
+            return;
+        }
+
+        if (prefix && !isValidSerialFormat(prefix)) {
+            toastr.error("Prefix contains invalid special characters or spaces.");
+            return;
+        }
+
+        for (let i = from; i <= to; i++) {
+            if (activeRowSerials.length >= targetQty) {
+                toastr.warning(`Reached maximum quantity limit (${targetQty}). Remaining sequence skipped.`);
+                break;
+            }
+            const sn = `${prefix}${i}`;
+            if (!activeRowSerials.includes(sn)) {
+                activeRowSerials.push(sn);
+            }
+        }
+        $('#txtSeqFrom, #txtSeqTo').val('');
+        renderModalSerials();
+    }
+
+    function addNotepadSerials() {
+        const targetQty = parseFloat($('#modalTargetQty').text()) || 0;
+        const raw = $('#txtNotepadSerials').val();
+        if (!raw) return;
+
+        const lines = raw.split(/[\n,]+/);
+
+        $.each(lines, function (i, line) {
+            const sn = line.trim();
+            if (!sn) return;
+
+            if (activeRowSerials.length >= targetQty) {
+                toastr.warning(`Reached maximum quantity limit (${targetQty}). Excess serials skipped.`);
+                return false;
+            }
+
+            if (!isValidSerialFormat(sn)) {
+                toastr.error(`Serial "${sn}" skipped: contains special characters or spaces.`);
+                return;
+            }
+
+            if (!activeRowSerials.includes(sn)) {
+                activeRowSerials.push(sn);
+            }
+        });
+
+        $('#txtNotepadSerials').val('');
+        renderModalSerials();
+    }
+
+    function removeSerialFromModal(index) {
+        activeRowSerials.splice(index, 1);
+        renderModalSerials();
+    }
+
+    function applySerialsToRow() {
+        if (!activeSerialRowIndex) return;
+        const $row =$(`#row_main_${activeSerialRowIndex}`);
+        $row.data('serials', activeRowSerials);$(`#badge_${activeSerialRowIndex}`).text(activeRowSerials.length);
+    }
+
+    /* SAVE PURCHASE WITH PROPORTIONAL MASTER DISCOUNTS & ADDITIONAL COSTS SPLIT */
+    async function submitPurchase() {
+        if (isAlreadySaved) {
+            toastr.info("This entry is already saved. Click 'Clear' to start a new purchase.");
+            return;
+        }
+
+        const supplierId = parseInt($('#hdnSupplierId').val()) || 0;
+        const purchaseDate = $('#txtPurchaseDate').val();
+        const paymentMethodId = parseInt($('#ddlPaymentMethod').val()) || 0;
+
+        if (!supplierId) { toastr.error("Please select a valid supplier."); return; }
+        if (!purchaseDate) { toastr.error("Please select purchase date."); return; }
+        if (!paymentMethodId) { toastr.error("Please select payment method."); return; }
+
+        const $mainRows =$('#purchaseDetailsBody tr.tier-row-main');
+        if ($mainRows.length === 0) {
+            toastr.error("Please add at least one product.");
+            return;
+        }
+
+        let serialValidationFailed = false;
+        let totalPurchaseGrossAmount = 0;
+
+        // Calculate Gross Sum across all lines for proportional split
+        $mainRows.each(function () {
+            const qty = parseFloat($(this).find('.row-qty').val()) || 0;
+            const cost = parseFloat($(this).find('.row-cost').val()) || 0;
+            const addCost = parseFloat($(this).find('.row-add-cost').val()) || 0;
+            totalPurchaseGrossAmount += (qty * (cost + addCost));
+        });
+
+        const masterAddCostTotal = parseFloat($('#txtMasterAdditionalCost').val()) || 0;
+        const masterDiscountValTotal = parseFloat($('#txtMasterDiscount').val()) || 0;
+        const masterDiscountType = $('#ddlMasterDiscountType').val();
+
+        const detailItems = [];
+
+        $mainRows.each(function () {
+            const rowId = $(this).data('row-id');
+            const productId = parseInt($(this).data('product-id'));
+            const isSerial = $(this).data('serial-avail') === true;
+            const prodName = $(this).find('.row-product-name').text();
+            const unitTypeId = parseInt($(this).find('.row-unit-id').val());
+            const qty = parseFloat($(this).find('.row-qty').val()) || 0;
+            const cost = parseFloat($(this).find('.row-cost').val()) || 0;
+            const addCost = parseFloat($(this).find('.row-add-cost').val()) || 0;
+            const discVal = parseFloat($(this).find('.row-discount').val()) || 0;
+            const discType = $(this).find('.row-disc-type').val();
+
+            const $subRow =$(`#row_sub_${rowId}`);
+            const lotNo = $subRow.find('.row-lot-no').val() || null;
+            const batchNo = $subRow.find('.row-batch-no').val() || null;
+            const mfgDate = $subRow.find('.row-mfg-date').val() ? new Date($subRow.find('.row-mfg-date').val()).toISOString() : null;
+            const expDate = $subRow.find('.row-exp-date').val() ? new Date($subRow.find('.row-exp-date').val()).toISOString() : null;
+
+            const serials = $(this).data('serials') || [];
+
+            if (isSerial && serials.length !== qty) {
+                serialValidationFailed = true;
+                toastr.error(`Quantity mismatch for "${prodName}": Required ${qty} serials, but ${serials.length} provided.`);
+                return false;
+            }
+
+            const lineGross = qty * (cost + addCost);
+            const lineProportion = totalPurchaseGrossAmount > 0 ? (lineGross / totalPurchaseGrossAmount) : 0;
+
+            // Proportional Split of Master Additional Cost & Master Discount
+            const splitMasterAdditionalCost = masterAddCostTotal * lineProportion;
+            const splitMasterDiscount = masterDiscountType === 'P'
+                ? masterDiscountValTotal
+                : (masterDiscountValTotal * lineProportion);
+
+            const serialDtos = serials.map(s => ({ serialNo: s }));
+            const taxDtos = appliedTaxesList.map(t => ({
+                taxId: t.taxId,
+                taxAmount: t.taxValue,
+                taxOn: t.taxOn
+            }));
+
+            detailItems.push({
+                productId: productId,
+                unitTypeId: unitTypeId,
+                quantity: qty,
+                cost: cost,
+                additionalCost: addCost,
+                purchaseInAdditionalCost: parseFloat(splitMasterAdditionalCost.toFixed(2)),
+                discountAmount: discVal,
+                discountType: discType,
+                purchaseInDiscount: parseFloat(splitMasterDiscount.toFixed(2)),
+                purchaseInDiscountType: masterDiscountType,
+                locationId: 1,
+                batchNo: batchNo,
+                lotNo: lotNo,
+                manufactureDate: mfgDate,
+                expiryDate: expDate,
+                taxes: taxDtos,
+                purchaseInDetailSerials: serialDtos
+            });
+        });
+
+        if (serialValidationFailed) return;
+
+        const masterPayload = {
+            referenceNo: $('#txtReferenceNo').val() || null,
+            supplierId: supplierId,
+            date: new Date(purchaseDate).toISOString(),
+            paymentMethodId: paymentMethodId,
+            remarks: $('#txtRemarks').val() || null,
+            additionalCost: masterAddCostTotal,
+            amount: detailItems.reduce((acc, curr) => acc + (curr.quantity * curr.cost), 0),
+            discount: masterDiscountValTotal,
+            discountType: masterDiscountType,
+            totalAmount: parseFloat($('#txtGrandTotalAmount').val()) || 0,
+            previousDeu: parseFloat($('#txtLedgerDue').val()) || 0,
+            locationId: 1,
+            company: 1,
+            entryBy: 1,
+            purchaseInDetails: detailItems
+        };
+
+        $('#btnSavePurchase').prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Saving...');
+
+        try {
+            const res = await fetch(getApiUrl('/api/Purchase/CreatePurchase'), {
+                method: 'POST',
+                headers: getAuthHeaders('application/json'),
+                body: JSON.stringify(masterPayload)
+            });
+
+            if (res.ok) {
+                const result = await res.json();
+                toastr.success("Purchase Entry created successfully!");
+
+                if (result.data || result.purchaseNo) {
+                    $('#txtPurchaseNo').val(result.data || result.purchaseNo);
+                }
+
+                isAlreadySaved = true;
+                $('#btnSavePurchase').html('<i class="fa-solid fa-check me-1"></i> Saved').addClass('btn-secondary').removeClass('btn-gold-action');
+            } else {
+                toastr.error("Failed to save purchase entry.");
+                $('#btnSavePurchase').prop('disabled', false).html('<i class="fa-solid fa-floppy-disk me-1"></i> Save Purchase');
+            }
+        } catch (e) {
+            toastr.error("Server error occurred while saving purchase.");
+            $('#btnSavePurchase').prop('disabled', false).html('<i class="fa-solid fa-floppy-disk me-1"></i> Save Purchase');
+        }
+    }
+
+    function resetPurchaseForm() {
+        isAlreadySaved = false;
+        $('#hdnSupplierId').val('0');
+        $('#txtSupplierSearch, #txtPurchaseOrderNo, #txtSupplierName, #txtReferenceNo, #txtSupplierCode, #txtSupplierPhone, #txtSupplierAddress, #txtRemarks, #txtPurchaseNo').val('');
+        $('#txtLedgerDue, #txtMasterAdditionalCost, #txtMasterDiscount').val('');
+        $('#imgSupplierPreview').attr('src', DEFAULT_NO_IMAGE);
+        $('#purchaseDetailsBody').html('<tr><td colspan="10" class="text-center py-4 text-muted">No products added yet. Search and add items above.</td></tr>');
+        appliedTaxesList = [];
+        renderTaxTable();
+        recalculateGrandTotals();
+
+        $('#btnSavePurchase').prop('disabled', false).html('<i class="fa-solid fa-floppy-disk me-1"></i> Save Purchase').addClass('btn-gold-action').removeClass('btn-secondary');
+    }
+</script>

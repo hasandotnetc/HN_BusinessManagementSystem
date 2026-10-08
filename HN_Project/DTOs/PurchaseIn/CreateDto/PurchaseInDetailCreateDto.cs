@@ -6,7 +6,7 @@ namespace HN_Backend.DTOs.PurchaseIn.CreateDto
     public class PurchaseInDetailCreateDto
     { 
         public long ProductId { get; set; } 
-        public long UnitType { get; set; } 
+        public long UnitTypeId { get; set; } 
         public decimal Quantity { get; set; } 
         public decimal Cost { get; set; } 
         public decimal? AdditionalCost { get; set; } 

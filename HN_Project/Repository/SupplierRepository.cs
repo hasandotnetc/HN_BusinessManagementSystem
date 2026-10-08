@@ -21,7 +21,11 @@ namespace HN_Backend.Repository
                 .Select(x=> new SupplierAutocompleteDto
                 {
                     SupplierId = x.SupplierId,
-                    Name = x.Name
+                    Name = x.Name,
+                    Code = x.Code,
+                    Phone = x.Phone ?? "",
+                    Address = x.Address,
+                    ImageUrl = x.Picture??""
                 }).Take(10).ToListAsync();
         }
         public async Task<Supplier> GetSupplierByIdAsync(long supplierId,long CompanyId)

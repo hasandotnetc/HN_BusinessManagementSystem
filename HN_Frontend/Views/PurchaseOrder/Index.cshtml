@@ -1,0 +1,864 @@
+<!-- ============================================================ -->
+<!--  PURCHASE IN ENTRY PAGE                                      -->
+<!--  Single .cshtml page: HTML / CSS / JS / AJAX / Calculations  -->
+<!-- ============================================================ -->
+@{
+    ViewData["Title"] = "Purchase In Entry";
+}
+
+<style>
+    :root {
+        --rebecca-solid: #663399;
+        --rebecca-dark: #4b2375;
+        --rebecca-light: #8a2be2;
+        --rebecca-gold: #e0aa3e;
+        --rebecca-gold-hover: #cc962d;
+        --rebecca-light-bg: #f3f4f6;
+        --rebecca-card-bg: #ffffff;
+        --rebecca-border: #e5e7eb;
+        --text-dark: #1f2937;
+        --text-muted: #6b7280;
+        --text-purple: #663399;
+        --danger: #dc2626;
+        --success: #16a34a;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: var(--rebecca-light-bg);
+        color: var(--text-dark);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+
+    .purchase-page-header {
+        background-color: var(--rebecca-solid);
+        color: #ffffff;
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+        .purchase-page-header h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .purchase-page-header .page-sub {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+    .form-card {
+        background-color: var(--rebecca-card-bg) !important;
+        border: 1px solid var(--rebecca-border);
+        border-radius: 8px;
+        padding: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
+        margin-bottom: 16px;
+    }
+
+        .form-card h3 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--rebecca-border);
+            padding-bottom: 6px;
+        }
+
+    .field-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 12px;
+    }
+
+    .field-row {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+        .field-row .col-full {
+            width: 100%;
+        }
+
+    .field-label {
+        color: #374151;
+        font-size: 12px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+        .field-label .mandatory-star {
+            color: var(--danger);
+        }
+
+    .custom-select,
+    .custom-input,
+    .custom-textarea {
+        background-color: #ffffff !important;
+        color: var(--text-dark) !important;
+        border: 1px solid #d1d5db !important;
+        border-radius: 4px !important;
+        padding: 6px 10px !important;
+        font-size: 13px !important;
+        width: 100%;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+        .custom-select:focus,
+        .custom-input:focus,
+        .custom-textarea:focus {
+            border-color: var(--rebecca-solid) !important;
+            box-shadow: 0 0 0 2px rgba(102,51,153,0.2) !important;
+            outline: none;
+        }
+
+    .btn-purple {
+        background-color: var(--rebecca-solid);
+        color: #ffffff !important;
+        font-weight: 700;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .btn-purple:hover {
+            background-color: var(--rebecca-dark);
+        }
+
+    .btn-purple-outline {
+        background-color: #ffffff;
+        color: var(--rebecca-solid) !important;
+        border: 1px solid var(--rebecca-solid);
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+    }
+
+        .btn-purple-outline:hover {
+            background-color: #f3e8ff;
+        }
+
+    .btn-gold {
+        background-color: var(--rebecca-gold);
+        color: #1a0f30 !important;
+        font-weight: 700;
+        border: none;
+        padding: 6px 16px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .btn-gold:hover {
+            background-color: var(--rebecca-gold-hover);
+        }
+
+    .detail-table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--rebecca-border);
+        border-radius: 6px;
+        background-color: #ffffff;
+    }
+
+    .detail-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        min-width: 900px;
+    }
+
+        .detail-table th {
+            background-color: var(--rebecca-solid);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 8px 8px;
+            border: 1px solid var(--rebecca-border);
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .detail-table td {
+            padding: 6px 8px;
+            border: 1px solid var(--rebecca-border);
+            vertical-align: middle;
+        }
+
+        .detail-table tbody tr:hover {
+            background-color: #fafafa;
+        }
+
+    .badge-stock {
+        background-color: #d1fae5;
+        color: #065f46;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 11px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 24px;
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    /* Autocomplete dropdown positioning */
+    .autocomplete-box {
+        position: absolute;
+        z-index: 1000;
+        background: #ffffff;
+        border: 1px solid var(--rebecca-border);
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        max-height: 250px;
+        overflow-y: auto;
+        width: 100%;
+    }
+
+    .product-autocomplete-item {
+        cursor: pointer;
+        border-bottom: 1px solid var(--rebecca-border);
+        padding: 8px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+        .product-autocomplete-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .product-autocomplete-item .product-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            object-fit: cover;
+            background-color: #f3f4f6;
+            flex-shrink: 0;
+        }
+
+        .product-autocomplete-item .product-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .product-autocomplete-item .product-name {
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .product-autocomplete-item .product-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+    .grid-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+        padding-top: 12px;
+        border-top: 1px solid var(--rebecca-border);
+    }
+
+    .serial-notepad {
+        font-family: 'Consolas', 'Courier New', monospace;
+        font-size: 11px;
+        line-height: 1.6;
+        padding: 8px;
+        border: 1px solid var(--rebecca-border);
+        border-radius: 4px;
+        min-height: 100px;
+        width: 100%;
+        resize: vertical;
+        background-color: #fafafa;
+    }
+
+    @@media (max-width: 768px) {
+        .field-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .purchase-page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .grid-actions {
+            flex-direction: column;
+        }
+
+            .grid-actions .btn {
+                width: 100%;
+            }
+    }
+</style>
+
+<div class="container-fluid py-3" style="max-width: 1440px;">
+
+    <!-- Top Bar -->
+    <div class="purchase-page-header">
+        <div>
+            <h2>Purchase In Entry</h2>
+            <span class="page-sub">Purchase Order / Supplier Purchase Record</span>
+        </div>
+        <div>
+            <button type="button" id="btnSavePurchase" class="btn btn-gold">
+                <i class="fa-solid fa-floppy-disk me-1"></i> Save Purchase
+            </button>
+            <button type="button" id="btnResetForm" class="btn btn-purple-outline bg-white">
+                <i class="fa-solid fa-rotate-left me-1"></i> Reset
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <!-- Main Form Section -->
+        <div class="col-lg-4">
+            <div class="form-card">
+                <h3>Purchase Information</h3>
+                <div class="field-grid" style="grid-template-columns: 1fr;">
+                    <div class="field-row">
+                        <label class="field-label">PurchaseIn No</label>
+                        <input type="text" id="txtPurchaseInNo" class="custom-input" readonly placeholder="Generated after save">
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Reference No</label>
+                        <input type="text" id="txtReferenceNo" class="custom-input" placeholder="Optional reference #">
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Date <span class="mandatory-star">*</span></label>
+                        <input type="date" id="txtDate" class="custom-input">
+                    </div>
+                    <div class="field-row" style="position: relative;">
+                        <label class="field-label">Supplier <span class="mandatory-star">*</span></label>
+                        <input type="text" id="txtSupplier" class="custom-input" placeholder="Type supplier name/code/phone..." autocomplete="off">
+                        <input type="hidden" id="hdnSupplierId">
+                        <div id="supplierAutoCompleteList" class="autocomplete-box" style="display:none;"></div>
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Supplier Name</label>
+                        <input type="text" id="txtSupplierName" class="custom-input" readonly placeholder="Selected supplier">
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Supplier Phone</label>
+                        <input type="text" id="txtSupplierPhone" class="custom-input" readonly placeholder="Phone">
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Supplier Email</label>
+                        <input type="text" id="txtSupplierEmail" class="custom-input" readonly placeholder="Email">
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Location <span class="mandatory-star">*</span></label>
+                        <select id="ddlLocation" class="custom-select">
+                            <option value="0">-- Select Location --</option>
+                        </select>
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Payment Method <span class="mandatory-star">*</span></label>
+                        <select id="ddlPaymentMethod" class="custom-select">
+                            <option value="0">-- Select Payment Method --</option>
+                        </select>
+                    </div>
+                    <div class="field-row">
+                        <label class="field-label">Remarks</label>
+                        <textarea id="txtRemarks" class="custom-textarea" rows="2" placeholder="Optional notes"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Details & Summary Section -->
+        <div class="col-lg-8">
+            <div class="form-card">
+                <h3>Purchase Details</h3>
+
+                <div class="row g-2 mb-3 align-items-center" style="position: relative;">
+                    <div class="col-md-6">
+                        <input type="text" id="txtProductSearch" class="custom-input" placeholder="Search product by name, model, code..." autocomplete="off">
+                        <div id="productAutoCompleteList" class="autocomplete-box" style="display:none;"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="ddlProductUnitType" class="custom-select">
+                            <option value="0">-- Select Unit --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" id="btnAddProduct" class="btn btn-purple w-100 justify-content-center">
+                            <i class="fa-solid fa-plus me-1"></i> Add Product
+                        </button>
+                    </div>
+                </div>
+
+                <div class="detail-table-wrap">
+                    <table class="detail-table">
+                        <thead>
+                            <tr>
+                                <th style="width:30px;">#</th>
+                                <th style="width:160px;">Product</th>
+                                <th style="width:60px;">Image</th>
+                                <th style="width:90px;">Model/Code</th>
+                                <th style="width:80px;">Stock</th>
+                                <th style="width:80px;">Unit</th>
+                                <th style="width:70px;">Qty</th>
+                                <th style="width:90px;">Cost</th>
+                                <th style="width:80px;">Discount</th>
+                                <th style="width:80px;">Add. Cost</th>
+                                <th style="width:100px;">Amount</th>
+                                <th style="width:60px;">Serial</th>
+                                <th style="width:40px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="purchaseDetailBody">
+                            <tr id="emptyDetailRow">
+                                <td colspan="13" class="empty-state">
+                                    No product added yet. Search and select a product, then click "Add Product".
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid-actions">
+                    <button type="button" id="btnClearDetails" class="btn btn-purple-outline">
+                        <i class="fa-solid fa-trash-can me-1"></i> Clear Details
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tax and Totals -->
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <div class="form-card">
+                        <h3>VAT / Tax</h3>
+                        <div class="field-row">
+                            <label class="field-label">Taxes (Hold Ctrl to select multiple)</label>
+                            <select id="ddlTaxes" class="custom-select" multiple size="4" style="height:100px;">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <div class="form-card">
+                        <h3>Summary Total</h3>
+                        <div class="field-grid" style="grid-template-columns: repeat(2, 1fr);">
+                            <div class="field-row">
+                                <label class="field-label">Sub Total</label>
+                                <input type="number" id="numSubTotal" class="custom-input" readonly placeholder="0.00">
+                            </div>
+                            <div class="field-row">
+                                <label class="field-label">Purchase Discount</label>
+                                <input type="number" id="numPurchaseDiscountCalc" class="custom-input" readonly placeholder="0.00">
+                            </div>
+                            <div class="field-row">
+                                <label class="field-label">Additional Cost</label>
+                                <input type="number" id="numAdditionalCostCalc" class="custom-input" readonly placeholder="0.00">
+                            </div>
+                            <div class="field-row">
+                                <label class="field-label">Tax Amount</label>
+                                <input type="number" id="numTaxAmount" class="custom-input" readonly placeholder="0.00">
+                            </div>
+                            <div class="field-row" style="grid-column: span 2;">
+                                <label class="field-label" style="font-weight: 700;">Grand Total</label>
+                                <input type="number" id="numGrandTotal" class="custom-input" readonly placeholder="0.00" style="background:#f3f4f6; font-weight:700; font-size:16px; color:var(--rebecca-solid);">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Serial Modal -->
+<div class="modal fade" id="serialModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fs-6 fw-bold">Manage Serial Numbers</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-2" style="font-size:12px;">Enter serial numbers, one per line (Total count should match quantity):</p>
+                <textarea id="txtSerialNotepad" class="serial-notepad" placeholder="SN10001&#10;SN10002&#10;SN10003"></textarea>
+                <input type="hidden" id="hdnSerialRowIndex">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnSaveSerials" class="btn btn-purple">Save Serials</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script Logic -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let purchaseItems = [];
+            let selectedProduct = null;
+
+            // Set Default Date to Today
+            document.getElementById('txtDate').valueAsDate = new Date();
+
+            // Load Initial Dropdown Data
+            loadLocations();
+            loadPaymentMethods();
+            loadTaxes();
+
+            // Autocomplete: Supplier
+            $('#txtSupplier').on('input', function () {
+                let query = $(this).val().trim();
+                if (query.length < 2) {
+                    $('#supplierAutoCompleteList').hide();
+                    return;
+                }
+                $.ajax({
+                    url: '/Supplier/Search',
+                    type: 'GET',
+                    data: { term: query },
+                    success: function (res) {
+                        if (res && res.length > 0) {
+                            let html = '';
+                            res.forEach(item => {
+                                html += `<div class="product-autocomplete-item supplier-item" data-id="${item.id}" data-name="${item.name}" data-phone="${item.phone || ''}" data-email="${item.email || ''}">
+                                            <div class="product-name">${item.name}</div>
+                                            <div class="product-meta">${item.phone || 'No phone'}</div>
+                                        </div>`;
+                            });
+                            $('#supplierAutoCompleteList').html(html).show();
+                        } else {
+                            $('#supplierAutoCompleteList').hide();
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', '.supplier-item', function () {
+                let id = $(this).data('id');
+                let name = $(this).data('name');
+                let phone = $(this).data('phone');
+                let email = $(this).data('email');
+
+                $('#hdnSupplierId').val(id);
+                $('#txtSupplier').val(name);
+                $('#txtSupplierName').val(name);
+                $('#txtSupplierPhone').val(phone);
+                $('#txtSupplierEmail').val(email);
+                $('#supplierAutoCompleteList').hide();
+            });
+
+            // Autocomplete: Product
+            $('#txtProductSearch').on('input', function () {
+                let query = $(this).val().trim();
+                if (query.length < 2) {
+                    $('#productAutoCompleteList').hide();
+                    return;
+                }
+                $.ajax({
+                    url: '/Product/Search',
+                    type: 'GET',
+                    data: { term: query },
+                    success: function (res) {
+                        if (res && res.length > 0) {
+                            let html = '';
+                            res.forEach(p => {
+                                html += `<div class="product-autocomplete-item product-item" data-json='${JSON.stringify(p)}'>
+                                            <img src="${p.imageUrl || '/images/no-image.png'}" class="product-img"/>
+                                            <div class="product-details">
+                                                <div class="product-name">${p.name}</div>
+                                                <div class="product-meta">Code: ${p.code || '-'} | Stock: ${p.stockQty || 0}</div>
+                                            </div>
+                                        </div>`;
+                            });
+                            $('#productAutoCompleteList').html(html).show();
+                        } else {
+                            $('#productAutoCompleteList').hide();
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', '.product-item', function () {
+                selectedProduct = $(this).data('json');$('#txtProductSearch').val(selectedProduct.name);
+                $('#productAutoCompleteList').hide();
+
+                // Populate Units
+                let unitDdl = $('#ddlProductUnitType').empty().append('<option value="0">-- Select Unit --</option>');
+                if (selectedProduct.units && selectedProduct.units.length > 0) {
+                    selectedProduct.units.forEach(u => {
+                        unitDdl.append(`<option value="${u.id}">${u.name}</option>`);
+                    });
+                } else {
+                    unitDdl.append(`<option value="1">Pcs</option>`);
+                }
+            });
+
+            // Add Product to Grid
+            $('#btnAddProduct').on('click', function () {
+                if (!selectedProduct) {
+                    alert('Please search and select a product first.');
+                    return;
+                }
+
+                let unitId = $('#ddlProductUnitType').val();
+                let unitName = $('#ddlProductUnitType option:selected').text();
+
+                let item = {
+                    productId: selectedProduct.id,
+                    name: selectedProduct.name,
+                    image: selectedProduct.imageUrl || '/images/no-image.png',
+                    code: selectedProduct.code || '-',
+                    stock: selectedProduct.stockQty || 0,
+                    unitId: unitId,
+                    unitName: unitName,
+                    qty: 1,
+                    cost: selectedProduct.costPrice || 0,
+                    discount: 0,
+                    additionalCost: 0,
+                    serials: []
+                };
+
+                purchaseItems.push(item);
+                renderTable();
+                resetProductSearch();
+            });
+
+            function renderTable() {
+                let tbody = $('#purchaseDetailBody').empty();
+
+                if (purchaseItems.length === 0) {
+                    tbody.append(`<tr id="emptyDetailRow">
+                        <td colspan="13" class="empty-state">
+                            No product added yet. Search and select a product, then click "Add Product".
+                        </td>
+                    </tr>`);
+                    calculateSummary();
+                    return;
+                }
+
+                purchaseItems.forEach((item, index) => {
+                    let lineTotal = (item.qty * item.cost) - item.discount + item.additionalCost;
+
+                    let row = `<tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${item.name}</strong></td>
+                        <td><img src="${item.image}" style="width:30px;height:30px;border-radius:4px;object-fit:cover;"/></td>
+                        <td>${item.code}</td>
+                        <td><span class="badge-stock">${item.stock}</span></td>
+                        <td>${item.unitName}</td>
+                        <td><input type="number" class="custom-input txt-qty" data-index="${index}" value="${item.qty}" min="1" style="width:60px;"/></td>
+                        <td><input type="number" class="custom-input txt-cost" data-index="${index}" value="${item.cost}" step="0.01" style="width:80px;"/></td>
+                        <td><input type="number" class="custom-input txt-discount" data-index="${index}" value="${item.discount}" step="0.01" style="width:70px;"/></td>
+                        <td><input type="number" class="custom-input txt-addcost" data-index="${index}" value="${item.additionalCost}" step="0.01" style="width:70px;"/></td>
+                        <td><strong>${lineTotal.toFixed(2)}</strong></td>
+                        <td>
+                            <button type="button" class="btn btn-purple-outline btn-sm btn-serial" data-index="${index}">
+                                <i class="fa-solid fa-barcode"></i> (${item.serials.length})
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm btn-remove-item" data-index="${index}">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+                    tbody.append(row);
+                });
+
+                calculateSummary();
+            }
+
+            // Value changes inside grid
+            $(document).on('change input', '.txt-qty, .txt-cost, .txt-discount, .txt-addcost', function () {
+                let index = $(this).data('index');
+                purchaseItems[index].qty = parseFloat($(`.txt-qty[data-index="${index}"]`).val()) || 0;
+                purchaseItems[index].cost = parseFloat($(`.txt-cost[data-index="${index}"]`).val()) || 0;
+                purchaseItems[index].discount = parseFloat($(`.txt-discount[data-index="${index}"]`).val()) || 0;
+                purchaseItems[index].additionalCost = parseFloat($(`.txt-addcost[data-index="${index}"]`).val()) || 0;
+                renderTable();
+            });
+
+            // Remove item
+            $(document).on('click', '.btn-remove-item', function () {
+                let index = $(this).data('index');
+                purchaseItems.splice(index, 1);
+                renderTable();
+            });
+
+            // Clear All
+            $('#btnClearDetails').on('click', function () {
+                purchaseItems = [];
+                renderTable();
+            });
+
+            // Serials Modal
+            $(document).on('click', '.btn-serial', function () {
+                let index = $(this).data('index');$('#hdnSerialRowIndex').val(index);
+                $('#txtSerialNotepad').val(purchaseItems[index].serials.join('\n'));
+                let modal = new bootstrap.Modal(document.getElementById('serialModal'));
+                modal.show();
+            });
+
+            $('#btnSaveSerials').on('click', function () {
+                let index = $('#hdnSerialRowIndex').val();
+                let rawText = $('#txtSerialNotepad').val();
+                let serials = rawText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+
+                purchaseItems[index].serials = serials;
+                renderTable();
+
+                let modalEl = document.getElementById('serialModal');
+                let modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+            });
+
+            // Calculate Totals
+            function calculateSummary() {
+                let subTotal = 0;
+                let totalDiscount = 0;
+                let totalAddCost = 0;
+
+                purchaseItems.forEach(i => {
+                    subTotal += (i.qty * i.cost);
+                    totalDiscount += i.discount;
+                    totalAddCost += i.additionalCost;
+                });
+
+                $('#numSubTotal').val(subTotal.toFixed(2));
+                $('#numPurchaseDiscountCalc').val(totalDiscount.toFixed(2));
+                $('#numAdditionalCostCalc').val(totalAddCost.toFixed(2));
+
+                // Calculate Multi-Taxes
+                let taxPct = 0;
+                $('#ddlTaxes option:selected').each(function () {
+                    taxPct += parseFloat($(this).data('rate') || 0);
+                });
+
+                let baseAmount = subTotal - totalDiscount + totalAddCost;
+                let taxAmount = (baseAmount * taxPct) / 100;
+                let grandTotal = baseAmount + taxAmount;
+
+                $('#numTaxAmount').val(taxAmount.toFixed(2));
+                $('#numGrandTotal').val(grandTotal.toFixed(2));
+            }
+
+            $('#ddlTaxes').on('change', calculateSummary);
+
+            // API Placeholders
+            function loadLocations() {
+                $.get('/Location/GetList', function(data) {
+                    if(data) data.forEach(d => $('#ddlLocation').append(`<option value="${d.id}">${d.name}</option>`));
+                });
+            }
+
+            function loadPaymentMethods() {
+                $.get('/PaymentMethod/GetList', function(data) {
+                    if(data) data.forEach(d => $('#ddlPaymentMethod').append(`<option value="${d.id}">${d.name}</option>`));
+                });
+            }
+
+            function loadTaxes() {
+                $.get('/Tax/GetList', function(data) {
+                    if(data) data.forEach(d => $('#ddlTaxes').append(`<option value="${d.id}" data-rate="${d.rate}">${d.name} (${d.rate}%)</option>`));
+                });
+            }
+
+            function resetProductSearch() {
+                selectedProduct = null;
+                $('#txtProductSearch').val('');
+                $('#ddlProductUnitType').empty().append('<option value="0">-- Select Unit --</option>');
+            }
+
+            // Form Submission
+            $('#btnSavePurchase').on('click', function () {
+                let supplierId = $('#hdnSupplierId').val();
+                let locationId = $('#ddlLocation').val();
+                let paymentMethodId = $('#ddlPaymentMethod').val();
+
+                if (!supplierId || supplierId == "0") {
+                    alert("Please select a valid supplier.");
+                    return;
+                }
+                if (locationId == "0") {
+                    alert("Please select a location.");
+                    return;
+                }
+                if (paymentMethodId == "0") {
+                    alert("Please select a payment method.");
+                    return;
+                }
+                if (purchaseItems.length === 0) {
+                    alert("Please add at least one product.");
+                    return;
+                }
+
+                let payload = {
+                    referenceNo: $('#txtReferenceNo').val(),
+                    date: $('#txtDate').val(),
+                    supplierId: parseInt(supplierId),
+                    locationId: parseInt(locationId),
+                    paymentMethodId: parseInt(paymentMethodId),
+                    remarks: $('#txtRemarks').val(),
+                    subTotal: parseFloat($('#numSubTotal').val()),
+                    discountTotal: parseFloat($('#numPurchaseDiscountCalc').val()),
+                    additionalCostTotal: parseFloat($('#numAdditionalCostCalc').val()),
+                    taxTotal: parseFloat($('#numTaxAmount').val()),
+                    grandTotal: parseFloat($('#numGrandTotal').val()),
+                    items: purchaseItems
+                };
+
+                $.ajax({
+                    url: '/PurchaseIn/Save',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
+                    success: function (res) {
+                        if (res.success) {
+                            alert('Purchase entry saved successfully! Purchase No: ' + res.purchaseInNo);
+                            location.reload();
+                        } else {
+                            alert('Error: ' + res.message);
+                        }
+                    },
+                    error: function () {
+                        alert('An unexpected error occurred while saving.');
+                    }
+                });
+            });
+        });
+    </script>
+}

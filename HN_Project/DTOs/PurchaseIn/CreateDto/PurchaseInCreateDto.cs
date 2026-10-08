@@ -16,7 +16,7 @@ namespace HN_Backend.DTOs.PurchaseIn.CreateDto
         public decimal TotalAmount { get; set; } 
         public decimal? PreviousDeu { get; set; }  
         public long LocationId { get; set; } 
-        public long Company { get; set; } 
+        public long CompanyId { get; set; } 
         public long EntryBy { get; set; }
         public List<PurchaseInDetailCreateDto> PurchaseInDetails { get; set; } = new List<PurchaseInDetailCreateDto>();
     }
